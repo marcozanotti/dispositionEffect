@@ -1,11 +1,32 @@
 Package: dispositionEffect
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Title: Analysis Of Disposition Effect On Financial Portfolios
+Version: 0.0.0.9000
+Author@R: c(
+    person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
+    person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = "cre")
+)
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    tidyr,
+    dplyr,
+    stringr,
+    lubridate,
+    purrr,
+    progress,
+    magrittr,
+    rlang (>= 0.1.2)
+Suggests: 
+    tidyverse,
+    devtools,
+    knitr,
+    rmarkdown,
+    roxygen2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+URL: https://github.com/marcozanotti/dispositionEffect

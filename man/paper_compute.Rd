@@ -47,10 +47,10 @@ investor's portfolio.}
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
 
-\item{last_dtt}{POSIXct vector. The portfolio date-times of assets into the
-investor's portfolio.}
+\item{last_dtt}{POSIXct value. The date-time of the last transaction
+performed by the investor.}
 
-\item{trx_dtt}{POSIXct vector. The market date-times at which the transaction
+\item{trx_dtt}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
 \item{assets}{Character vector. The name of assets into the investor's
@@ -78,7 +78,7 @@ of paper gains and paper losses computed using the duration method.}
 
 In particular:
 
-\itemize{
+\describe{
 \item{\code{RG_"method"}}{contains Realized Gains results.}
 \item{\code{RL_"method"}}{contains Realized Losses results.}
 \item{\code{PG_"method"}}{contains Paper Gains results.}

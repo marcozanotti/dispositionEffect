@@ -12,9 +12,9 @@
 #'   investor's portfolio.
 #' @param hist_prz Numeric vector. The market prices of assets into the
 #'   investor's portfolio.
-#' @param last_dtt POSIXct vector. The portfolio date-times of assets into the
-#'   investor's portfolio.
-#' @param trx_dtt POSIXct vector. The market date-times at which the transaction
+#' @param last_dtt POSIXct value. The date-time of the last transaction
+#'   performed by the investor.
+#' @param trx_dtt POSIXct value. The date-time at which the transaction
 #'   is going to occur.
 #' @param assets Character vector. The name of assets into the investor's
 #'   portfolio.

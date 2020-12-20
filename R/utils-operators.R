@@ -29,3 +29,52 @@ NULL
 #' @export
 `%!in%` <- Negate(`%in%`)
 
+
+#' @title Element-wise mean calculation
+#'
+#' @description The function allows for the calculation of the mean on two
+#'   vectors element-wise.
+#'
+#' @param x,y Numeric vectors of the same length.
+#' @param zero.substitute Logical. If TRUE zero values are substituted with
+#'   corresponding non-missing values whether possible.
+#' @inheritParams base::mean
+#'
+#' @return Numeric vector of averages.
+#'
+#' @examples
+#' x <- 1:10
+#' y <- 99:90
+#' ewise_mean(x, y)
+#'
+#' x[1] <- NA
+#' ewise_mean(x, y, na.rm = TRUE)
+#'
+#' x[1] <- 0
+#' ewise_mean(x, y, zero.substitute = TRUE)
+#'
+#' @rdname elementwise_mean
+#' @keywords internal
+#' @export
+ewise_mean <- function(x, y, na.rm = FALSE, zero.substitute = FALSE) {
+
+	x <- as.numeric(x)
+	y <- as.numeric(y)
+
+	if (zero.substitute) {
+
+		ewm <- case_when(x == 0 & y == 0 ~ 0,
+										 x == 0 & y != 0 ~ y,
+										 x != 0 & y == 0 ~ x,
+										 TRUE ~ map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm)))
+
+	} else {
+
+		ewm <- map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm))
+
+	}
+
+	return(ewm)
+
+}
+

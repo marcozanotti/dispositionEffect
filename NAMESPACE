@@ -2,6 +2,7 @@
 
 export("%!in%")
 export("%>%")
+export(closest_historical_price)
 export(compare_difftime)
 export(dtt_update)
 export(evaluate_portfolio)

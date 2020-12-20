@@ -23,15 +23,15 @@ The function allows for the calculation of the mean on two
 vectors element-wise.
 }
 \examples{
-x <- 1:10
-y <- 99:90
-ewise_mean(x, y)
+  x <- 1:10
+  y <- 99:90
+  ewise_mean(x, y)
 
-x[1] <- NA
-ewise_mean(x, y, na.rm = TRUE)
+  x[1] <- NA
+  ewise_mean(x, y, na.rm = TRUE)
 
-x[1] <- 0
-ewise_mean(x, y, zero.substitute = TRUE)
+  x[1] <- 0
+  ewise_mean(x, y, zero.substitute = TRUE)
 
 }
 \keyword{internal}

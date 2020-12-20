@@ -8,7 +8,7 @@
 #'
 #' @param portfolio_df Data frame of the investor's portfolio at time t.
 #' @param trx_date POSIXct value of the transaction date.
-#' @param df_asset_prices Data frame of the market prices.
+#' @inheritParams closest_historical_price
 #' @param statistics Logical. If TRUE some statistical indexes are computed
 #'   on the portfolio and returned.
 #'
@@ -19,7 +19,8 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_update}}, \code{\link{gains_and_losses}}
+#' @seealso \code{\link{portfolio_update}}, \code{\link{gains_and_losses}},
+#'   \code{\link{closest_historical_price}}
 #'
 #' @export
 evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statistics = FALSE) {

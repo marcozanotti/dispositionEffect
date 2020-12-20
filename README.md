@@ -17,14 +17,24 @@ You can install the released version of dispositionEffect from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-#install.packages("dispositionEffect")
+# install.packages("dispositionEffect")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-#devtools::install_github("marcozanotti/dispositionEffect")
+# devtools::install_github("marcozanotti/dispositionEffect")
+```
+
+By the moment, since we are still working with a Privae Repo, you need
+to install the development version via PAT from the appropriate branch.
+
+``` r
+install.packages("devtools")
+devtools::install_github("marcozanotti/dispositionEffect",
+                         ref = "branch_name",
+                         auth_token = "cf248fcfa25a81c3caea95896beb28f4e9878ff6")
 ```
 
 ## Example
@@ -32,21 +42,10 @@ And the development version from [GitHub](https://github.com/) with:
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-#library(dispositionEffect)
-## basic example code
+library(dispositionEffect)
+res <- portfolio_update(df_client = dispositionEffect::client_4273N, 
+                                                df_asset_prices = dispositionEffect::marketprices_4273N, 
+                                                method = "all", allow_short = TRUE, time_threshold = "0 mins",
+                                                posneg_portfolios = FALSE, portfolio_statistics = FALSE,
+                                                verbose = c(1, 1), progress = TRUE)
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-#summary(cars)
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!

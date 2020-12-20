@@ -1,8 +1,3 @@
-## usethis namespace: start
-#' @importFrom tibble tibble
-## usethis namespace: end
-NULL
-
 #' @name %>%
 #'
 #' @title Pipe operator
@@ -18,7 +13,7 @@ NULL
 NULL
 
 
-#' @name %!in%
+#' @name negative_match
 #'
 #' @title Negative match operator
 #'
@@ -68,14 +63,14 @@ ewise_mean <- function(x, y, na.rm = FALSE, zero.substitute = FALSE) {
 
 	if (zero.substitute) {
 
-		ewm <- case_when(x == 0 & y == 0 ~ 0,
-										 x == 0 & y != 0 ~ y,
-										 x != 0 & y == 0 ~ x,
-										 TRUE ~ map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm)))
+		ewm <- dplyr::case_when(x == 0 & y == 0 ~ 0,
+														x == 0 & y != 0 ~ y,
+														x != 0 & y == 0 ~ x,
+														TRUE ~ purrr::map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm)))
 
 	} else {
 
-		ewm <- map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm))
+		ewm <- purrr::map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm))
 
 	}
 

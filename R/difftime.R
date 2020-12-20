@@ -79,7 +79,7 @@ financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
 	} else {
 		# if different dates, then new difftime
 		s <- seq(as.Date(from), as.Date(to), by = "days") %>%
-			wday(week_start = 1)
+			lubridate::wday(week_start = 1)
 		len <- which(s %in% 1:5) %>% length() - 2 # num working days -2 (first and last)
 		h <- after_market - pre_market # financial working hours in a day (from 8.00 to 19.00)
 		res <- len * h # total financial working hours between the two dates
@@ -99,8 +99,8 @@ financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
 compare_difftime <- function(from, to, time_threshold = "0 mins") {
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
-	units <- str_split(time_threshold, "\\s")[[1]][2]
-	value <- str_split(time_threshold, "\\s")[[1]][1] %>% as.numeric()
+	units <- stringr::str_split(time_threshold, "\\s")[[1]][2]
+	value <- stringr::str_split(time_threshold, "\\s")[[1]][1] %>% as.numeric()
 
 	dtt_diff <- financial_difftime(from, to) %>%
 		as.difftime(units = "hours") %>% # financial_difftime returns in hours

@@ -2,7 +2,7 @@
 #'
 #' @title Papers' estimation
 #'
-#' @description
+#' @description Papers' estimation
 #'
 #' @details
 #'

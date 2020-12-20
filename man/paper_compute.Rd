@@ -86,7 +86,7 @@ In particular:
 }
 }
 \description{
-
+Papers' estimation
 }
 \details{
 

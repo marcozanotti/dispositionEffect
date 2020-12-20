@@ -2,7 +2,7 @@
 #'
 #' @title Realized estimation
 #'
-#' @description
+#' @description Realized estimation
 #'
 #' @details
 #'

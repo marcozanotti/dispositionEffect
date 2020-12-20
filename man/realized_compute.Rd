@@ -132,7 +132,7 @@ In particular:
 }
 }
 \description{
-
+Realized estimation
 }
 \details{
 

@@ -2,7 +2,9 @@
 
 export("%!in%")
 export("%>%")
+export(compare_difftime)
 export(ewise_mean)
+export(financial_difftime)
 export(initializer_portfolio)
 export(initializer_results)
 export(paper_compute)

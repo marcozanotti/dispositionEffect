@@ -31,28 +31,28 @@ gains_and_losses <- function(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, las
 														 method = "all", allow_short = FALSE,
 														 verbose = c(0, 0)) {
 
-	# checks on inputs
-	# trx_type
-	msg <- check_var_types("trx_type", class(trx_type), "character", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# trx_asset
-	msg <- check_var_types("trx_asset", class(trx_asset), "character", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# trx_qty
-	msg <- check_var_types("trx_qty", class(trx_qty), "integer", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# trx_prz
-	msg <- check_var_types("trx_prz", class(trx_prz), "numeric", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# trx_dtt
-	msg <- check_var_types("trx_dtt", class(trx_dtt)[1], "POSIXct", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# last_dtt
-	msg <- check_var_types("last_dtt", class(last_dtt)[1], "POSIXct", multiple = FALSE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # checks on inputs
+	# # trx_type
+	# msg <- check_var_types("trx_type", class(trx_type), "character", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # trx_asset
+	# msg <- check_var_types("trx_asset", class(trx_asset), "character", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # trx_qty
+	# msg <- check_var_types("trx_qty", class(trx_qty), "integer", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # trx_prz
+	# msg <- check_var_types("trx_prz", class(trx_prz), "numeric", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # trx_dtt
+	# msg <- check_var_types("trx_dtt", class(trx_dtt)[1], "POSIXct", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # last_dtt
+	# msg <- check_var_types("last_dtt", class(last_dtt)[1], "POSIXct", multiple = FALSE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+
 	# verbosity
 	verb <- verbose[2] == 1
-
 
 	# qty, prz and dtt of trx_asset already into portfolio
 	ptf_qty <- portfolio[portfolio$asset == trx_asset, ]$qty

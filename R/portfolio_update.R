@@ -45,37 +45,37 @@ portfolio_update <- function(df_client, df_asset_prices,
 	# checks on inputs
 	# assumes that df_client is ordered by datetime
 
-	# df_client column names
-	msg <- check_df_names("df_client", names(df_client),
-												c("client", "type", "asset", "qty", "prz", "datetime"))
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# df_client column types
-	typ <- purrr::map(df_client, class) %>% purrr::map(1) %>% unlist()
-	msg <- check_var_types("df_client", typ,
-												 c("client" = "character", "type" = "character",
-												 	"asset" = "character", "qty" = "integer",
-												 	"prz" = "numeric", "datetime" = "POSIXct"))
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# df_client column "type" values
-	msg <- check_values("df_client$type", unique(df_client$type), c("B", "S"), identical = TRUE)
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# df_asset_prices column names
-	msg <- check_df_names("df_asset_prices", names(df_asset_prices),
-												c("asset", "datetime", "prz", "qty"))
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# df_asset_prices column types
-	typ <- purrr::map(df_asset_prices, class) %>% purrr::map(1) %>% unlist()
-	msg <- check_var_types("df_asset_prices", typ,
-												 c("asset" = "character", "datetime" = "POSIXct",
-												 	"qty" = "integer", "prz" = "numeric"))
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# method values
-	msg <- check_values("method", method,
-											c("count", "total", "value", "duration", "all", "none"))
-	if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # df_client column names
+	# msg <- check_df_names("df_client", names(df_client),
+	# 											c("client", "type", "asset", "qty", "prz", "datetime"))
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # df_client column types
+	# typ <- purrr::map(df_client, class) %>% purrr::map(1) %>% unlist()
+	# msg <- check_var_types("df_client", typ,
+	# 											 c("client" = "character", "type" = "character",
+	# 											 	"asset" = "character", "qty" = "integer",
+	# 											 	"prz" = "numeric", "datetime" = "POSIXct"))
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # df_client column "type" values
+	# msg <- check_values("df_client$type", unique(df_client$type), c("B", "S"), identical = TRUE)
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # df_asset_prices column names
+	# msg <- check_df_names("df_asset_prices", names(df_asset_prices),
+	# 											c("asset", "datetime", "prz", "qty"))
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # df_asset_prices column types
+	# typ <- purrr::map(df_asset_prices, class) %>% purrr::map(1) %>% unlist()
+	# msg <- check_var_types("df_asset_prices", typ,
+	# 											 c("asset" = "character", "datetime" = "POSIXct",
+	# 											 	"qty" = "integer", "prz" = "numeric"))
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+	# # method values
+	# msg <- check_values("method", method,
+	# 										c("count", "total", "value", "duration", "all", "none"))
+	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
+
 	# verbosity
 	verb <- verbose[1] == 1
-
 
 	# global parameters
 	client <- df_client$client[1]

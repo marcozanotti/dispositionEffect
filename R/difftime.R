@@ -99,8 +99,13 @@ financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
 compare_difftime <- function(from, to, time_threshold = "0 mins") {
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
-	units <- stringr::str_split(time_threshold, "\\s")[[1]][2]
-	value <- stringr::str_split(time_threshold, "\\s")[[1]][1] %>% as.numeric()
+	if (length(strsplit(time_threshold, "\\s")[[1]]) <= 1) {
+		stop(paste("Please correctly specify the time_threshold argument. Possibly a space is missing."))
+	}
+
+	units <- strsplit(time_threshold, "\\s")[[1]][2]
+	value <- strsplit(time_threshold, "\\s")[[1]][1] %>%
+		as.numeric()
 
 	dtt_diff <- financial_difftime(from, to) %>%
 		as.difftime(units = "hours") %>% # financial_difftime returns in hours

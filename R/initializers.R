@@ -24,7 +24,7 @@ NULL
 #' @export
 initializer_portfolio <- function(client, client_assets) {
 
-	portfolio <- tibble(client = client,
+	portfolio <- tibble::tibble(client = client,
 											asset = client_assets,
 											qty = as.numeric(rep(NA, length(client_assets))),
 											prz = as.numeric(rep(NA, length(client_assets))),
@@ -42,35 +42,35 @@ initializer_portfolio <- function(client, client_assets) {
 initializer_results <- function(client, client_assets, method = "all") {
 
 	if (method == "count") {
-		results_df <- tibble(client = client,
+		results_df <- tibble::tibble(client = client,
 												 asset = client_assets,
 												 RG_count = as.numeric(rep(NA, length(client_assets))),
 												 RL_count = as.numeric(rep(NA, length(client_assets))),
 												 PG_count = as.numeric(rep(NA, length(client_assets))),
 												 PL_count = as.numeric(rep(NA, length(client_assets))))
 	} else if (method == "total") {
-		results_df <- tibble(client = client,
+		results_df <- tibble::tibble(client = client,
 												 asset = client_assets,
 												 RG_total = as.numeric(rep(NA, length(client_assets))),
 												 RL_total = as.numeric(rep(NA, length(client_assets))),
 												 PG_total = as.numeric(rep(NA, length(client_assets))),
 												 PL_total = as.numeric(rep(NA, length(client_assets))))
 	} else if (method == "value") {
-		results_df <- tibble(client = client,
+		results_df <- tibble::tibble(client = client,
 												 asset = client_assets,
 												 RG_value = as.numeric(rep(NA, length(client_assets))),
 												 RL_value = as.numeric(rep(NA, length(client_assets))),
 												 PG_value = as.numeric(rep(NA, length(client_assets))),
 												 PL_value = as.numeric(rep(NA, length(client_assets))))
 	} else if (method == "duration") {
-		results_df <- tibble(client = client,
+		results_df <- tibble::tibble(client = client,
 												 asset = client_assets,
 												 RG_duration = as.numeric(rep(NA, length(client_assets))),
 												 RL_duration = as.numeric(rep(NA, length(client_assets))),
 												 PG_duration = as.numeric(rep(NA, length(client_assets))),
 												 PL_duration = as.numeric(rep(NA, length(client_assets))))
 	} else if (method == "all") {
-		results_df <- tibble(client = client,
+		results_df <- tibble::tibble(client = client,
 												 asset = client_assets,
 												 RG_count = as.numeric(rep(NA, length(client_assets))),
 												 RL_count = as.numeric(rep(NA, length(client_assets))),
@@ -88,7 +88,7 @@ initializer_results <- function(client, client_assets, method = "all") {
 												 RL_duration = as.numeric(rep(NA, length(client_assets))),
 												 PG_duration = as.numeric(rep(NA, length(client_assets))),
 												 PL_duration = as.numeric(rep(NA, length(client_assets))))
-	} else { # method == "none"
+	} else {# method == "none"
 		results_df <- NULL
 	}
 

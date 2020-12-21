@@ -21,7 +21,6 @@ NULL
 
 #' @describeIn initializers Empty [tibble][tibble::tibble-package]
 #'   of investor's portfolio.
-#' @export
 initializer_portfolio <- function(client, client_assets) {
 
 	portfolio <- tibble::tibble(client = client,
@@ -38,7 +37,6 @@ initializer_portfolio <- function(client, client_assets) {
 #' @describeIn initializers Empty [tibble][tibble::tibble-package]
 #'   of investor's realized and paper gains and losses results based on
 #'   the chosen method.
-#' @export
 initializer_results <- function(client, client_assets, method = "all") {
 
 	if (method == "count") {

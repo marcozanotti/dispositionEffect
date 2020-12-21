@@ -24,7 +24,6 @@ NULL
 
 
 #' @describeIn checks Check consistency of data frame variables' names.
-#' @export
 check_df_names <- function(df_name, df_names, target_names) {
 
 	test <- identical(target_names, df_names)
@@ -48,7 +47,6 @@ check_df_names <- function(df_name, df_names, target_names) {
 
 
 #' @describeIn checks Check consistency of values.
-#' @export
 check_values <- function(input_name, input_values, target_values, identical = FALSE) {
 
 	if (identical) {
@@ -81,7 +79,6 @@ check_values <- function(input_name, input_values, target_values, identical = FA
 
 
 #' @describeIn checks Check consistency of variables' types.
-#' @export
 check_var_types <- function(input_name, input_types, target_types, multiple = TRUE) {
 
 	if (multiple) {

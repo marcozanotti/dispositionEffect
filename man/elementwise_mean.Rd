@@ -23,6 +23,7 @@ The function allows for the calculation of the mean on two
 vectors element-wise.
 }
 \examples{
+  \dontrun{
   x <- 1:10
   y <- 99:90
   ewise_mean(x, y)
@@ -32,6 +33,7 @@ vectors element-wise.
 
   x[1] <- 0
   ewise_mean(x, y, zero.substitute = TRUE)
+  }
 
 }
 \keyword{internal}

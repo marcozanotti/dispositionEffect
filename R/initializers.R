@@ -4,8 +4,8 @@
 #'
 #' @description Initializers functions
 #'
-#' @param client Character string. The name of the investor.
-#' @param client_assets Character vector. The names of the assets traded by
+#' @param investor Character string. The name of the investor.
+#' @param assets Character vector. The names of the assets traded by
 #'   the investor.
 #' @inheritParams paper_compute
 #'
@@ -21,13 +21,14 @@ NULL
 
 #' @describeIn initializers Empty [tibble][tibble::tibble-package]
 #'   of investor's portfolio.
-initializer_portfolio <- function(client, client_assets) {
+initializer_portfolio <- function(investor,
+																	assets) {
 
-	portfolio <- tibble::tibble(client = client,
-											asset = client_assets,
-											qty = as.numeric(rep(NA, length(client_assets))),
-											prz = as.numeric(rep(NA, length(client_assets))),
-											dtt = as.POSIXct(rep(NA, length(client_assets))))
+	portfolio <- tibble::tibble(investor = investor,
+											asset = assets,
+											qty = as.numeric(rep(NA, length(assets))),
+											prz = as.numeric(rep(NA, length(assets))),
+											dtt = as.POSIXct(rep(NA, length(assets))))
 
 	return(portfolio)
 
@@ -37,55 +38,57 @@ initializer_portfolio <- function(client, client_assets) {
 #' @describeIn initializers Empty [tibble][tibble::tibble-package]
 #'   of investor's realized and paper gains and losses results based on
 #'   the chosen method.
-initializer_results <- function(client, client_assets, method = "all") {
+initializer_results <- function(investor,
+																assets,
+																method = "all") {
 
 	if (method == "count") {
-		results_df <- tibble::tibble(client = client,
-												 asset = client_assets,
-												 RG_count = as.numeric(rep(NA, length(client_assets))),
-												 RL_count = as.numeric(rep(NA, length(client_assets))),
-												 PG_count = as.numeric(rep(NA, length(client_assets))),
-												 PL_count = as.numeric(rep(NA, length(client_assets))))
+		results_df <- tibble::tibble(investor = investor,
+												 asset = assets,
+												 RG_count = as.numeric(rep(NA, length(assets))),
+												 RL_count = as.numeric(rep(NA, length(assets))),
+												 PG_count = as.numeric(rep(NA, length(assets))),
+												 PL_count = as.numeric(rep(NA, length(assets))))
 	} else if (method == "total") {
-		results_df <- tibble::tibble(client = client,
-												 asset = client_assets,
-												 RG_total = as.numeric(rep(NA, length(client_assets))),
-												 RL_total = as.numeric(rep(NA, length(client_assets))),
-												 PG_total = as.numeric(rep(NA, length(client_assets))),
-												 PL_total = as.numeric(rep(NA, length(client_assets))))
+		results_df <- tibble::tibble(investor = investor,
+												 asset = assets,
+												 RG_total = as.numeric(rep(NA, length(assets))),
+												 RL_total = as.numeric(rep(NA, length(assets))),
+												 PG_total = as.numeric(rep(NA, length(assets))),
+												 PL_total = as.numeric(rep(NA, length(assets))))
 	} else if (method == "value") {
-		results_df <- tibble::tibble(client = client,
-												 asset = client_assets,
-												 RG_value = as.numeric(rep(NA, length(client_assets))),
-												 RL_value = as.numeric(rep(NA, length(client_assets))),
-												 PG_value = as.numeric(rep(NA, length(client_assets))),
-												 PL_value = as.numeric(rep(NA, length(client_assets))))
+		results_df <- tibble::tibble(investor = investor,
+												 asset = assets,
+												 RG_value = as.numeric(rep(NA, length(assets))),
+												 RL_value = as.numeric(rep(NA, length(assets))),
+												 PG_value = as.numeric(rep(NA, length(assets))),
+												 PL_value = as.numeric(rep(NA, length(assets))))
 	} else if (method == "duration") {
-		results_df <- tibble::tibble(client = client,
-												 asset = client_assets,
-												 RG_duration = as.numeric(rep(NA, length(client_assets))),
-												 RL_duration = as.numeric(rep(NA, length(client_assets))),
-												 PG_duration = as.numeric(rep(NA, length(client_assets))),
-												 PL_duration = as.numeric(rep(NA, length(client_assets))))
+		results_df <- tibble::tibble(investor = investor,
+												 asset = assets,
+												 RG_duration = as.numeric(rep(NA, length(assets))),
+												 RL_duration = as.numeric(rep(NA, length(assets))),
+												 PG_duration = as.numeric(rep(NA, length(assets))),
+												 PL_duration = as.numeric(rep(NA, length(assets))))
 	} else if (method == "all") {
-		results_df <- tibble::tibble(client = client,
-												 asset = client_assets,
-												 RG_count = as.numeric(rep(NA, length(client_assets))),
-												 RL_count = as.numeric(rep(NA, length(client_assets))),
-												 PG_count = as.numeric(rep(NA, length(client_assets))),
-												 PL_count = as.numeric(rep(NA, length(client_assets))),
-												 RG_total = as.numeric(rep(NA, length(client_assets))),
-												 RL_total = as.numeric(rep(NA, length(client_assets))),
-												 PG_total = as.numeric(rep(NA, length(client_assets))),
-												 PL_total = as.numeric(rep(NA, length(client_assets))),
-												 RG_value = as.numeric(rep(NA, length(client_assets))),
-												 RL_value = as.numeric(rep(NA, length(client_assets))),
-												 PG_value = as.numeric(rep(NA, length(client_assets))),
-												 PL_value = as.numeric(rep(NA, length(client_assets))),
-												 RG_duration = as.numeric(rep(NA, length(client_assets))),
-												 RL_duration = as.numeric(rep(NA, length(client_assets))),
-												 PG_duration = as.numeric(rep(NA, length(client_assets))),
-												 PL_duration = as.numeric(rep(NA, length(client_assets))))
+		results_df <- tibble::tibble(investor = investor,
+												 asset = assets,
+												 RG_count = as.numeric(rep(NA, length(assets))),
+												 RL_count = as.numeric(rep(NA, length(assets))),
+												 PG_count = as.numeric(rep(NA, length(assets))),
+												 PL_count = as.numeric(rep(NA, length(assets))),
+												 RG_total = as.numeric(rep(NA, length(assets))),
+												 RL_total = as.numeric(rep(NA, length(assets))),
+												 PG_total = as.numeric(rep(NA, length(assets))),
+												 PL_total = as.numeric(rep(NA, length(assets))),
+												 RG_value = as.numeric(rep(NA, length(assets))),
+												 RL_value = as.numeric(rep(NA, length(assets))),
+												 PG_value = as.numeric(rep(NA, length(assets))),
+												 PL_value = as.numeric(rep(NA, length(assets))),
+												 RG_duration = as.numeric(rep(NA, length(assets))),
+												 RL_duration = as.numeric(rep(NA, length(assets))),
+												 PG_duration = as.numeric(rep(NA, length(assets))),
+												 PL_duration = as.numeric(rep(NA, length(assets))))
 	} else {# method == "none"
 		results_df <- NULL
 	}

@@ -5,16 +5,21 @@
 \alias{evaluate_portfolio}
 \title{Portfolio evaluation}
 \usage{
-evaluate_portfolio(portfolio_df, trx_date, df_asset_prices, statistics = FALSE)
+evaluate_portfolio(
+  portfolio_df,
+  transaction_datetime,
+  market_prices,
+  portfolio_statistics = FALSE
+)
 }
 \arguments{
 \item{portfolio_df}{Data frame of the investor's portfolio at time t.}
 
-\item{trx_date}{POSIXct value of the transaction date.}
+\item{transaction_datetime}{POSIXct value of the transaction date.}
 
-\item{df_asset_prices}{Data frame containing the market prices.}
+\item{market_prices}{Data frame containing the market prices.}
 
-\item{statistics}{Logical. If TRUE some statistical indexes are computed
+\item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}
 }
 \value{

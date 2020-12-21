@@ -4,7 +4,7 @@
 \alias{closest_historical_price}
 \title{Closest market price}
 \usage{
-closest_historical_price(asset, datetime, df_asset_prices)
+closest_historical_price(asset, datetime, market_prices)
 }
 \arguments{
 \item{asset}{Character name of the asset to look for.}
@@ -12,7 +12,7 @@ closest_historical_price(asset, datetime, df_asset_prices)
 \item{datetime}{POSIXct of the datetime at which looking for the asset's
 price.}
 
-\item{df_asset_prices}{Data frame containing the market prices.}
+\item{market_prices}{Data frame containing the market prices.}
 }
 \value{
 The value of the asset's price.

@@ -7,9 +7,9 @@
 #' @details
 #'
 #' @param portfolio_df Data frame of the investor's portfolio at time t.
-#' @param trx_date POSIXct value of the transaction date.
+#' @param transaction_datetime POSIXct value of the transaction date.
 #' @inheritParams closest_historical_price
-#' @param statistics Logical. If TRUE some statistical indexes are computed
+#' @param portfolio_statistics Logical. If TRUE some statistical indexes are computed
 #'   on the portfolio and returned.
 #'
 #' @return The portfolio value as the sum of each asset quantity times the
@@ -23,7 +23,10 @@
 #'   \code{\link{closest_historical_price}}
 #'
 #' @export
-evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statistics = FALSE) {
+evaluate_portfolio <- function(portfolio_df,
+															 transaction_datetime,
+															 market_prices,
+															 portfolio_statistics = FALSE) {
 
 	portfolio_df <- portfolio_df[which(!is.na(portfolio_df$qty)),] # remove asset with missing qty
 
@@ -33,10 +36,11 @@ evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statisti
 
 	} else {
 
-		market_values <- purrr::map_dbl(portfolio_df$asset, closest_historical_price, trx_date, df_asset_prices)
+		market_values <- purrr::map_dbl(portfolio_df$asset, closest_historical_price,
+																		transaction_datetime, market_prices)
 		value <- sum(portfolio_df$qty * (market_values - portfolio_df$prz))
 
-		if (statistics) {
+		if (portfolio_statistics) {
 			# compute some other portfolio statistics
 		}
 

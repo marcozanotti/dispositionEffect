@@ -6,16 +6,16 @@
 #'
 #' @details
 #'
-#' @param ptf_qty Numeric vector. The portfolio quantities of assets into the
+#' @param portfolio_quantity Numeric vector. The portfolio quantities of assets into the
 #'   investor's portfolio.
-#' @param ptf_prz Numeric vector. The portfolio prices of assets into the
+#' @param portfolio_price Numeric vector. The portfolio prices of assets into the
 #'   investor's portfolio.
-#' @param trx_qty Numeric value. The quantity of the traded asset.
-#' @param trx_prz Numeric value. The market price of the traded asset.
-#' @param trx_type Character string. Either "B" = buy or "S" = sell.
-#' @param initial_dtt POSIXct value. The portfolio date-time related to the
+#' @param transaction_quantity Numeric value. The quantity of the traded asset.
+#' @param transaction_price Numeric value. The market price of the traded asset.
+#' @param transaction_type Character string. Either "B" = buy or "S" = sell.
+#' @param previous_transaction_datetime POSIXct value. The portfolio date-time related to the
 #'   last transaction of the traded asset.
-#' @param trx_asset Character string. The name of the traded asset.
+#' @param transaction_asset Character string. The name of the traded asset.
 #' @param realized_only Logical. If TRUE only realized gains and realized
 #'   losses are computed. Otherwise also paper gains and paper losses on excess
 #'   quantity of the traded asset are computed.
@@ -60,16 +60,23 @@ NULL
 #' @describeIn realized_compute Computation, as simple counts, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
-realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-													 allow_short = FALSE, realized_only = FALSE) {
+realized_count <- function(portfolio_quantity,
+													 portfolio_price,
+													 transaction_quantity,
+													 transaction_price,
+													 transaction_type,
+													 allow_short = FALSE,
+													 realized_only = FALSE) {
 
-	if (!is.numeric(ptf_qty) || !is.numeric(ptf_prz) ||
-			!is.numeric(trx_qty) || !is.numeric(trx_prz)) {
+	if (!is.numeric(portfolio_quantity) ||
+			!is.numeric(portfolio_price) ||
+			!is.numeric(transaction_quantity) ||
+			!is.numeric(transaction_price)) {
 		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
 	}
 
-	qty_diff <- ptf_qty + trx_qty # quantity difference (if trx_type == "S" then ptf_qty < 0)
-	prz_diff <- trx_prz - ptf_prz # price difference
+	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
+	prz_diff <- transaction_price - portfolio_price # price difference
 
 
 	if (realized_only) {
@@ -79,7 +86,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -91,7 +98,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -111,7 +118,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -123,7 +130,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -143,7 +150,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -153,7 +160,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -165,7 +172,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -185,7 +192,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -203,7 +210,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -215,7 +222,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -235,7 +242,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -247,7 +254,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -267,7 +274,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -277,7 +284,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -289,7 +296,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -309,7 +316,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -329,16 +336,23 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 #' @describeIn realized_compute Computation, as simple quantity, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
-realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-													 allow_short = FALSE, realized_only = FALSE) {
+realized_total <- function(portfolio_quantity,
+													 portfolio_price,
+													 transaction_quantity,
+													 transaction_price,
+													 transaction_type,
+													 allow_short = FALSE,
+													 realized_only = FALSE) {
 
-	if (!is.numeric(ptf_qty) || !is.numeric(ptf_prz) ||
-			!is.numeric(trx_qty) || !is.numeric(trx_prz)) {
+	if (!is.numeric(portfolio_quantity) ||
+			!is.numeric(portfolio_price) ||
+			!is.numeric(transaction_quantity) ||
+			!is.numeric(transaction_price)) {
 		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
 	}
 
-	qty_diff <- ptf_qty + trx_qty # quantity difference (if trx_type == "S" then ptf_qty < 0)
-	prz_diff <- trx_prz - ptf_prz # price difference
+	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
+	prz_diff <- transaction_price - portfolio_price # price difference
 
 
 	if (realized_only) {
@@ -349,7 +363,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -361,27 +375,27 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
-						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity), "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -393,27 +407,27 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = trx_qty, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = transaction_quantity, "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = trx_qty - qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = transaction_quantity - qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
-						res <- c("RG_total" = trx_qty, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = transaction_quantity, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = trx_qty - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = transaction_quantity - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -423,7 +437,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -435,27 +449,27 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
-						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity), "PG_total" = 0, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -473,71 +487,71 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = ptf_qty, "PL_total" = 0)
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = portfolio_quantity, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = ptf_qty)
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = portfolio_quantity)
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
-						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = qty_diff)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity), "PG_total" = 0, "PL_total" = qty_diff)
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = abs(ptf_qty))
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = abs(portfolio_quantity))
 				} else if (prz_diff < 0) { # Paper Gain
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = abs(ptf_qty), "PL_total" = 0)
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = abs(portfolio_quantity), "PL_total" = 0)
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = trx_qty, "PG_total" = 0, "PL_total" = abs(qty_diff))
+						res <- c("RG_total" = 0, "RL_total" = transaction_quantity, "PG_total" = 0, "PL_total" = abs(qty_diff))
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = trx_qty - qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = transaction_quantity - qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
-						res <- c("RG_total" = trx_qty, "RL_total" = 0, "PG_total" = abs(qty_diff), "PL_total" = 0)
+						res <- c("RG_total" = transaction_quantity, "RL_total" = 0, "PG_total" = abs(qty_diff), "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = trx_qty - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = transaction_quantity - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -547,39 +561,39 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = ptf_qty, "PL_total" = 0)
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = portfolio_quantity, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
-					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = ptf_qty)
+					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = portfolio_quantity)
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
-						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
 					} else {# + nothing
-						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = abs(transaction_quantity) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = qty_diff)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity), "PG_total" = 0, "PL_total" = qty_diff)
 					} else {# + nothing
-						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
+						res <- c("RG_total" = 0, "RL_total" = abs(transaction_quantity) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -599,17 +613,23 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 #' @describeIn realized_compute Computation, as simple expected return, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
-realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
+realized_value <- function(portfolio_quantity,
+													 portfolio_price,
+													 transaction_quantity,
+													 transaction_price,
+													 transaction_type,
 													 allow_short = FALSE, realized_only = FALSE) {
 
-	if (!is.numeric(ptf_qty) || !is.numeric(ptf_prz) ||
-			!is.numeric(trx_qty) || !is.numeric(trx_prz)) {
+	if (!is.numeric(portfolio_quantity) ||
+			!is.numeric(portfolio_price) ||
+			!is.numeric(transaction_quantity) ||
+			!is.numeric(transaction_price)) {
 		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
 	}
 
-	qty_diff <- ptf_qty + trx_qty # quantity difference (if trx_type == "S" then trx_qty < 0)
-	prz_diff <- trx_prz - ptf_prz # price difference
-	Er <- prz_diff / ptf_prz # trx_asset expected return
+	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
+	prz_diff <- transaction_price - portfolio_price # price difference
+	Er <- prz_diff / portfolio_price # transaction_asset expected return
 
 
 	if (realized_only) {
@@ -620,7 +640,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -632,7 +652,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -652,7 +672,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -664,7 +684,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -684,7 +704,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -694,7 +714,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -706,7 +726,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -726,7 +746,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -744,7 +764,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -756,7 +776,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -776,7 +796,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -788,7 +808,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -808,7 +828,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -818,7 +838,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -830,7 +850,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -850,7 +870,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -870,29 +890,38 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 #' @describeIn realized_compute Computation, as simple financial duration, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
-realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-															initial_dtt, last_dtt, trx_dtt,
-															allow_short = FALSE, realized_only = FALSE) {
+realized_duration <- function(portfolio_quantity,
+															portfolio_price,
+															transaction_quantity,
+															transaction_price,
+															transaction_type,
+															previous_transaction_datetime,
+															previous_datetime,
+															transaction_datetime,
+															allow_short = FALSE,
+															realized_only = FALSE) {
 
-	if (!is.numeric(ptf_qty) || !is.numeric(ptf_prz) ||
-			!is.numeric(trx_qty) || !is.numeric(trx_prz)) {
+	if (!is.numeric(portfolio_quantity) ||
+			!is.numeric(portfolio_price) ||
+			!is.numeric(transaction_quantity) ||
+			!is.numeric(transaction_price)) {
 		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
 	}
 
-	if (!lubridate::is.POSIXct(initial_dtt) ||
-			!lubridate::is.POSIXct(last_dtt) ||
-			!lubridate::is.POSIXct(trx_dtt)) {
+	if (!lubridate::is.POSIXct(previous_transaction_datetime) ||
+			!lubridate::is.POSIXct(previous_datetime) ||
+			!lubridate::is.POSIXct(transaction_datetime)) {
 		stop("Arguments *dtt must be POSIXct.", call. = FALSE)
 	}
 
-	qty_diff <- ptf_qty + trx_qty # quantity difference (if trx_type == "S" then trx_qty < 0)
-	prz_diff <- trx_prz - ptf_prz # price difference
-	# dtt_diff <- difftime(trx_dtt, last_dtt, units = "days") %>% # duration of paper gain/loss
+	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
+	prz_diff <- transaction_price - portfolio_price # price difference
+	# dtt_diff <- difftime(transaction_datetime, previous_datetime, units = "days") %>% # duration of paper gain/loss
 	# as.numeric() # to avoid conversion errors
-	dtt_diff <- financial_difftime(last_dtt, trx_dtt)
-	# dtt_diff0 <- difftime(trx_dtt, initial_dtt, units = "days") %>% # duration of realized gain/loss
+	dtt_diff <- financial_difftime(previous_datetime, transaction_datetime)
+	# dtt_diff0 <- difftime(transaction_datetime, previous_transaction_datetime, units = "days") %>% # duration of realized gain/loss
 	#   as.numeric() # to avoid conversion errors
-	dtt_diff0 <- financial_difftime(initial_dtt, trx_dtt)
+	dtt_diff0 <- financial_difftime(previous_transaction_datetime, transaction_datetime)
 	# by default the duration returned is in days, conversion is left to the user
 
 
@@ -904,7 +933,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -916,7 +945,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -936,7 +965,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -948,7 +977,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -968,7 +997,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -978,7 +1007,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -990,7 +1019,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -1010,7 +1039,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -1028,7 +1057,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -1040,7 +1069,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -1060,7 +1089,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "S") { # Short + No Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "S") { # Short + No Realized
 
 
 				if (prz_diff > 0) { # Paper Loss
@@ -1072,7 +1101,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty < 0 && trx_type == "B") { # Short - Realized
+			} else if (portfolio_quantity < 0 && transaction_type == "B") { # Short - Realized
 
 
 				if (prz_diff > 0) { # Realized Loss
@@ -1092,7 +1121,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty == 0, then nothing
+			} else {# if portfolio_quantity == 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -1102,7 +1131,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-			if (ptf_qty > 0 && trx_type == "B") { # Long + No Realized
+			if (portfolio_quantity > 0 && transaction_type == "B") { # Long + No Realized
 
 
 				if (prz_diff > 0) { # Paper Gain
@@ -1114,7 +1143,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else if (ptf_qty > 0 && trx_type == "S") { # Long - Realized
+			} else if (portfolio_quantity > 0 && transaction_type == "S") { # Long - Realized
 
 
 				if (prz_diff > 0) { # Realized Gain
@@ -1134,7 +1163,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				}
 
 
-			} else {# if ptf_qty <= 0, then nothing
+			} else {# if portfolio_quantity <= 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -1155,52 +1184,112 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 #'   compute realized gains and realized losses of the traded asset based on the
 #'   chosen method.
 #' @export
-realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-														 initial_dtt, last_dtt, trx_dtt, trx_asset,
-														 allow_short = FALSE, realized_only = FALSE,
+realized_compute <- function(portfolio_quantity,
+														 portfolio_price,
+														 transaction_quantity,
+														 transaction_price,
+														 transaction_type,
+														 previous_transaction_datetime,
+														 previous_datetime,
+														 transaction_datetime,
+														 transaction_asset,
+														 allow_short = FALSE,
+														 realized_only = FALSE,
 														 method = "all") {
 
 	if (method == "count") {
 
 		# compute Realized and Paper Gain and Loss with realized_count()
-		rgl_count <- realized_count(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
+		rgl_count <- realized_count(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
 		# convert results to a df
-		res_df <- c("asset" = trx_asset, as.list(rgl_count)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_count)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "total") {
 
 		# compute Realized and Paper Gain and Loss with realized_total()
-		rgl_total <- realized_total(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
+		rgl_total <- realized_total(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
 		# convert results to a df
-		res_df <- c("asset" = trx_asset, as.list(rgl_total)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_total)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "value") {
 
 		# compute Realized and Paper Gain and Loss with realized_value()
-		rgl_value <- realized_value(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
-		res_df <- c("asset" = trx_asset, as.list(rgl_value)) %>%
+		rgl_value <- realized_value(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
+		res_df <- c("asset" = transaction_asset, as.list(rgl_value)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "duration") {
 
 		# compute Realized and Paper Gain and Loss with realized_value()
-		rgl_duration <- realized_duration(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-																			initial_dtt, last_dtt, trx_dtt, allow_short, realized_only)
-		res_df <- c("asset" = trx_asset, as.list(rgl_duration)) %>%
+		rgl_duration <- realized_duration(portfolio_quantity,
+																			portfolio_price,
+																			transaction_quantity,
+																			transaction_price,
+																			transaction_type,
+																			previous_transaction_datetime,
+																			previous_datetime,
+																			transaction_datetime,
+																			allow_short,
+																			realized_only)
+		res_df <- c("asset" = transaction_asset, as.list(rgl_duration)) %>%
 			tibble::as_tibble()
 
 	} else {# method == "all"
 
 		# compute Realized and Paper Gain and Loss with all functions and wrap-up results
-		rgl_count <- realized_count(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
-		rgl_total <- realized_total(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
-		rgl_value <- realized_value(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
-		rgl_duration <- realized_duration(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-																			initial_dtt, last_dtt, trx_dtt, allow_short, realized_only)
+		rgl_count <- realized_count(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
+		rgl_total <- realized_total(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
+		rgl_value <- realized_value(portfolio_quantity,
+																portfolio_price,
+																transaction_quantity,
+																transaction_price,
+																transaction_type,
+																allow_short,
+																realized_only)
+		rgl_duration <- realized_duration(portfolio_quantity,
+																			portfolio_price,
+																			transaction_quantity,
+																			transaction_price,
+																			transaction_type,
+																			previous_transaction_datetime,
+																			previous_datetime,
+																			transaction_datetime,
+																			allow_short,
+																			realized_only)
 		# convert results to a df
-		res_df <- c("asset" = trx_asset,
+		res_df <- c("asset" = transaction_asset,
 								as.list(rgl_count),
 								as.list(rgl_total),
 								as.list(rgl_value),
@@ -1217,30 +1306,30 @@ realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 #' @describeIn realized_compute Simple function to obtain empty results for
 #'   realized and paper computations based on the chosen method.
 #' @export
-realized_empty <- function(trx_asset, method = "all") {
+realized_empty <- function(transaction_asset, method = "all") {
 
 	if (method == "count") {
 
 		rgl_count <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-		res_df <- c("asset" = trx_asset, as.list(rgl_count)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_count)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "total") {
 
 		rgl_total <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-		res_df <- c("asset" = trx_asset, as.list(rgl_total)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_total)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "value") {
 
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-		res_df <- c("asset" = trx_asset, as.list(rgl_value)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_value)) %>%
 			tibble::as_tibble()
 
 	} else if (method == "duration") {
 
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-		res_df <- c("asset" = trx_asset, as.list(rgl_duration)) %>%
+		res_df <- c("asset" = transaction_asset, as.list(rgl_duration)) %>%
 			tibble::as_tibble()
 
 	} else {# method == "all"
@@ -1250,7 +1339,7 @@ realized_empty <- function(trx_asset, method = "all") {
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 		# convert results to a df
-		res_df <- c("asset" = trx_asset,
+		res_df <- c("asset" = transaction_asset,
 								as.list(rgl_count),
 								as.list(rgl_total),
 								as.list(rgl_value),

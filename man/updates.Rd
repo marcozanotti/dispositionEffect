@@ -8,38 +8,50 @@
 \alias{meanvalue_compute}
 \title{Update investor's portfolio or realized and paper results}
 \usage{
-prz_update(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type)
+prz_update(
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type
+)
 
-dtt_update(ptf_qty, ptf_dtt, trx_qty, trx_dtt, trx_type)
+dtt_update(
+  portfolio_quantity,
+  portfolio_datetime,
+  transaction_quantity,
+  transaction_datetime,
+  transaction_type
+)
 
-results_update(df_to_update, df_new_info, method = "all")
+results_update(realized_and_paper, new_realized_and_paper, method = "all")
 
-meanvalue_compute(df_to_update, df_numtrx)
+meanvalue_compute(realized_and_paper, asset_transactions)
 }
 \arguments{
-\item{ptf_qty}{Numeric value. The portfolio quantity of the traded asset.}
+\item{portfolio_quantity}{Numeric value. The portfolio quantity of the traded asset.}
 
-\item{ptf_prz}{Numeric value. The portfolio price of the traded asset.}
+\item{portfolio_price}{Numeric value. The portfolio price of the traded asset.}
 
-\item{trx_qty}{Numeric value. The quantity of the traded asset.}
+\item{transaction_quantity}{Numeric value. The quantity of the traded asset.}
 
-\item{trx_prz}{Numeric value. The market price of the traded asset.}
+\item{transaction_price}{Numeric value. The market price of the traded asset.}
 
-\item{trx_type}{Character string. Either "B" = buy or "S" = sell.}
+\item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
-\item{trx_dtt}{POSIXct value. The date-time at which the transaction
+\item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
-\item{df_to_update}{Data frame containing the realized and paper gains and
+\item{realized_and_paper}{Data frame containing the realized and paper gains and
 losses results to be updated.}
 
-\item{df_new_info}{Data frame containing the realized and paper gains and
+\item{new_realized_and_paper}{Data frame containing the realized and paper gains and
 losses results related to the new transaction.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}
 
-\item{df_numtrx}{Data frame containing the number of transactions for
+\item{asset_transactions}{Data frame containing the number of transactions for
 each asset traded by the investor.}
 }
 \value{

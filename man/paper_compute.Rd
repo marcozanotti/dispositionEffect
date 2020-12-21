@@ -8,53 +8,68 @@
 \alias{paper_duration}
 \title{Papers' estimation}
 \usage{
-paper_count(portf_qty, portf_prz, hist_prz, allow_short = FALSE)
+paper_count(
+  portfolio_quantity,
+  portfolio_price,
+  market_price,
+  allow_short = FALSE
+)
 
-paper_total(portf_qty, portf_prz, hist_prz, allow_short = FALSE)
+paper_total(
+  portfolio_quantity,
+  portfolio_price,
+  market_price,
+  allow_short = FALSE
+)
 
-paper_value(portf_qty, portf_prz, hist_prz, allow_short = FALSE)
+paper_value(
+  portfolio_quantity,
+  portfolio_price,
+  market_price,
+  allow_short = FALSE
+)
 
 paper_duration(
-  portf_qty,
-  portf_prz,
-  hist_prz,
-  last_dtt,
-  trx_dtt,
+  portfolio_quantity,
+  portfolio_price,
+  market_price,
+  previous_datetime,
+  transaction_datetime,
   allow_short = FALSE
 )
 
 paper_compute(
-  portf_qty,
-  portf_prz,
-  hist_prz,
-  last_dtt,
-  trx_dtt,
+  portfolio_quantity,
+  portfolio_price,
+  market_price,
+  previous_datetime,
+  transaction_datetime,
   assets,
   allow_short = FALSE,
   method = "all"
 )
 }
 \arguments{
-\item{portf_qty}{Numeric vector. The portfolio quantities of assets into the
+\item{portfolio_quantity}{Numeric vector. The portfolio quantities of assets into the
 investor's portfolio.}
 
-\item{portf_prz}{Numeric vector. The portfolio prices of assets into the
+\item{portfolio_price}{Numeric vector. The portfolio prices of assets into the
 investor's portfolio.}
 
-\item{hist_prz}{Numeric vector. The market prices of assets into the
+\item{market_price}{Numeric vector. The market prices of assets into the
 investor's portfolio.}
 
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
 
-\item{last_dtt}{POSIXct value. The date-time of the last transaction
+\item{previous_datetime}{POSIXct value. The date-time of the last transaction
 performed by the investor.}
 
-\item{trx_dtt}{POSIXct value. The date-time at which the transaction
+\item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
 \item{assets}{Character vector. The name of assets into the investor's
-portfolio.}
+portfolio but the traded asset.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}

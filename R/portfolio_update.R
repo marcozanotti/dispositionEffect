@@ -5,10 +5,11 @@
 #'
 #' @details
 #'
-#' @param df_client Data frame. The investor's transactions data frame.
+#' @param portfolio_transactions Data frame. The investor's transactions data frame.
 #' @inheritParams closest_historical_price
 #' @inheritParams paper_compute
 #' @inheritParams difference_in_time
+#' @inheritParams evaluate
 #' @param method Character string containing the method to use to compute
 #'   realized and paper gains and losses. If "none" nothing is computed but the
 #'   investor's portfolio update. Otherwise it has to be one of "count", "total",
@@ -19,8 +20,6 @@
 #'   and the negative (that is when the investor's portfolio value, as computed
 #'   through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 #'   are returned.
-#' @param portfolio_statistics Logical. If TRUE some statistical indexes are computed
-#'   on the portfolio and returned.
 #' @param verbose Numeric vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
@@ -37,35 +36,40 @@
 #'   \code{\link{portfolio_update}}
 #'
 #' @export
-portfolio_update <- function(df_client, df_asset_prices,
-														 method = "all", allow_short = FALSE, time_threshold = "5 mins",
-														 posneg_portfolios = FALSE, portfolio_statistics = FALSE,
-														 verbose = c(0, 0), progress = TRUE) {
+portfolio_update <- function(portfolio_transactions,
+														 market_prices,
+														 method = "all",
+														 allow_short = FALSE,
+														 time_threshold = "5 mins",
+														 posneg_portfolios = FALSE,
+														 portfolio_statistics = FALSE,
+														 verbose = c(0, 0),
+														 progress = TRUE) {
 
 	# checks on inputs
-	# assumes that df_client is ordered by datetime
+	# assumes that portfolio_transactions is ordered by datetime
 
-	# # df_client column names
-	# msg <- check_df_names("df_client", names(df_client),
+	# # portfolio_transactions column names
+	# msg <- check_df_names("portfolio_transactions", names(portfolio_transactions),
 	# 											c("client", "type", "asset", "qty", "prz", "datetime"))
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # df_client column types
-	# typ <- purrr::map(df_client, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("df_client", typ,
+	# # portfolio_transactions column types
+	# typ <- purrr::map(portfolio_transactions, class) %>% purrr::map(1) %>% unlist()
+	# msg <- check_var_types("portfolio_transactions", typ,
 	# 											 c("client" = "character", "type" = "character",
 	# 											 	"asset" = "character", "qty" = "integer",
 	# 											 	"prz" = "numeric", "datetime" = "POSIXct"))
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # df_client column "type" values
-	# msg <- check_values("df_client$type", unique(df_client$type), c("B", "S"), identical = TRUE)
+	# # portfolio_transactions column "type" values
+	# msg <- check_values("portfolio_transactions$type", unique(portfolio_transactions$type), c("B", "S"), identical = TRUE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # df_asset_prices column names
-	# msg <- check_df_names("df_asset_prices", names(df_asset_prices),
+	# # market_prices column names
+	# msg <- check_df_names("market_prices", names(market_prices),
 	# 											c("asset", "datetime", "prz", "qty"))
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # df_asset_prices column types
-	# typ <- purrr::map(df_asset_prices, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("df_asset_prices", typ,
+	# # market_prices column types
+	# typ <- purrr::map(market_prices, class) %>% purrr::map(1) %>% unlist()
+	# msg <- check_var_types("market_prices", typ,
 	# 											 c("asset" = "character", "datetime" = "POSIXct",
 	# 											 	"qty" = "integer", "prz" = "numeric"))
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
@@ -78,9 +82,9 @@ portfolio_update <- function(df_client, df_asset_prices,
 	verb <- verbose[1] == 1
 
 	# global parameters
-	client <- df_client$client[1]
-	client_assets <- unique(df_client$asset)
-	asset_ntrx <- df_client %>%
+	client <- portfolio_transactions$client[1]
+	client_assets <- unique(portfolio_transactions$asset)
+	asset_ntrx <- portfolio_transactions %>%
 		dplyr::group_by(asset) %>%
 		dplyr::summarise(ntrx = dplyr::n())
 
@@ -101,20 +105,20 @@ portfolio_update <- function(df_client, df_asset_prices,
 	if (progress) {
 		# initialize progress bar
 		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed",
-													           total = nrow(df_client),
+													           total = nrow(portfolio_transactions),
 													           clear = FALSE, width = 60, show_after = 0)
 		pb$tick(0)
 	}
 
-	for (i in 1:nrow(df_client)) {
+	for (i in 1:nrow(portfolio_transactions)) {
 
 		# extract scalars (trx = transaction)
-		trx_type <- df_client[i, ]$type # trx type
-		trx_asset <- df_client[i, ]$asset # trx asset
-		trx_qty <- df_client[i, ]$qty # trx qty
-		trx_prz <- df_client[i, ]$prz # trx prz
-		trx_dtt <- df_client[i, ]$datetime # trx datetime
-		previous_dtt <- df_client[i - 1, ]$datetime
+		trx_type <- portfolio_transactions[i, ]$type # trx type
+		trx_asset <- portfolio_transactions[i, ]$asset # trx asset
+		trx_qty <- portfolio_transactions[i, ]$qty # trx qty
+		trx_prz <- portfolio_transactions[i, ]$prz # trx prz
+		trx_dtt <- portfolio_transactions[i, ]$datetime # trx datetime
+		previous_dtt <- portfolio_transactions[i - 1, ]$datetime
 
 		if (trx_type == "S") {
 			trx_qty <- trx_qty * -1L # if it's a sell transaction then consider qty as negative
@@ -124,14 +128,14 @@ portfolio_update <- function(df_client, df_asset_prices,
 		if (method != "none") {
 			if (verb) message("\nStart computing RG/RL/PG/PL..")
 			df_info <- gains_and_losses(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt,
-																	previous_dtt, portfolio, df_asset_prices,
+																	previous_dtt, portfolio, market_prices,
 																	time_threshold, method, allow_short, verbose)
 		}
 
 		# evaluate global portfolio value
 		if (verb) message("Evaluating global portfolio position..")
-		portfolio_value <- evaluate_portfolio(portfolio, trx_dtt, df_asset_prices,
-																					statistics = portfolio_statistics)
+		portfolio_value <- evaluate_portfolio(portfolio, trx_dtt, market_prices,
+																					portfolio_statistics = portfolio_statistics)
 
 		# update the portfolio
 		if (verb) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))

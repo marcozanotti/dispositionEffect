@@ -26,38 +26,46 @@
 #'   \code{\link{portfolio_update}}
 #'
 #' @export
-gains_and_losses <- function(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, last_dtt,
-														 portfolio, df_asset_prices, time_threshold = "5 mins",
-														 method = "all", allow_short = FALSE,
+gains_and_losses <- function(transaction_type,
+														 transaction_asset,
+														 transaction_quantity,
+														 transaction_price,
+														 transaction_datetime,
+														 previous_datetime,
+														 portfolio,
+														 market_prices,
+														 time_threshold = "5 mins",
+														 method = "all",
+														 allow_short = FALSE,
 														 verbose = c(0, 0)) {
 
 	# # checks on inputs
-	# # trx_type
-	# msg <- check_var_types("trx_type", class(trx_type), "character", multiple = FALSE)
+	# # transaction_type
+	# msg <- check_var_types("transaction_type", class(transaction_type), "character", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # trx_asset
-	# msg <- check_var_types("trx_asset", class(trx_asset), "character", multiple = FALSE)
+	# # transaction_asset
+	# msg <- check_var_types("transaction_asset", class(transaction_asset), "character", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # trx_qty
-	# msg <- check_var_types("trx_qty", class(trx_qty), "integer", multiple = FALSE)
+	# # transaction_quantity
+	# msg <- check_var_types("transaction_quantity", class(transaction_quantity), "integer", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # trx_prz
-	# msg <- check_var_types("trx_prz", class(trx_prz), "numeric", multiple = FALSE)
+	# # transaction_price
+	# msg <- check_var_types("transaction_price", class(transaction_price), "numeric", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # trx_dtt
-	# msg <- check_var_types("trx_dtt", class(trx_dtt)[1], "POSIXct", multiple = FALSE)
+	# # transaction_datetime
+	# msg <- check_var_types("transaction_datetime", class(transaction_datetime)[1], "POSIXct", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # last_dtt
-	# msg <- check_var_types("last_dtt", class(last_dtt)[1], "POSIXct", multiple = FALSE)
+	# # previous_datetime
+	# msg <- check_var_types("previous_datetime", class(previous_datetime)[1], "POSIXct", multiple = FALSE)
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
 
 	# verbosity
 	verb <- verbose[2] == 1
 
-	# qty, prz and dtt of trx_asset already into portfolio
-	ptf_qty <- portfolio[portfolio$asset == trx_asset, ]$qty
-	ptf_prz <- portfolio[portfolio$asset == trx_asset, ]$prz
-	ptf_dtt <- portfolio[portfolio$asset == trx_asset, ]$dtt
+	# qty, prz and dtt of transaction_asset already into portfolio
+	ptf_qty <- portfolio[portfolio$asset == transaction_asset, ]$qty
+	ptf_prz <- portfolio[portfolio$asset == transaction_asset, ]$prz
+	ptf_dtt <- portfolio[portfolio$asset == transaction_asset, ]$dtt
 
 	# extract assets already into portfolio
 	ptf_assets <- portfolio[!is.na(portfolio$qty), ]$asset
@@ -67,44 +75,76 @@ gains_and_losses <- function(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, las
 	}
 
 
-	if (compare_difftime(last_dtt, trx_dtt, time_threshold) == "greater") {
-		# if the difference trx_dtt - last_dtt >= time_threshold --> compute realized and paper
+	if (compare_difftime(previous_datetime, transaction_datetime, time_threshold) == "greater") {
+		# if the difference transaction_datetime - previous_datetime >= time_threshold --> compute realized and paper
 
 
-		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of trx_asset) is NA or 0, compute paper g&l of other assets
+		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
 
 			if (verb) message("\nComputing paper gains and losses..")
-			hist_prz <- purrr::map_dbl(ptf_assets, closest_historical_price, trx_dtt, df_asset_prices) # extract the historical prices at trx_dtt of all the portfolio assets but the trx_asset
-			portf_prz <- portfolio[portfolio$asset %in% ptf_assets, ]$prz # extract the portfolio asset prices but the trx_asset
-			portf_qty <- portfolio[portfolio$asset %in% ptf_assets, ]$qty # extract the portfolio asset quantities but the trx_asset
+			hist_prz <- purrr::map_dbl(ptf_assets, closest_historical_price,
+																 transaction_datetime, market_prices) # extract the historical prices at transaction_datetime of all the portfolio assets but the transaction_asset
+			portf_prz <- portfolio[portfolio$asset %in% ptf_assets, ]$prz # extract the portfolio asset prices but the transaction_asset
+			portf_qty <- portfolio[portfolio$asset %in% ptf_assets, ]$qty # extract the portfolio asset quantities but the transaction_asset
 			# compute paper gains and losses
-			realized_paper_df <- paper_compute(portf_qty, portf_prz, hist_prz, last_dtt, trx_dtt, ptf_assets,
-																				 allow_short, method)
+			realized_paper_df <- paper_compute(portf_qty,
+																				 portf_prz,
+																				 hist_prz,
+																				 previous_datetime,
+																				 transaction_datetime,
+																				 ptf_assets,
+																				 allow_short,
+																				 method)
 
 		} else {# compute gains and losses for all the assets
 
-			ptf_assets <- ptf_assets[ptf_assets != trx_asset] # remove trx_asset from assets already into portfolio
+			ptf_assets <- ptf_assets[ptf_assets != transaction_asset] # remove transaction_asset from assets already into portfolio
 
-			if (!length(ptf_assets)) { # if there are no other assets but the trx_asset, just compute on trx_asset
+			if (!length(ptf_assets)) { # if there are no other assets but the transaction_asset, just compute on transaction_asset
 
 				if (verb) message("\nComputing realized gains and losses..")
-				realized_paper_df <- realized_compute(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-																							ptf_dtt, last_dtt, trx_dtt, trx_asset,
-																							allow_short, realized_only = FALSE, method)
+				realized_paper_df <- realized_compute(ptf_qty,
+																							ptf_prz,
+																							transaction_quantity,
+																							transaction_price,
+																							transaction_type,
+																							ptf_dtt,
+																							previous_datetime,
+																							transaction_datetime,
+																							transaction_asset,
+																							allow_short,
+																							realized_only = FALSE,
+																							method)
 
-			} else {# compute on both, trx_asset and ptf_assets
+			} else {# compute on both, transaction_asset and ptf_assets
 
-				hist_prz <- purrr::map_dbl(ptf_assets, closest_historical_price, trx_dtt, df_asset_prices) # extract the historical prices at trx_dtt of all the portfolio assets but the trx_asset
-				portf_prz <- portfolio[portfolio$asset %in% ptf_assets, ]$prz # extract the portfolio asset prices but the trx_asset
-				portf_qty <- portfolio[portfolio$asset %in% ptf_assets, ]$qty # extract the portfolio asset quantities but the trx_asset
+				hist_prz <- purrr::map_dbl(ptf_assets, closest_historical_price,
+																	 transaction_datetime, market_prices) # extract the historical prices at transaction_datetime of all the portfolio assets but the transaction_asset
+				portf_prz <- portfolio[portfolio$asset %in% ptf_assets, ]$prz # extract the portfolio asset prices but the transaction_asset
+				portf_qty <- portfolio[portfolio$asset %in% ptf_assets, ]$qty # extract the portfolio asset quantities but the transaction_asset
 				# compute realized and paper gains and losses
 				if (verb) message("\nComputing realized and paper gains and losses..")
-				realized_df <- realized_compute(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-																				ptf_dtt, last_dtt, trx_dtt, trx_asset,
-																				allow_short, realized_only = FALSE, method)
-				paper_df <- paper_compute(portf_qty, portf_prz, hist_prz, last_dtt, trx_dtt, ptf_assets,
-																	allow_short, method)
-				# bind rows of trx_asset and ptf_assets results
+				realized_df <- realized_compute(ptf_qty,
+																				ptf_prz,
+																				transaction_quantity,
+																				transaction_price,
+																				transaction_type,
+																				ptf_dtt,
+																				previous_datetime,
+																				transaction_datetime,
+																				transaction_asset,
+																				allow_short,
+																				realized_only = FALSE,
+																				method)
+				paper_df <- paper_compute(portf_qty,
+																	portf_prz,
+																	hist_prz,
+																	previous_datetime,
+																	transaction_datetime,
+																	ptf_assets,
+																	allow_short,
+																	method)
+				# bind rows of transaction_asset and ptf_assets results
 				realized_paper_df <- rbind(realized_df, paper_df)
 
 			}
@@ -113,19 +153,28 @@ gains_and_losses <- function(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, las
 
 
 	} else {
-		# if the difference trx_dtt - last_dtt < time_threshold --> compute only realized
+		# if the difference transaction_datetime - previous_datetime < time_threshold --> compute only realized
 
 
-		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of trx_asset) is NA or 0, return an empty df
+		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, return an empty df
 
-			realized_paper_df <- realized_empty(trx_asset, method)
+			realized_paper_df <- realized_empty(transaction_asset, method)
 
 		} else {# compute gains and losses for all the assets
 
 			if (verb) message("\nComputing realized gains and losses..")
-			realized_paper_df <- realized_compute(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
-																						ptf_dtt, last_dtt, trx_dtt, trx_asset,
-																						allow_short, realized_only = TRUE, method)
+			realized_paper_df <- realized_compute(ptf_qty,
+																						ptf_prz,
+																						transaction_quantity,
+																						transaction_price,
+																						transaction_type,
+																						ptf_dtt,
+																						previous_datetime,
+																						transaction_datetime,
+																						transaction_asset,
+																						allow_short,
+																						realized_only = TRUE,
+																						method)
 
 
 		}

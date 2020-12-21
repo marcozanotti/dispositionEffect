@@ -5,14 +5,14 @@
 \title{Gains & Losses}
 \usage{
 gains_and_losses(
-  trx_type,
-  trx_asset,
-  trx_qty,
-  trx_prz,
-  trx_dtt,
-  last_dtt,
+  transaction_type,
+  transaction_asset,
+  transaction_quantity,
+  transaction_price,
+  transaction_datetime,
+  previous_datetime,
   portfolio,
-  df_asset_prices,
+  market_prices,
   time_threshold = "5 mins",
   method = "all",
   allow_short = FALSE,
@@ -20,23 +20,23 @@ gains_and_losses(
 )
 }
 \arguments{
-\item{trx_type}{Character string. Either "B" = buy or "S" = sell.}
+\item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
-\item{trx_asset}{Character string. The name of the traded asset.}
+\item{transaction_asset}{Character string. The name of the traded asset.}
 
-\item{trx_qty}{Numeric value. The quantity of the traded asset.}
+\item{transaction_quantity}{Numeric value. The quantity of the traded asset.}
 
-\item{trx_prz}{Numeric value. The market price of the traded asset.}
+\item{transaction_price}{Numeric value. The market price of the traded asset.}
 
-\item{trx_dtt}{POSIXct value. The date-time at which the transaction
+\item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
-\item{last_dtt}{POSIXct value. The date-time of the last transaction
+\item{previous_datetime}{POSIXct value. The date-time of the last transaction
 performed by the investor.}
 
 \item{portfolio}{Data frame of the investor's portfolio at time t.}
 
-\item{df_asset_prices}{Data frame containing the market prices.}
+\item{market_prices}{Data frame containing the market prices.}
 
 \item{time_threshold}{character in the format "value units" indicating the
 time threshold at which the computed financial difftime has to be evaluated

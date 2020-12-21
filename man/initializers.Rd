@@ -6,14 +6,14 @@
 \alias{initializer_results}
 \title{Initializers functions}
 \usage{
-initializer_portfolio(client, client_assets)
+initializer_portfolio(investor, assets)
 
-initializer_results(client, client_assets, method = "all")
+initializer_results(investor, assets, method = "all")
 }
 \arguments{
-\item{client}{Character string. The name of the investor.}
+\item{investor}{Character string. The name of the investor.}
 
-\item{client_assets}{Character vector. The names of the assets traded by
+\item{assets}{Character vector. The names of the assets traded by
 the investor.}
 
 \item{method}{Character string. The method used to compute papers.

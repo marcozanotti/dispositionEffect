@@ -8,7 +8,7 @@
 #' @param asset Character name of the asset to look for.
 #' @param datetime POSIXct of the datetime at which looking for the asset's
 #'   price.
-#' @param df_asset_prices Data frame containing the market prices.
+#' @param market_prices Data frame containing the market prices.
 #'
 #' @return The value of the asset's price.
 #'
@@ -19,7 +19,9 @@
 #' @seealso \code{\link{evaluate}}
 #'
 #' @export
-closest_historical_price <- function(asset, datetime, df_asset_prices) {
+closest_historical_price <- function(asset,
+																		 datetime,
+																		 market_prices) {
 
 	round_datetime_unit <- "15 mins" # generalize this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -27,12 +29,12 @@ closest_historical_price <- function(asset, datetime, df_asset_prices) {
 	datetime <- lubridate::round_date(datetime, unit = round_datetime_unit)
 
 	# filter historical przs for asset and datetime
-	df_asset_prices <- df_asset_prices[(df_asset_prices$asset == asset) &
-																		 	(df_asset_prices$datetime <= datetime), ]
+	market_prices <- market_prices[(market_prices$asset == asset) &
+																		 	(market_prices$datetime <= datetime), ]
 	# extract the closest date which is before the datetime
-	closest_date <- which.min(abs(datetime - df_asset_prices$datetime))
+	closest_date <- which.min(abs(datetime - market_prices$datetime))
 	# extract the price
-	res <- df_asset_prices[closest_date, ]$prz
+	res <- market_prices[closest_date, ]$prz
 
 	return(res)
 

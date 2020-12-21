@@ -5,8 +5,8 @@
 \title{Portfolio Compute}
 \usage{
 portfolio_update(
-  df_client,
-  df_asset_prices,
+  portfolio_transactions,
+  market_prices,
   method = "all",
   allow_short = FALSE,
   time_threshold = "5 mins",
@@ -17,9 +17,9 @@ portfolio_update(
 )
 }
 \arguments{
-\item{df_client}{Data frame. The investor's transactions data frame.}
+\item{portfolio_transactions}{Data frame. The investor's transactions data frame.}
 
-\item{df_asset_prices}{Data frame containing the market prices.}
+\item{market_prices}{Data frame containing the market prices.}
 
 \item{method}{Character string containing the method to use to compute
 realized and paper gains and losses. If "none" nothing is computed but the

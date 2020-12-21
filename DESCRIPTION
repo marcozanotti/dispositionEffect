@@ -11,20 +11,18 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    tidyr,
     dplyr,
-    stringr,
-    lubridate,
     purrr,
-    progress,
-    magrittr,
-    rlang (>= 0.1.2)
+    lubridate,
+    tibble,
+    progress
 Suggests: 
     tidyverse,
     devtools,
     knitr,
     rmarkdown,
-    roxygen2
+    roxygen2,
+    magrittr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

@@ -1,22 +1,22 @@
-#' Client 4273N financial transactions
+#' @title Sample investor financial transactions
 #'
-#' A sample dataset containing 19 transactions over time.
+#' @description A sample dataset containing 19 transactions over time.
 #'
 #' @format A data frame with 19 rows and 6 variables:
 #' \describe{
-#'   \item{client}{id of the investor}
+#'   \item{investor}{id of the investor}
 #'   \item{type}{binary variable indicating the type of operation, B = buy and S = sell}
 #'   \item{asset}{id of the traded asset}
-#'   \item{qty}{quantity of the traded asset}
-#'   \item{prz}{market price of the traded asset}
+#'   \item{quantity}{quantity of the traded asset}
+#'   \item{price}{market price of the traded asset}
 #'   \item{datetime}{timestamp of the operation}
 #' }
 #'
 #' @source \url{https://www.directa.it/index-ita.html}
-"client_4273N"
+"investor"
 
 
-#' Market prices of assets traded by client 4273N
+#' Market prices of assets traded by the sample investor
 #'
 #' A sample dataset containing 6895 market prices of 5 different assets over time.
 #'
@@ -24,8 +24,8 @@
 #' \describe{
 #'   \item{asset}{id of the asset}
 #'   \item{datetime}{timestamp of market price}
-#'   \item{prz}{market price of the asset}
+#'   \item{price}{market price of the asset}
 #' }
 #'
 #' @source \url{https://www.directa.it/index-ita.html}
-"marketprices_4273N"
+"marketprices"

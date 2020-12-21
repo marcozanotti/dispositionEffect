@@ -8,7 +8,6 @@
 #'
 #' @rdname pipe
 #' @keywords internal
-#' @export
 #' @importFrom magrittr %>%
 NULL
 
@@ -26,7 +25,6 @@ NULL
 #'
 #' @rdname negative_match
 #' @keywords internal
-#' @export
 `%!in%` <- Negate(`%in%`)
 
 
@@ -43,6 +41,7 @@ NULL
 #' @return Numeric vector of averages.
 #'
 #' @examples
+#'   \dontrun{
 #'   x <- 1:10
 #'   y <- 99:90
 #'   ewise_mean(x, y)
@@ -52,10 +51,10 @@ NULL
 #'
 #'   x[1] <- 0
 #'   ewise_mean(x, y, zero.substitute = TRUE)
+#'   }
 #'
 #' @rdname elementwise_mean
 #' @keywords internal
-#' @export
 ewise_mean <- function(x, y, na.rm = FALSE, zero.substitute = FALSE) {
 
 	x <- as.numeric(x)

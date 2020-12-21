@@ -33,7 +33,7 @@ evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statisti
 
 	} else {
 
-		market_values <- map_dbl(portfolio_df$asset, closest_historical_price, trx_date, df_asset_prices)
+		market_values <- purrr::map_dbl(portfolio_df$asset, closest_historical_price, trx_date, df_asset_prices)
 		value <- sum(portfolio_df$qty * (market_values - portfolio_df$prz))
 
 		if (statistics) {
@@ -45,3 +45,4 @@ evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statisti
 	return(value)
 
 }
+

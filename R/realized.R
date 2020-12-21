@@ -56,6 +56,7 @@
 #' @seealso \code{\link{paper_compute}}, \code{\link{gains_and_losses}}
 NULL
 
+
 #' @describeIn realized_compute Computation, as simple counts, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
@@ -85,7 +86,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -96,16 +97,16 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -117,7 +118,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -128,27 +129,27 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -159,7 +160,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -170,21 +171,21 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -194,7 +195,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-	} else { # not realized_only
+	} else {# not realized_only
 
 
 
@@ -209,7 +210,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 1)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -220,16 +221,16 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 1)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -241,7 +242,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 1)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -252,27 +253,27 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 1)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -283,7 +284,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 1)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
@@ -294,21 +295,21 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 1, "PL_count" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 1, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 1)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_count" = 0, "RL_count" = 1, "PG_count" = 0, "PL_count" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 			}
 
@@ -323,6 +324,7 @@ realized_count <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 	return(res)
 
 }
+
 
 #' @describeIn realized_compute Computation, as simple quantity, of realized
 #'   gains and realized losses of the traded asset.
@@ -354,7 +356,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -365,16 +367,16 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -386,7 +388,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -397,27 +399,27 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = trx_qty, "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = trx_qty - qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_total" = trx_qty, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = trx_qty - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -428,7 +430,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -439,21 +441,21 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -463,7 +465,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-	} else { # not realized_olny
+	} else {# not realized_olny
 
 
 
@@ -478,7 +480,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = ptf_qty, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = ptf_qty)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -489,16 +491,16 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = qty_diff)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -510,7 +512,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = abs(ptf_qty))
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = abs(ptf_qty), "PL_total" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -521,27 +523,27 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = trx_qty, "PG_total" = 0, "PL_total" = abs(qty_diff))
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = trx_qty - qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_total" = trx_qty, "RL_total" = 0, "PG_total" = abs(qty_diff), "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = trx_qty - qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -552,7 +554,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = ptf_qty, "PL_total" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = ptf_qty)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
@@ -563,21 +565,21 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_total" = abs(trx_qty), "RL_total" = 0, "PG_total" = qty_diff, "PL_total" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = abs(trx_qty) + qty_diff, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty), "PG_total" = 0, "PL_total" = qty_diff)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_total" = 0, "RL_total" = abs(trx_qty) + qty_diff, "PG_total" = 0, "PL_total" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 			}
 
@@ -592,6 +594,7 @@ realized_total <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 	return(res)
 
 }
+
 
 #' @describeIn realized_compute Computation, as simple expected return, of
 #'   realized gains and realized losses of the traded asset.
@@ -624,7 +627,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -635,16 +638,16 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -656,7 +659,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -667,27 +670,27 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_value" = -Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = -Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -698,7 +701,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -709,21 +712,21 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -733,7 +736,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-	} else { #not realized_only
+	} else {# not realized_only
 
 
 
@@ -748,7 +751,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = Er, "PL_value" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = Er)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -759,16 +762,16 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = Er, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = Er)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -780,7 +783,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = Er)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = -Er, "PL_value" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -791,27 +794,27 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = Er)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_value" = -Er, "RL_value" = 0, "PG_value" = -Er, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = -Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -822,7 +825,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = Er, "PL_value" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = Er)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
@@ -833,21 +836,21 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = Er, "PL_value" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = Er, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = Er)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 			}
 
@@ -863,6 +866,7 @@ realized_value <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 }
 
+
 #' @describeIn realized_compute Computation, as simple financial duration, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
@@ -875,7 +879,9 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
 	}
 
-	if (!is.POSIXct(initial_dtt) || !is.POSIXct(last_dtt) || !is.POSIXct(trx_dtt)) {
+	if (!lubridate::is.POSIXct(initial_dtt) ||
+			!lubridate::is.POSIXct(last_dtt) ||
+			!lubridate::is.POSIXct(trx_dtt)) {
 		stop("Arguments *dtt must be POSIXct.", call. = FALSE)
 	}
 
@@ -905,7 +911,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -916,16 +922,16 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -937,7 +943,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -948,27 +954,27 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -979,7 +985,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -990,21 +996,21 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -1014,7 +1020,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 
 
 
-	} else { # not realized_only
+	} else {# not realized_only
 
 
 
@@ -1029,7 +1035,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = dtt_diff)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -1040,16 +1046,16 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = dtt_diff)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -1061,7 +1067,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = dtt_diff)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -1072,27 +1078,27 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = dtt_diff)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
 
-			} else { # if ptf_qty == 0, then nothing
+			} else {# if ptf_qty == 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
 
 
-		} else { # allow_short = FALSE
+		} else {# allow_short = FALSE
 
 
 
@@ -1103,7 +1109,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
 				} else if (prz_diff < 0) { # Paper Loss
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = dtt_diff)
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
@@ -1114,21 +1120,21 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 				if (prz_diff > 0) { # Realized Gain
 					if (qty_diff > 0) { # + Paper Gain
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = dtt_diff, "PL_duration" = 0)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = dtt_diff0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Loss
 					if (qty_diff > 0) { # + Paper Loss
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = dtt_diff)
-					} else { # + nothing
+					} else {# + nothing
 						res <- c("RG_duration" = 0, "RL_duration" = dtt_diff0, "PG_duration" = 0, "PL_duration" = 0)
 					}
-				} else { # Nothing
+				} else {# Nothing
 					res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 				}
 
 
-			} else { # if ptf_qty <= 0, then nothing
+			} else {# if ptf_qty <= 0, then nothing
 				res <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 			}
 
@@ -1143,6 +1149,7 @@ realized_duration <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 	return(res)
 
 }
+
 
 #' @describeIn realized_compute Wrapper that calls other realized_. functions to
 #'   compute realized gains and realized losses of the traded asset based on the
@@ -1159,7 +1166,7 @@ realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 		rgl_count <- realized_count(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
 		# convert results to a df
 		res_df <- c("asset" = trx_asset, as.list(rgl_count)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "total") {
 
@@ -1167,14 +1174,14 @@ realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 		rgl_total <- realized_total(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
 		# convert results to a df
 		res_df <- c("asset" = trx_asset, as.list(rgl_total)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "value") {
 
 		# compute Realized and Paper Gain and Loss with realized_value()
 		rgl_value <- realized_value(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
 		res_df <- c("asset" = trx_asset, as.list(rgl_value)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "duration") {
 
@@ -1182,9 +1189,9 @@ realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 		rgl_duration <- realized_duration(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 																			initial_dtt, last_dtt, trx_dtt, allow_short, realized_only)
 		res_df <- c("asset" = trx_asset, as.list(rgl_duration)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
-	} else { # method == "all"
+	} else {# method == "all"
 
 		# compute Realized and Paper Gain and Loss with all functions and wrap-up results
 		rgl_count <- realized_count(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type, allow_short, realized_only)
@@ -1198,13 +1205,14 @@ realized_compute <- function(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type,
 								as.list(rgl_total),
 								as.list(rgl_value),
 								as.list(rgl_duration)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	}
 
 	return(res_df)
 
 }
+
 
 #' @describeIn realized_compute Simple function to obtain empty results for
 #'   realized and paper computations based on the chosen method.
@@ -1215,27 +1223,27 @@ realized_empty <- function(trx_asset, method = "all") {
 
 		rgl_count <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 		res_df <- c("asset" = trx_asset, as.list(rgl_count)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "total") {
 
 		rgl_total <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 		res_df <- c("asset" = trx_asset, as.list(rgl_total)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "value") {
 
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 		res_df <- c("asset" = trx_asset, as.list(rgl_value)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	} else if (method == "duration") {
 
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 		res_df <- c("asset" = trx_asset, as.list(rgl_duration)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
-	} else { # method == "all"
+	} else {# method == "all"
 
 		rgl_count <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
 		rgl_total <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
@@ -1247,7 +1255,7 @@ realized_empty <- function(trx_asset, method = "all") {
 								as.list(rgl_total),
 								as.list(rgl_value),
 								as.list(rgl_duration)) %>%
-			as_tibble()
+			tibble::as_tibble()
 
 	}
 

@@ -180,8 +180,8 @@ dtt_update <- function(ptf_qty, ptf_dtt, trx_qty, trx_dtt, trx_type) {
 #' @export
 results_update <- function(df_to_update, df_new_info, method = "all") {
 
-	df_to_update <- arrange(df_to_update, asset)
-	df_new_info <- arrange(df_new_info, asset)
+	df_to_update <- dplyr::arrange(df_to_update, asset)
+	df_new_info <- dplyr::arrange(df_new_info, asset)
 	assets <- df_new_info$asset
 
 	# replace the df_to_update values corresponding to the assets present into df_new_info
@@ -195,112 +195,112 @@ results_update <- function(df_to_update, df_new_info, method = "all") {
 
 		df_to_update[df_to_update$asset %in% assets,] <-
 			df_to_update[df_to_update$asset %in% assets,] %>%
-			mutate(
-				RG_count = case_when(is.na(RG_count) ~ df_new_info$RG_count,
-														 TRUE ~ RG_count + df_new_info$RG_count),
-				RL_count = case_when(is.na(RL_count) ~ df_new_info$RL_count,
-														 TRUE ~ RL_count + df_new_info$RL_count),
-				PG_count = case_when(is.na(PG_count) ~ df_new_info$PG_count,
-														 TRUE ~ PG_count + df_new_info$PG_count),
-				PL_count = case_when(is.na(PL_count) ~ df_new_info$PL_count,
-														 TRUE ~ PL_count + df_new_info$PL_count)
+			dplyr::mutate(
+				RG_count = dplyr::case_when(is.na(RG_count) ~ df_new_info$RG_count,
+														        TRUE ~ RG_count + df_new_info$RG_count),
+				RL_count = dplyr::case_when(is.na(RL_count) ~ df_new_info$RL_count,
+														        TRUE ~ RL_count + df_new_info$RL_count),
+				PG_count = dplyr::case_when(is.na(PG_count) ~ df_new_info$PG_count,
+														        TRUE ~ PG_count + df_new_info$PG_count),
+				PL_count = dplyr::case_when(is.na(PL_count) ~ df_new_info$PL_count,
+														        TRUE ~ PL_count + df_new_info$PL_count)
 			)
 
 	} else if (method == "total") {
 
 		df_to_update[df_to_update$asset %in% assets,] <-
 			df_to_update[df_to_update$asset %in% assets,] %>%
-			mutate(
-				RG_total = case_when(is.na(RG_total) ~ df_new_info$RG_total,
-														 TRUE ~ RG_total + df_new_info$RG_total),
-				RL_total = case_when(is.na(RL_total) ~ df_new_info$RL_total,
-														 TRUE ~ RL_total + df_new_info$RL_total),
-				PG_total = case_when(is.na(PG_total) ~ df_new_info$PG_total,
-														 TRUE ~ PG_total + df_new_info$PG_total),
-				PL_total = case_when(is.na(PL_total) ~ df_new_info$PL_total,
-														 TRUE ~ PL_total + df_new_info$PL_total)
+			dplyr::mutate(
+				RG_total = dplyr::case_when(is.na(RG_total) ~ df_new_info$RG_total,
+														        TRUE ~ RG_total + df_new_info$RG_total),
+				RL_total = dplyr::case_when(is.na(RL_total) ~ df_new_info$RL_total,
+														        TRUE ~ RL_total + df_new_info$RL_total),
+				PG_total = dplyr::case_when(is.na(PG_total) ~ df_new_info$PG_total,
+														        TRUE ~ PG_total + df_new_info$PG_total),
+				PL_total = dplyr::case_when(is.na(PL_total) ~ df_new_info$PL_total,
+														        TRUE ~ PL_total + df_new_info$PL_total)
 			)
 
 	} else if (method == "value") {
 
 		df_to_update[df_to_update$asset %in% assets,] <-
 			df_to_update[df_to_update$asset %in% assets,] %>%
-			mutate(
-				RG_value = case_when(is.na(RG_value) ~ df_new_info$RG_value,
-														 TRUE ~ RG_value + df_new_info$RG_value),
-				RL_value = case_when(is.na(RL_value) ~ df_new_info$RL_value,
-														 TRUE ~ RL_value + df_new_info$RL_value),
-				PG_value = case_when(is.na(PG_value) ~ df_new_info$PG_value,
-														 TRUE ~ PG_value + df_new_info$PG_value),
-				PL_value = case_when(is.na(PL_value) ~ df_new_info$PL_value,
-														 TRUE ~ PL_value + df_new_info$PL_value)
+			dplyr::mutate(
+				RG_value = dplyr::case_when(is.na(RG_value) ~ df_new_info$RG_value,
+														        TRUE ~ RG_value + df_new_info$RG_value),
+				RL_value = dplyr::case_when(is.na(RL_value) ~ df_new_info$RL_value,
+														        TRUE ~ RL_value + df_new_info$RL_value),
+				PG_value = dplyr::case_when(is.na(PG_value) ~ df_new_info$PG_value,
+														        TRUE ~ PG_value + df_new_info$PG_value),
+				PL_value = dplyr::case_when(is.na(PL_value) ~ df_new_info$PL_value,
+														        TRUE ~ PL_value + df_new_info$PL_value)
 			)
-		# mutate(
-		#   RG_value = case_when(is.na(RG_value) ~ df_new_info$RG_value,
-		#                        TRUE ~ ewise_mean(RG_value, df_new_info$RG_value, zero.rm = TRUE)),
-		#   RL_value = case_when(is.na(RL_value) ~ df_new_info$RL_value,
-		#                        TRUE ~ ewise_mean(RL_value, df_new_info$RL_value, zero.rm = TRUE)),
-		#   PG_value = case_when(is.na(PG_value) ~ df_new_info$PG_value,
-		#                        TRUE ~ ewise_mean(PG_value, df_new_info$PG_value, zero.rm = TRUE)),
-		#   PL_value = case_when(is.na(PL_value) ~ df_new_info$PL_value,
-		#                        TRUE ~ ewise_mean(PL_value, df_new_info$PL_value, zero.rm = TRUE))
+		# dplyr::mutate(
+		#   RG_value = dplyr::case_when(is.na(RG_value) ~ df_new_info$RG_value,
+		#                               TRUE ~ ewise_mean(RG_value, df_new_info$RG_value, zero.rm = TRUE)),
+		#   RL_value = dplyr::case_when(is.na(RL_value) ~ df_new_info$RL_value,
+		#                               TRUE ~ ewise_mean(RL_value, df_new_info$RL_value, zero.rm = TRUE)),
+		#   PG_value = dplyr::case_when(is.na(PG_value) ~ df_new_info$PG_value,
+		#                               TRUE ~ ewise_mean(PG_value, df_new_info$PG_value, zero.rm = TRUE)),
+		#   PL_value = dplyr::case_when(is.na(PL_value) ~ df_new_info$PL_value,
+		#                               TRUE ~ ewise_mean(PL_value, df_new_info$PL_value, zero.rm = TRUE))
 		#   )
 
 	} else if (method == "duration") {
 
 		df_to_update[df_to_update$asset %in% assets,] <-
 			df_to_update[df_to_update$asset %in% assets,] %>%
-			mutate(
-				RG_duration = case_when(is.na(RG_duration) ~ df_new_info$RG_duration,
-																TRUE ~ RG_duration + df_new_info$RG_duration),
-				RL_duration = case_when(is.na(RL_duration) ~ df_new_info$RL_duration,
-																TRUE ~ RL_duration + df_new_info$RL_duration),
-				PG_duration = case_when(is.na(PG_duration) ~ df_new_info$PG_duration,
-																TRUE ~ PG_duration + df_new_info$PG_duration),
-				PL_duration = case_when(is.na(PL_duration) ~ df_new_info$PL_duration,
-																TRUE ~ PL_duration + df_new_info$PL_duration)
+			dplyr::mutate(
+				RG_duration = dplyr::case_when(is.na(RG_duration) ~ df_new_info$RG_duration,
+																       TRUE ~ RG_duration + df_new_info$RG_duration),
+				RL_duration = dplyr::case_when(is.na(RL_duration) ~ df_new_info$RL_duration,
+																       TRUE ~ RL_duration + df_new_info$RL_duration),
+				PG_duration = dplyr::case_when(is.na(PG_duration) ~ df_new_info$PG_duration,
+																       TRUE ~ PG_duration + df_new_info$PG_duration),
+				PL_duration = dplyr::case_when(is.na(PL_duration) ~ df_new_info$PL_duration,
+																       TRUE ~ PL_duration + df_new_info$PL_duration)
 			)
 
 	} else { # method == "all"
 
 		df_to_update[df_to_update$asset %in% assets,] <-
 			df_to_update[df_to_update$asset %in% assets,] %>%
-			mutate(
-				RG_count = case_when(is.na(RG_count) ~ df_new_info$RG_count,
-														 TRUE ~ RG_count + df_new_info$RG_count),
-				RL_count = case_when(is.na(RL_count) ~ df_new_info$RL_count,
-														 TRUE ~ RL_count + df_new_info$RL_count),
-				PG_count = case_when(is.na(PG_count) ~ df_new_info$PG_count,
-														 TRUE ~ PG_count + df_new_info$PG_count),
-				PL_count = case_when(is.na(PL_count) ~ df_new_info$PL_count,
-														 TRUE ~ PL_count + df_new_info$PL_count),
+			dplyr::mutate(
+				RG_count = dplyr::case_when(is.na(RG_count) ~ df_new_info$RG_count,
+													        	 TRUE ~ RG_count + df_new_info$RG_count),
+				RL_count = dplyr::case_when(is.na(RL_count) ~ df_new_info$RL_count,
+														        TRUE ~ RL_count + df_new_info$RL_count),
+				PG_count = dplyr::case_when(is.na(PG_count) ~ df_new_info$PG_count,
+														        TRUE ~ PG_count + df_new_info$PG_count),
+				PL_count = dplyr::case_when(is.na(PL_count) ~ df_new_info$PL_count,
+														        TRUE ~ PL_count + df_new_info$PL_count),
 
-				RG_total = case_when(is.na(RG_total) ~ df_new_info$RG_total,
-														 TRUE ~ RG_total + df_new_info$RG_total),
-				RL_total = case_when(is.na(RL_total) ~ df_new_info$RL_total,
-														 TRUE ~ RL_total + df_new_info$RL_total),
-				PG_total = case_when(is.na(PG_total) ~ df_new_info$PG_total,
-														 TRUE ~ PG_total + df_new_info$PG_total),
-				PL_total = case_when(is.na(PL_total) ~ df_new_info$PL_total,
-														 TRUE ~ PL_total + df_new_info$PL_total),
+				RG_total = dplyr::case_when(is.na(RG_total) ~ df_new_info$RG_total,
+														        TRUE ~ RG_total + df_new_info$RG_total),
+				RL_total = dplyr::case_when(is.na(RL_total) ~ df_new_info$RL_total,
+														        TRUE ~ RL_total + df_new_info$RL_total),
+				PG_total = dplyr::case_when(is.na(PG_total) ~ df_new_info$PG_total,
+													          TRUE ~ PG_total + df_new_info$PG_total),
+				PL_total = dplyr::case_when(is.na(PL_total) ~ df_new_info$PL_total,
+													          TRUE ~ PL_total + df_new_info$PL_total),
 
-				RG_value = case_when(is.na(RG_value) ~ df_new_info$RG_value,
-														 TRUE ~ RG_value + df_new_info$RG_value),
-				RL_value = case_when(is.na(RL_value) ~ df_new_info$RL_value,
-														 TRUE ~ RL_value + df_new_info$RL_value),
-				PG_value = case_when(is.na(PG_value) ~ df_new_info$PG_value,
-														 TRUE ~ PG_value + df_new_info$PG_value),
-				PL_value = case_when(is.na(PL_value) ~ df_new_info$PL_value,
-														 TRUE ~ PL_value + df_new_info$PL_value),
+				RG_value = dplyr::case_when(is.na(RG_value) ~ df_new_info$RG_value,
+														        TRUE ~ RG_value + df_new_info$RG_value),
+				RL_value = dplyr::case_when(is.na(RL_value) ~ df_new_info$RL_value,
+														        TRUE ~ RL_value + df_new_info$RL_value),
+				PG_value = dplyr::case_when(is.na(PG_value) ~ df_new_info$PG_value,
+														        TRUE ~ PG_value + df_new_info$PG_value),
+				PL_value = dplyr::case_when(is.na(PL_value) ~ df_new_info$PL_value,
+														        TRUE ~ PL_value + df_new_info$PL_value),
 
-				RG_duration = case_when(is.na(RG_duration) ~ df_new_info$RG_duration,
-																TRUE ~ RG_duration + df_new_info$RG_duration),
-				RL_duration = case_when(is.na(RL_duration) ~ df_new_info$RL_duration,
-																TRUE ~ RL_duration + df_new_info$RL_duration),
-				PG_duration = case_when(is.na(PG_duration) ~ df_new_info$PG_duration,
-																TRUE ~ PG_duration + df_new_info$PG_duration),
-				PL_duration = case_when(is.na(PL_duration) ~ df_new_info$PL_duration,
-																TRUE ~ PL_duration + df_new_info$PL_duration)
+				RG_duration = dplyr::case_when(is.na(RG_duration) ~ df_new_info$RG_duration,
+															         TRUE ~ RG_duration + df_new_info$RG_duration),
+				RL_duration = dplyr::case_when(is.na(RL_duration) ~ df_new_info$RL_duration,
+															         TRUE ~ RL_duration + df_new_info$RL_duration),
+				PG_duration = dplyr::case_when(is.na(PG_duration) ~ df_new_info$PG_duration,
+																       TRUE ~ PG_duration + df_new_info$PG_duration),
+				PL_duration = dplyr::case_when(is.na(PL_duration) ~ df_new_info$PL_duration,
+																       TRUE ~ PL_duration + df_new_info$PL_duration)
 			)
 
 	}
@@ -317,8 +317,8 @@ results_update <- function(df_to_update, df_new_info, method = "all") {
 #  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 meanvalue_compute <- function(df_to_update, df_numtrx) {
 
-	df_to_update <- arrange(df_to_update, "asset")
-	df_numtrx <- arrange(df_numtrx, "asset")
+	df_to_update <- dplyr::arrange(df_to_update, "asset")
+	df_numtrx <- dplyr::arrange(df_numtrx, "asset")
 
 	weights <- df_numtrx[["ntrx"]]
 

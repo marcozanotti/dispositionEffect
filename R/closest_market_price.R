@@ -24,7 +24,7 @@ closest_historical_price <- function(asset, datetime, df_asset_prices) {
 	round_datetime_unit <- "15 mins" # generalize this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	# convert datetime into some rounded unit
-	datetime <- round_date(datetime, unit = round_datetime_unit)
+	datetime <- lubridate::round_date(datetime, unit = round_datetime_unit)
 
 	# filter historical przs for asset and datetime
 	df_asset_prices <- df_asset_prices[(df_asset_prices$asset == asset) &

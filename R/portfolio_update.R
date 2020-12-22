@@ -20,7 +20,7 @@
 #'   and the negative (that is when the investor's portfolio value, as computed
 #'   through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 #'   are returned.
-#' @param verbose Numeric vector of length 2 that allows to control
+#' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
 #'
@@ -79,26 +79,27 @@ portfolio_update <- function(portfolio_transactions,
 	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
 
 	# verbosity
-	verb <- verbose[1] == 1
+	verb_lvl1 <- as.logical(verbose[1])
+	verb_lvl2 <- as.logical(verbose[2])
 
 	# global parameters
-	client <- portfolio_transactions$client[1]
-	client_assets <- unique(portfolio_transactions$asset)
-	asset_ntrx <- portfolio_transactions %>%
-		dplyr::group_by(asset) %>%
-		dplyr::summarise(ntrx = dplyr::n())
+	investor_id <- portfolio_transactions$investor[1]
+	investor_assets <- unique(portfolio_transactions$asset)
+	asset_numtrx <- portfolio_transactions %>%
+		dplyr::group_by(!!rlang::sym("asset")) %>%
+		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
 
-	# client's initial portfolio (portfolio at time 0):
-	# an empty df with all the assets traded by the client
+	# investor's initial portfolio (portfolio at time 0):
+	# an empty df with all the assets traded by the investor
 	# with qty = NA and prz = NA for all the assets (initial condition)
-	portfolio <- initializer_portfolio(client, client_assets)
+	portfolio <- initializer_portfolio(investor_id, investor_assets)
 
 	# initialize the df of computation: RG, RL, PG, PL and other
 	if (!posneg_portfolios) {
-		results_df <- initializer_results(client, client_assets, method)
+		results_df <- initializer_results(investor_id, investor_assets, method)
 	} else {
-		pos_results_df <- initializer_results(client, client_assets, method)
-		neg_results_df <- initializer_results(client, client_assets, method)
+		pos_results_df <- initializer_results(investor_id, investor_assets, method)
+		neg_results_df <- initializer_results(investor_id, investor_assets, method)
 	}
 
 	# progress bar
@@ -106,7 +107,9 @@ portfolio_update <- function(portfolio_transactions,
 		# initialize progress bar
 		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed",
 													           total = nrow(portfolio_transactions),
-													           clear = FALSE, width = 60, show_after = 0)
+													           clear = FALSE,
+																		 width = 60,
+																		 show_after = 0)
 		pb$tick(0)
 	}
 
@@ -115,62 +118,60 @@ portfolio_update <- function(portfolio_transactions,
 		# extract scalars (trx = transaction)
 		trx_type <- portfolio_transactions[i, ]$type # trx type
 		trx_asset <- portfolio_transactions[i, ]$asset # trx asset
-		trx_qty <- portfolio_transactions[i, ]$qty # trx qty
-		trx_prz <- portfolio_transactions[i, ]$prz # trx prz
+		trx_qty <- portfolio_transactions[i, ]$quantity # trx quantity
+		trx_prz <- portfolio_transactions[i, ]$price # trx price
 		trx_dtt <- portfolio_transactions[i, ]$datetime # trx datetime
 		previous_dtt <- portfolio_transactions[i - 1, ]$datetime
 
-		if (trx_type == "S") {
-			trx_qty <- trx_qty * -1L # if it's a sell transaction then consider qty as negative
+		if (trx_type == "S") { # if it's a sell transaction then consider qty as negative
+			trx_qty <- trx_qty * -1L
 		}
 
 		# compute RG/RL/PG/PL
 		if (method != "none") {
-			if (verb) message("\nStart computing RG/RL/PG/PL..")
-			df_info <- gains_and_losses(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt,
-																	previous_dtt, portfolio, market_prices,
-																	time_threshold, method, allow_short, verbose)
+			if (verb_lvl1) message("\nStart computing RG/RL/PG/PL..")
+			gainloss_df <- gains_and_losses(trx_type,
+																	    trx_asset,
+																	    trx_qty,
+																	    trx_prz,
+																	    trx_dtt,
+																	    previous_dtt,
+																	    portfolio,
+																	    market_prices,
+																	    time_threshold,
+																	    method,
+																	    allow_short,
+																	    verb_lvl2)
 		}
 
 		# evaluate global portfolio value
-		if (verb) message("Evaluating global portfolio position..")
-		portfolio_value <- evaluate_portfolio(portfolio, trx_dtt, market_prices,
-																					portfolio_statistics = portfolio_statistics)
+		if (verb_lvl1) message("Evaluating global portfolio position..")
+		portfolio_value <- evaluate_portfolio(portfolio,
+																					trx_dtt,
+																					market_prices,
+																					portfolio_statistics)
 
 		# update the portfolio
-		if (verb) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))
-		# qty, prz and dtt of trx_asset already into portfolio
-		ptf_qty <- portfolio[portfolio$asset == trx_asset, ]$qty
-		ptf_prz <- portfolio[portfolio$asset == trx_asset, ]$prz
-		ptf_dtt <- portfolio[portfolio$asset == trx_asset, ]$dtt
-		if (is.na(ptf_qty)) {
-			# if qty is NA (initial condition), simply update the portfolio
-			# with the values of qty, prz and dtt of the transaction
-			portfolio[portfolio$asset == trx_asset,]$qty <- trx_qty
-			portfolio[portfolio$asset == trx_asset,]$prz <- trx_prz
-			portfolio[portfolio$asset == trx_asset,]$dtt <- trx_dtt
-		} else {
-			# else sum the qtys
-			portfolio[portfolio$asset == trx_asset,]$qty <- ptf_qty + trx_qty
-			# and adjust the przs based on conditions
-			portfolio[portfolio$asset == trx_asset,]$prz <-
-				prz_update(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type)
-			portfolio[portfolio$asset == trx_asset,]$dtt <-
-				dtt_update(ptf_qty, ptf_dtt, trx_qty, trx_dtt, trx_type)
-		}
+		if (verb_lvl1) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))
+		portfolio <- update_portfolio(portfolio,
+																	trx_asset,
+																	trx_qty,
+																	trx_prz,
+																	trx_dtt,
+																	trx_type)
 
 		# update the results_df
-		if (method != "none" && !is.null(df_info)) {
+		if (method != "none" && !is.null(gainloss_df)) {
 			# if empty portfolio, then gains_and_losses() returns NULL
 			# if empty portfolio, then evaluate_portfolio() returns NULL
-			if (verb) message("Updating results..")
+			if (verb_lvl1) message("Updating realized and paper results..")
 			if (!posneg_portfolios) {
-				results_df <- results_update(results_df, df_info, method)
+				results_df <- results_update(results_df, gainloss_df, method)
 			} else {
 				if (portfolio_value >= 0) {
-					pos_results_df <- results_update(pos_results_df, df_info, method)
+					pos_results_df <- results_update(pos_results_df, gainloss_df, method)
 				} else {
-					neg_results_df <- results_update(neg_results_df, df_info, method)
+					neg_results_df <- results_update(neg_results_df, gainloss_df, method)
 				}
 			}
 
@@ -180,17 +181,15 @@ portfolio_update <- function(portfolio_transactions,
 
 	}
 
-	rm(i, trx_type, trx_asset, trx_qty, trx_prz, trx_dtt,
-		 previous_dtt, ptf_qty, ptf_prz, ptf_dtt, df_info, portfolio_value)
 
 	# compute the mean expected return for RG, RL, PG, and PL
 	if (!posneg_portfolios) {
-		results_df <- meanvalue_compute(results_df, asset_ntrx)
+		results_df <- meanvalue_compute(results_df, asset_numtrx)
 	} else {
 		if (portfolio_value >= 0) {
-			pos_results_df <- meanvalue_compute(pos_results_df, asset_ntrx)
+			pos_results_df <- meanvalue_compute(pos_results_df, asset_numtrx)
 		} else {
-			neg_results_df <- meanvalue_compute(neg_results_df, asset_ntrx)
+			neg_results_df <- meanvalue_compute(neg_results_df, asset_numtrx)
 		}
 	}
 
@@ -198,15 +197,13 @@ portfolio_update <- function(portfolio_transactions,
 	# join the dataframes and return a single result dataframe
 	if (method != "none") {
 		if (!posneg_portfolios) {
-			final_res <- dplyr::left_join(portfolio, results_df, by = c("client", "asset"))
-			# inserire value / nrow() o per il count
+			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
 		} else {
 			pos_results_df$type <- "positive"
 			neg_results_df$type <- "negative"
 			results_df <- dplyr::bind_rows(pos_results_df, neg_results_df)
-			final_res <- dplyr::left_join(portfolio, results_df, by = c("client", "asset")) %>%
-				dplyr::relocate(type, .after = prz)
-			# inserire value / nrow() or per il count
+			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset")) %>%
+				dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("price"))
 		}
 
 	} else {

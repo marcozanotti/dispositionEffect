@@ -38,7 +38,7 @@ initializer_portfolio <- function(investor,
 #' @describeIn initializers Empty [tibble][tibble::tibble-package]
 #'   of investor's realized and paper gains and losses results based on
 #'   the chosen method.
-initializer_results <- function(investor,
+initializer_realized_and_paper <- function(investor,
 																assets,
 																method = "all") {
 

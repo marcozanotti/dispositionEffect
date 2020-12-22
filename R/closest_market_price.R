@@ -19,7 +19,7 @@
 #' @seealso \code{\link{evaluate}}
 #'
 #' @export
-closest_historical_price <- function(asset,
+closest_market_price <- function(asset,
 																		 datetime,
 																		 market_prices) {
 

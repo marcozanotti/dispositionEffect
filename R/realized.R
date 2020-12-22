@@ -918,10 +918,10 @@ realized_duration <- function(portfolio_quantity,
 	prz_diff <- transaction_price - portfolio_price # price difference
 	# dtt_diff <- difftime(transaction_datetime, previous_datetime, units = "days") %>% # duration of paper gain/loss
 	# as.numeric() # to avoid conversion errors
-	dtt_diff <- financial_difftime(previous_datetime, transaction_datetime)
+	dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
 	# dtt_diff0 <- difftime(transaction_datetime, previous_transaction_datetime, units = "days") %>% # duration of realized gain/loss
 	#   as.numeric() # to avoid conversion errors
-	dtt_diff0 <- financial_difftime(previous_transaction_datetime, transaction_datetime)
+	dtt_diff0 <- difftime_financial(previous_transaction_datetime, transaction_datetime)
 	# by default the duration returned is in days, conversion is left to the user
 
 

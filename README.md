@@ -43,7 +43,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(dispositionEffect)
-res <- portfolio_update(portfolio_transactions = dispositionEffect::investor, 
+res <- portfolio_compute(portfolio_transactions = dispositionEffect::investor, 
                                                 market_prices = dispositionEffect::marketprices, 
                                                 method = "all", 
                                                 allow_short = TRUE, 

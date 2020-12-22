@@ -8,7 +8,7 @@
 #'
 #' @inheritParams paper_compute
 #' @inheritParams realized_compute
-#' @inheritParams closest_historical_price
+#' @inheritParams closest_market_price
 #' @inheritParams difference_in_time
 #' @param portfolio Data frame of the investor's portfolio at time t.
 #' @param verbose Logical. If TRUE than messages are printed to the console.
@@ -22,7 +22,7 @@
 #' @references H. Shefrin & M. Statman, 1985
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{paper_compute}},
-#'   \code{\link{portfolio_update}}
+#'   \code{\link{portfolio_compute}}
 #'
 #' @export
 gains_and_losses <- function(transaction_type,
@@ -74,14 +74,14 @@ gains_and_losses <- function(transaction_type,
 	}
 
 
-	if (compare_difftime(previous_datetime, transaction_datetime, time_threshold) == "greater") {
+	if (difftime_compare(previous_datetime, transaction_datetime, time_threshold) == "greater") {
 		# if the difference transaction_datetime - previous_datetime >= time_threshold --> compute realized and paper
 
 		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
 
 			if (verb) message("\nComputing paper gains and losses..")
 			# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
-			market_przs <- purrr::map_dbl(ptf_assets, closest_historical_price,
+			market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
 																    transaction_datetime, market_prices)
 			pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
 			pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
@@ -118,7 +118,7 @@ gains_and_losses <- function(transaction_type,
 			} else {# compute on both, transaction_asset and ptf_assets
 
 				# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
-				market_przs <- purrr::map_dbl(ptf_assets, closest_historical_price,
+				market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
 																	    transaction_datetime, market_prices)
 				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
 				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset

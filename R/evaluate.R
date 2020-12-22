@@ -8,7 +8,7 @@
 #'
 #' @param portfolio Data frame of the investor's portfolio at time t.
 #' @param transaction_datetime POSIXct value of the transaction date.
-#' @inheritParams closest_historical_price
+#' @inheritParams closest_market_price
 #' @param portfolio_statistics Logical. If TRUE some statistical indexes are computed
 #'   on the portfolio and returned.
 #'
@@ -19,8 +19,8 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_update}}, \code{\link{gains_and_losses}},
-#'   \code{\link{closest_historical_price}}
+#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_and_losses}},
+#'   \code{\link{closest_market_price}}
 #'
 #' @export
 evaluate_portfolio <- function(portfolio,
@@ -36,7 +36,7 @@ evaluate_portfolio <- function(portfolio,
 
 	} else {
 
-		market_values <- purrr::map_dbl(portfolio$asset, closest_historical_price,
+		market_values <- purrr::map_dbl(portfolio$asset, closest_market_price,
 																		transaction_datetime, market_prices)
 		value <- sum(portfolio$quantity * (market_values - portfolio$price))
 

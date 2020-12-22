@@ -22,14 +22,14 @@
 #'   The described functions have different return behaviours.
 #'
 #'   \describe{
-#'     \item{\code{prz_update}}{returns a numeric value of the new portfolio
+#'     \item{\code{update_price}}{returns a numeric value of the new portfolio
 #'       price of the traded asset.}
-#'     \item{\code{dtt_update}}{returns a datetime value of the new portfolio
+#'     \item{\code{update_datetime}}{returns a datetime value of the new portfolio
 #'       datetime of the traded asset.}
-#'     \item{\code{results_update}}{returns a [tibble][tibble::tibble-package]
+#'     \item{\code{update_realized_and_paper}}{returns a [tibble][tibble::tibble-package]
 #'       containing the realized and paper gains and losses with the updated
 #'       values.}
-#'     \item{\code{meanvalue_compute}}{returns a [tibble][tibble::tibble-package]
+#'     \item{\code{update_expectedvalue}}{returns a [tibble][tibble::tibble-package]
 #'       containing the realized and paper gains and losses with the updated
 #'       values.}
 #'   }
@@ -47,13 +47,13 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_update}}, \code{\link{gains_and_losses}}
+#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_and_losses}}
 NULL
 
 
 #' @describeIn updates Update the portfolio price of the traded asset.
 #' @export
-prz_update <- function(portfolio_quantity,
+update_price <- function(portfolio_quantity,
 											 portfolio_price,
 											 transaction_quantity,
 											 transaction_price,
@@ -120,7 +120,7 @@ prz_update <- function(portfolio_quantity,
 
 #' @describeIn updates Update the portfolio datetime of the traded asset.
 #' @export
-dtt_update <- function(portfolio_quantity,
+update_datetime <- function(portfolio_quantity,
 											 portfolio_datetime,
 											 transaction_quantity,
 											 transaction_datetime,
@@ -186,7 +186,7 @@ dtt_update <- function(portfolio_quantity,
 
 #' @describeIn updates Update the portfolio quantity of the traded asset.
 #' @export
-qty_update <- function(portfolio_quantity,
+update_quantity <- function(portfolio_quantity,
 											 transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
@@ -223,12 +223,12 @@ update_portfolio <- function(portfolio,
 	} else {
 		# else sum the qtys
 		portfolio[portfolio$asset == transaction_asset, ]$quantity <-
-			qty_update(ptf_qty, transaction_quantity)
+			update_quantity(ptf_qty, transaction_quantity)
 		# and adjust the przs based on conditions
 		portfolio[portfolio$asset == transaction_asset, ]$price <-
-			prz_update(ptf_qty, ptf_prz, transaction_quantity, transaction_price, transaction_type)
+			update_price(ptf_qty, ptf_prz, transaction_quantity, transaction_price, transaction_type)
 		portfolio[portfolio$asset == transaction_asset, ]$datetime <-
-			dtt_update(ptf_qty, ptf_dtt, transaction_quantity, transaction_datetime, transaction_type)
+			update_datetime(ptf_qty, ptf_dtt, transaction_quantity, transaction_datetime, transaction_type)
 	}
 
 	return(portfolio)
@@ -239,7 +239,7 @@ update_portfolio <- function(portfolio,
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results with the results obtained on the last occurred transaction.
 #' @export
-results_update <- function(realized_and_paper,
+update_realized_and_paper <- function(realized_and_paper,
 													 new_realized_and_paper,
 													 method = "all") {
 
@@ -378,7 +378,7 @@ results_update <- function(realized_and_paper,
 #'   for each asset.
 #' @export
 #  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-meanvalue_compute <- function(realized_and_paper,
+update_expectedvalue <- function(realized_and_paper,
 															num_transaction_assets) {
 
 	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))

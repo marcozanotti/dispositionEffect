@@ -211,7 +211,7 @@ paper_duration <- function(portfolio_quantity,
 	prz_diff <- market_price - portfolio_price # price difference
 	# dtt_diff <- difftime(transaction_datetime, previous_datetime, units = "days") %>% # duration
 	#   as.numeric() # to avoid conversion errors
-	dtt_diff <- financial_difftime(previous_datetime, transaction_datetime)
+	dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
 	# by default the duration returned is in days, conversion is left to the user
 
 	if (allow_short) {

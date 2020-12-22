@@ -6,7 +6,7 @@
 #' @details
 #'
 #' @param portfolio_transactions Data frame. The investor's transactions data frame.
-#' @inheritParams closest_historical_price
+#' @inheritParams closest_market_price
 #' @inheritParams paper_compute
 #' @inheritParams difference_in_time
 #' @inheritParams evaluate
@@ -33,10 +33,10 @@
 #' @references H. Shefrin & M. Statman, 1985
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{paper_compute}},
-#'   \code{\link{portfolio_update}}
+#'   \code{\link{gains_and_losses}}
 #'
 #' @export
-portfolio_update <- function(portfolio_transactions,
+portfolio_compute <- function(portfolio_transactions,
 														 market_prices,
 														 method = "all",
 														 allow_short = FALSE,
@@ -96,10 +96,10 @@ portfolio_update <- function(portfolio_transactions,
 
 	# initialize the df of computation: RG, RL, PG, PL and other
 	if (!posneg_portfolios) {
-		results_df <- initializer_results(investor_id, investor_assets, method)
+		results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 	} else {
-		pos_results_df <- initializer_results(investor_id, investor_assets, method)
-		neg_results_df <- initializer_results(investor_id, investor_assets, method)
+		pos_results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
+		neg_results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 	}
 
 	# progress bar
@@ -166,12 +166,12 @@ portfolio_update <- function(portfolio_transactions,
 			# if empty portfolio, then evaluate_portfolio() returns NULL
 			if (verb_lvl1) message("Updating realized and paper results..")
 			if (!posneg_portfolios) {
-				results_df <- results_update(results_df, gainloss_df, method)
+				results_df <- update_realized_and_paper(results_df, gainloss_df, method)
 			} else {
 				if (portfolio_value >= 0) {
-					pos_results_df <- results_update(pos_results_df, gainloss_df, method)
+					pos_results_df <- update_realized_and_paper(pos_results_df, gainloss_df, method)
 				} else {
-					neg_results_df <- results_update(neg_results_df, gainloss_df, method)
+					neg_results_df <- update_realized_and_paper(neg_results_df, gainloss_df, method)
 				}
 			}
 
@@ -184,12 +184,12 @@ portfolio_update <- function(portfolio_transactions,
 
 	# compute the mean expected return for RG, RL, PG, and PL
 	if (!posneg_portfolios) {
-		results_df <- meanvalue_compute(results_df, asset_numtrx)
+		results_df <- update_expectedvalue(results_df, asset_numtrx)
 	} else {
 		if (portfolio_value >= 0) {
-			pos_results_df <- meanvalue_compute(pos_results_df, asset_numtrx)
+			pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
 		} else {
-			neg_results_df <- meanvalue_compute(neg_results_df, asset_numtrx)
+			neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
 		}
 	}
 

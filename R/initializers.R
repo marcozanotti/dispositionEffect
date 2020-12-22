@@ -26,9 +26,9 @@ initializer_portfolio <- function(investor,
 
 	portfolio <- tibble::tibble(investor = investor,
 											asset = assets,
-											qty = as.numeric(rep(NA, length(assets))),
-											prz = as.numeric(rep(NA, length(assets))),
-											dtt = as.POSIXct(rep(NA, length(assets))))
+											quantity = as.numeric(rep(NA, length(assets))),
+											price = as.numeric(rep(NA, length(assets))),
+											datetime = as.POSIXct(rep(NA, length(assets))))
 
 	return(portfolio)
 

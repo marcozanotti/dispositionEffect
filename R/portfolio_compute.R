@@ -37,14 +37,15 @@
 #'
 #' @export
 portfolio_compute <- function(portfolio_transactions,
-														 market_prices,
-														 method = "all",
-														 allow_short = FALSE,
-														 time_threshold = "5 mins",
-														 posneg_portfolios = FALSE,
-														 portfolio_statistics = FALSE,
-														 verbose = c(0, 0),
-														 progress = TRUE) {
+														  market_prices,
+														  method = "all",
+														  allow_short = FALSE,
+														  unit = "15 mins",
+														  time_threshold = "5 mins",
+														  posneg_portfolios = FALSE,
+														  portfolio_statistics = FALSE,
+														  verbose = c(0, 0),
+														  progress = TRUE) {
 
 	# checks on inputs
 	# assumes that portfolio_transactions is ordered by datetime
@@ -138,6 +139,7 @@ portfolio_compute <- function(portfolio_transactions,
 																	    previous_dtt,
 																	    portfolio,
 																	    market_prices,
+																			unit,
 																	    time_threshold,
 																	    method,
 																	    allow_short,
@@ -149,6 +151,7 @@ portfolio_compute <- function(portfolio_transactions,
 		portfolio_value <- evaluate_portfolio(portfolio,
 																					trx_dtt,
 																					market_prices,
+																					unit,
 																					portfolio_statistics)
 
 		# update the portfolio

@@ -26,6 +26,7 @@
 evaluate_portfolio <- function(portfolio,
 															 transaction_datetime,
 															 market_prices,
+															 unit = "15 mins",
 															 portfolio_statistics = FALSE) {
 
 	portfolio <- portfolio[which(!is.na(portfolio$quantity)),] # remove asset with missing qty
@@ -37,7 +38,7 @@ evaluate_portfolio <- function(portfolio,
 	} else {
 
 		market_values <- purrr::map_dbl(portfolio$asset, closest_market_price,
-																		transaction_datetime, market_prices)
+																		transaction_datetime, market_prices, unit)
 		value <- sum(portfolio$quantity * (market_values - portfolio$price))
 
 		if (portfolio_statistics) {

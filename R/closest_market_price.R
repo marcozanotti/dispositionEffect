@@ -9,6 +9,9 @@
 #' @param datetime POSIXct of the datetime at which looking for the asset's
 #'   price.
 #' @param market_prices Data frame containing the market prices.
+#' @param unit Character string specifying a time unit or a multiple of a
+#'   unit to be rounded to. Valid base units are second, minute, hour, day,
+#'   week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.
 #'
 #' @return The value of the asset's price.
 #'
@@ -16,17 +19,17 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{evaluate}}
+#' @seealso \code{\link{evaluate}},
+#'   \code{lubridate::\link[lubridate:round_date]{round_date}}
 #'
 #' @export
 closest_market_price <- function(asset,
-																		 datetime,
-																		 market_prices) {
-
-	round_datetime_unit <- "15 mins" # generalize this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+																 datetime,
+																 market_prices,
+																 unit = "15 mins") {
 
 	# convert datetime into some rounded unit
-	datetime <- lubridate::round_date(datetime, unit = round_datetime_unit)
+	datetime <- lubridate::floor_date(datetime, unit = unit)
 
 	# filter historical przs for asset and datetime
 	market_prices <- market_prices[(market_prices$asset == asset) &

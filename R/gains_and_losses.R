@@ -33,6 +33,7 @@ gains_and_losses <- function(transaction_type,
 														 previous_datetime,
 														 portfolio,
 														 market_prices,
+														 unit = "15 mins",
 														 time_threshold = "5 mins",
 														 method = "all",
 														 allow_short = FALSE,
@@ -82,7 +83,7 @@ gains_and_losses <- function(transaction_type,
 			if (verb) message("\nComputing paper gains and losses..")
 			# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
 			market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
-																    transaction_datetime, market_prices)
+																    transaction_datetime, market_prices, unit)
 			pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
 			pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
 			# compute paper gains and losses
@@ -119,7 +120,7 @@ gains_and_losses <- function(transaction_type,
 
 				# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
 				market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
-																	    transaction_datetime, market_prices)
+																	    transaction_datetime, market_prices, unit)
 				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
 				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
 				# compute realized and paper gains and losses

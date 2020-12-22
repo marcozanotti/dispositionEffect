@@ -70,7 +70,7 @@ H. Shefrin & M. Statman, 1985
 }
 \seealso{
 \code{\link{realized_compute}}, \code{\link{paper_compute}},
-\code{\link{portfolio_update}}
+\code{\link{portfolio_compute}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

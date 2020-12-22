@@ -36,8 +36,8 @@ Portfolio evaluation
 H. Shefrin & M. Statman, 1985
 }
 \seealso{
-\code{\link{portfolio_update}}, \code{\link{gains_and_losses}},
-\code{\link{closest_historical_price}}
+\code{\link{portfolio_compute}}, \code{\link{gains_and_losses}},
+\code{\link{closest_market_price}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

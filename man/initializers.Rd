@@ -3,12 +3,12 @@
 \name{initializers}
 \alias{initializers}
 \alias{initializer_portfolio}
-\alias{initializer_results}
+\alias{initializer_realized_and_paper}
 \title{Initializers functions}
 \usage{
 initializer_portfolio(investor, assets)
 
-initializer_results(investor, assets, method = "all")
+initializer_realized_and_paper(investor, assets, method = "all")
 }
 \arguments{
 \item{investor}{Character string. The name of the investor.}
@@ -32,7 +32,7 @@ Initializers functions
 \item \code{initializer_portfolio}: Empty \link[tibble:tibble-package]{tibble}
 of investor's portfolio.
 
-\item \code{initializer_results}: Empty \link[tibble:tibble-package]{tibble}
+\item \code{initializer_realized_and_paper}: Empty \link[tibble:tibble-package]{tibble}
 of investor's realized and paper gains and losses results based on
 the chosen method.
 }}

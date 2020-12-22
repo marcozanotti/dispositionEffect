@@ -263,7 +263,7 @@ paper_compute <- function(portfolio_quantity,
 		# convert results to a df
 		res_df <- do.call(rbind, pgl_count) %>%
 			as.data.frame() %>%
-			tibble::rownames_to_column(var = "asset")
+			tibble::rownames_to_column(.data = ., var = "asset")
 
 	} else if (method == "total") {
 
@@ -273,7 +273,7 @@ paper_compute <- function(portfolio_quantity,
 		# convert results to a df
 		res_df <- do.call(rbind, pgl_total) %>%
 			as.data.frame() %>%
-			tibble::rownames_to_column(var = "asset")
+			tibble::rownames_to_column(.data = ., var = "asset")
 
 	} else if (method == "value") {
 
@@ -283,7 +283,7 @@ paper_compute <- function(portfolio_quantity,
 		# convert results to a df
 		res_df <- do.call(rbind, pgl_value) %>%
 			as.data.frame() %>%
-			tibble::rownames_to_column(var = "asset")
+			tibble::rownames_to_column(.data = ., var = "asset")
 
 	} else if (method == "duration") {
 
@@ -294,7 +294,7 @@ paper_compute <- function(portfolio_quantity,
 		# convert results to a df
 		res_df <- do.call(rbind, pgl_duration) %>%
 			as.data.frame() %>%
-			tibble::rownames_to_column(var = "asset")
+			tibble::rownames_to_column(.data = ., var = "asset")
 
 	} else {# method == "all"
 
@@ -310,7 +310,7 @@ paper_compute <- function(portfolio_quantity,
 										do.call(rbind, pgl_total) %>% as.data.frame(),
 										do.call(rbind, pgl_value) %>% as.data.frame(),
 										do.call(rbind, pgl_duration) %>% as.data.frame()) %>%
-			tibble::rownames_to_column(var = "asset")
+			tibble::rownames_to_column(.data = ., var = "asset")
 
 	}
 

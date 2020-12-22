@@ -14,7 +14,7 @@
 #'   losses results to be updated.
 #' @param new_realized_and_paper Data frame containing the realized and paper gains and
 #'   losses results related to the new transaction.
-#' @param asset_transactions Data frame containing the number of transactions for
+#' @param num_transaction_assets Data frame containing the number of transactions for
 #'   each asset traded by the investor.
 #'
 #'
@@ -184,7 +184,53 @@ dtt_update <- function(portfolio_quantity,
 }
 
 
-# add functions update_quantity and update_portfolio ++++++++++++++++++++++++++++++++++++++++++++++
+#' @describeIn updates Update the portfolio quantity of the traded asset.
+#' @export
+qty_update <- function(portfolio_quantity, transaction_quantity) {
+
+	# the portfolio quantity of the traded asset has to be updated just
+	# summing up the transaction quantity
+	new_qty <- portfolio_quantity + transaction_quantity
+	return(new_qty)
+
+}
+
+
+#' @describeIn updates Update the portfolio with the new quantity, price
+#'   and datetime of the traded asset.
+#' @export
+update_portfolio <- function(portfolio,
+														 transaction_asset,
+														 transaction_quantity,
+														 transaction_price,
+														 transaction_datetime,
+														 transaction_type) {
+
+	# qty, prz and dtt of transaction asset already into portfolio
+	ptf_qty <- portfolio[portfolio$asset == transaction_asset, ]$quantity
+	ptf_prz <- portfolio[portfolio$asset == transaction_asset, ]$price
+	ptf_dtt <- portfolio[portfolio$asset == transaction_asset, ]$datetime
+
+	if (is.na(ptf_qty)) {
+		# if qty is NA (initial condition), simply update the portfolio
+		# with the values of qty, prz and dtt of the transaction
+		portfolio[portfolio$asset == transaction_asset, ]$quantity <- transaction_quantity
+		portfolio[portfolio$asset == transaction_asset, ]$price <- transaction_price
+		portfolio[portfolio$asset == transaction_asset, ]$datetime <- transaction_datetime
+	} else {
+		# else sum the qtys
+		portfolio[portfolio$asset == transaction_asset, ]$quantity <-
+			qty_update(ptf_qty, transaction_quantity)
+		# and adjust the przs based on conditions
+		portfolio[portfolio$asset == transaction_asset, ]$price <-
+			prz_update(ptf_qty, ptf_prz, transaction_quantity, transaction_price, transaction_type)
+		portfolio[portfolio$asset == transaction_asset, ]$datetime <-
+			dtt_update(ptf_qty, ptf_dtt, transaction_quantity, transaction_datetime, transaction_type)
+	}
+
+	return(portfolio)
+
+}
 
 
 #' @describeIn updates Update the realized and paper gains and losses
@@ -194,8 +240,8 @@ results_update <- function(realized_and_paper,
 													 new_realized_and_paper,
 													 method = "all") {
 
-	realized_and_paper <- dplyr::arrange(realized_and_paper, asset)
-	new_realized_and_paper <- dplyr::arrange(new_realized_and_paper, asset)
+	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
+	new_realized_and_paper <- dplyr::arrange(new_realized_and_paper, !!rlang::sym("asset"))
 	assets <- new_realized_and_paper$asset
 
 	# replace the realized_and_paper values corresponding to the assets present into new_realized_and_paper
@@ -275,7 +321,7 @@ results_update <- function(realized_and_paper,
 																       TRUE ~ PL_duration + new_realized_and_paper$PL_duration)
 			)
 
-	} else { # method == "all"
+	} else {# method == "all"
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
 			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
@@ -330,12 +376,12 @@ results_update <- function(realized_and_paper,
 #' @export
 #  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 meanvalue_compute <- function(realized_and_paper,
-															asset_transactions) {
+															num_transaction_assets) {
 
-	realized_and_paper <- dplyr::arrange(realized_and_paper, "asset")
-	asset_transactions <- dplyr::arrange(asset_transactions, "asset")
+	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
+	num_transaction_assets <- dplyr::arrange(num_transaction_assets, !!rlang::sym("asset"))
 
-	weights <- asset_transactions[["ntrx"]]
+	weights <- num_transaction_assets[["numtrx"]]
 
 	realized_and_paper[, "RG_value"] <- realized_and_paper[, "RG_value"] / weights
 	realized_and_paper[, "RL_value"] <- realized_and_paper[, "RL_value"] / weights

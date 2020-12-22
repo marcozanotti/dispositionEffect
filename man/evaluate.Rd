@@ -6,14 +6,14 @@
 \title{Portfolio evaluation}
 \usage{
 evaluate_portfolio(
-  portfolio_df,
+  portfolio,
   transaction_datetime,
   market_prices,
   portfolio_statistics = FALSE
 )
 }
 \arguments{
-\item{portfolio_df}{Data frame of the investor's portfolio at time t.}
+\item{portfolio}{Data frame of the investor's portfolio at time t.}
 
 \item{transaction_datetime}{POSIXct value of the transaction date.}
 

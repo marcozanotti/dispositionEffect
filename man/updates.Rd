@@ -4,6 +4,8 @@
 \alias{updates}
 \alias{prz_update}
 \alias{dtt_update}
+\alias{qty_update}
+\alias{update_portfolio}
 \alias{results_update}
 \alias{meanvalue_compute}
 \title{Update investor's portfolio or realized and paper results}
@@ -24,9 +26,20 @@ dtt_update(
   transaction_type
 )
 
+qty_update(portfolio_quantity, transaction_quantity)
+
+update_portfolio(
+  portfolio,
+  transaction_asset,
+  transaction_quantity,
+  transaction_price,
+  transaction_datetime,
+  transaction_type
+)
+
 results_update(realized_and_paper, new_realized_and_paper, method = "all")
 
-meanvalue_compute(realized_and_paper, asset_transactions)
+meanvalue_compute(realized_and_paper, num_transaction_assets)
 }
 \arguments{
 \item{portfolio_quantity}{Numeric value. The portfolio quantity of the traded asset.}
@@ -42,6 +55,8 @@ meanvalue_compute(realized_and_paper, asset_transactions)
 \item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
+\item{transaction_asset}{Character string. The name of the traded asset.}
+
 \item{realized_and_paper}{Data frame containing the realized and paper gains and
 losses results to be updated.}
 
@@ -51,7 +66,7 @@ losses results related to the new transaction.}
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}
 
-\item{asset_transactions}{Data frame containing the number of transactions for
+\item{num_transaction_assets}{Data frame containing the number of transactions for
 each asset traded by the investor.}
 }
 \value{
@@ -90,6 +105,11 @@ Unpdate investor's portfolio or realized and paper results
 \item \code{prz_update}: Update the portfolio price of the traded asset.
 
 \item \code{dtt_update}: Update the portfolio datetime of the traded asset.
+
+\item \code{qty_update}: Update the portfolio quantity of the traded asset.
+
+\item \code{update_portfolio}: Update the portfolio with the new quantity, price
+and datetime of the traded asset.
 
 \item \code{results_update}: Update the realized and paper gains and losses
 results with the results obtained on the last occurred transaction.

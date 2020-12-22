@@ -45,7 +45,7 @@ are returned.}
 \item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}
 
-\item{verbose}{Numeric vector of length 2 that allows to control
+\item{verbose}{Numeric or logical vector of length 2 that allows to control
 for the function verbosity.}
 
 \item{progress}{Logical. If TRUE a progress bar is displayed.}

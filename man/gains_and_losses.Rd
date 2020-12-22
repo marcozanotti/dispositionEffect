@@ -16,7 +16,7 @@ gains_and_losses(
   time_threshold = "5 mins",
   method = "all",
   allow_short = FALSE,
-  verbose = c(0, 0)
+  verbose = FALSE
 )
 }
 \arguments{
@@ -50,8 +50,7 @@ Allowed values are "count", "total", "value", "duration" and "all".}
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
 
-\item{verbose}{Numeric vector of length 2 that allows to control
-for the function verbosity.}
+\item{verbose}{Logical. If TRUE than messages are printed to the console.}
 }
 \value{
 A \link[tibble:tibble-package]{tibble} containing the values of

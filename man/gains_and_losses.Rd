@@ -13,6 +13,7 @@ gains_and_losses(
   previous_datetime,
   portfolio,
   market_prices,
+  unit = "15 mins",
   time_threshold = "5 mins",
   method = "all",
   allow_short = FALSE,
@@ -37,6 +38,10 @@ performed by the investor.}
 \item{portfolio}{Data frame of the investor's portfolio at time t.}
 
 \item{market_prices}{Data frame containing the market prices.}
+
+\item{unit}{Character string specifying a time unit or a multiple of a
+unit to be rounded to. Valid base units are second, minute, hour, day,
+week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.}
 
 \item{time_threshold}{character in the format "value units" indicating the
 time threshold at which the computed financial difftime has to be evaluated

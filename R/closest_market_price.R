@@ -30,11 +30,11 @@ closest_historical_price <- function(asset,
 
 	# filter historical przs for asset and datetime
 	market_prices <- market_prices[(market_prices$asset == asset) &
-																		 	(market_prices$datetime <= datetime), ]
+																 (market_prices$datetime <= datetime), ]
 	# extract the closest date which is before the datetime
 	closest_date <- which.min(abs(datetime - market_prices$datetime))
 	# extract the price
-	res <- market_prices[closest_date, ]$prz
+	res <- market_prices[closest_date, ]$price
 
 	return(res)
 

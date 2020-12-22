@@ -186,10 +186,13 @@ dtt_update <- function(portfolio_quantity,
 
 #' @describeIn updates Update the portfolio quantity of the traded asset.
 #' @export
-qty_update <- function(portfolio_quantity, transaction_quantity) {
+qty_update <- function(portfolio_quantity,
+											 transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
 	# summing up the transaction quantity
+	# if the transaction type is a sell, than the transaction
+	# quantity is negative
 	new_qty <- portfolio_quantity + transaction_quantity
 	return(new_qty)
 

@@ -2,13 +2,13 @@
 % Please edit documentation in R/difftime.R
 \name{difference_in_time}
 \alias{difference_in_time}
-\alias{financial_difftime}
-\alias{compare_difftime}
+\alias{difftime_financial}
+\alias{difftime_compare}
 \title{Difference in time}
 \usage{
-financial_difftime(from, to, pre_market = 8, after_market = 22)
+difftime_financial(from, to, pre_market = 8, after_market = 22)
 
-compare_difftime(from, to, time_threshold = "0 mins")
+difftime_compare(from, to, time_threshold = "0 mins")
 }
 \arguments{
 \item{from}{POSIXct for the initial date.}
@@ -29,14 +29,14 @@ The allowed units are "secs", "mins", "hours", "days" and "weeks"
 }
 \value{
 \describe{
-\item{\code{financial_difftime}}{returns a numeric value in hours.
+\item{\code{difftime_financial}}{returns a numeric value in hours.
 To convert in a different time unit use
 \code{base::\link[base:as.numeric]{as.numeric}} and specify the
 \code{units} argument (units = c("secs", "mins", "hours", "days",
 "weeks")).}
-\item{\code{compare_difftime}}{returns a character string whose possible
+\item{\code{difftime_compare}}{returns a character string whose possible
 values are "greater" or "smaller", indicating whether the
-\code{financial_difftime} evaluated between the two dates is greater or
+\code{difftime_financial} evaluated between the two dates is greater or
 smaller than the chosen threshold.}
 }
 }
@@ -48,12 +48,12 @@ Difference in time
 }
 \section{Functions}{
 \itemize{
-\item \code{financial_difftime}: Extension of the
+\item \code{difftime_financial}: Extension of the
 \code{base::\link[base:difftime]{difftime}} function to calculate the
 actual financial difftime taking into account pre and after market
 moments and financial markets closing days.
 
-\item \code{compare_difftime}: Comparison of the \code{financial_difftime}
+\item \code{difftime_compare}: Comparison of the \code{difftime_financial}
 with respect to a given time threshold.
 }}
 
@@ -62,18 +62,18 @@ with respect to a given time threshold.
   to <- as.POSIXct("2020-01-01 18:00:00", tz = "UTC")
   difftime(to, from)
   as.numeric(difftime(to, from))
-  financial_difftime(from, to)
+  difftime_financial(from, to)
 
   from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
   to <- as.POSIXct("2020-01-02 18:00:00", tz = "UTC")
   difftime(to, from)
   as.numeric(difftime(to, from), units = "hours")
-  financial_difftime(from, to)
-  financial_difftime(from, to, after_market = 19) # Italian market
+  difftime_financial(from, to)
+  difftime_financial(from, to, after_market = 19) # Italian market
 
-  compare_difftime(from, to, "5 mins")
-  compare_difftime(from, to, "5 hours")
-  compare_difftime(from, to, "5 days")
+  difftime_compare(from, to, "5 mins")
+  difftime_compare(from, to, "5 hours")
+  difftime_compare(from, to, "5 days")
 
 }
 \references{

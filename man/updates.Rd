@@ -2,58 +2,89 @@
 % Please edit documentation in R/updates.R
 \name{updates}
 \alias{updates}
-\alias{prz_update}
-\alias{dtt_update}
-\alias{results_update}
-\alias{meanvalue_compute}
+\alias{update_price}
+\alias{update_datetime}
+\alias{update_quantity}
+\alias{update_portfolio}
+\alias{update_realized_and_paper}
+\alias{update_expectedvalue}
 \title{Update investor's portfolio or realized and paper results}
 \usage{
-prz_update(ptf_qty, ptf_prz, trx_qty, trx_prz, trx_type)
+update_price(
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type
+)
 
-dtt_update(ptf_qty, ptf_dtt, trx_qty, trx_dtt, trx_type)
+update_datetime(
+  portfolio_quantity,
+  portfolio_datetime,
+  transaction_quantity,
+  transaction_datetime,
+  transaction_type
+)
 
-results_update(df_to_update, df_new_info, method = "all")
+update_quantity(portfolio_quantity, transaction_quantity)
 
-meanvalue_compute(df_to_update, df_numtrx)
+update_portfolio(
+  portfolio,
+  transaction_asset,
+  transaction_quantity,
+  transaction_price,
+  transaction_datetime,
+  transaction_type
+)
+
+update_realized_and_paper(
+  realized_and_paper,
+  new_realized_and_paper,
+  method = "all"
+)
+
+update_expectedvalue(realized_and_paper, num_transaction_assets)
 }
 \arguments{
-\item{ptf_qty}{Numeric value. The portfolio quantity of the traded asset.}
+\item{portfolio_quantity}{Numeric value. The portfolio quantity of the traded asset.}
 
-\item{ptf_prz}{Numeric value. The portfolio price of the traded asset.}
+\item{portfolio_price}{Numeric value. The portfolio price of the traded asset.}
 
-\item{trx_qty}{Numeric value. The quantity of the traded asset.}
+\item{transaction_quantity}{Numeric value. The quantity of the traded asset.}
 
-\item{trx_prz}{Numeric value. The market price of the traded asset.}
+\item{transaction_price}{Numeric value. The market price of the traded asset.}
 
-\item{trx_type}{Character string. Either "B" = buy or "S" = sell.}
+\item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
-\item{trx_dtt}{POSIXct value. The date-time at which the transaction
+\item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
-\item{df_to_update}{Data frame containing the realized and paper gains and
+\item{transaction_asset}{Character string. The name of the traded asset.}
+
+\item{realized_and_paper}{Data frame containing the realized and paper gains and
 losses results to be updated.}
 
-\item{df_new_info}{Data frame containing the realized and paper gains and
+\item{new_realized_and_paper}{Data frame containing the realized and paper gains and
 losses results related to the new transaction.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}
 
-\item{df_numtrx}{Data frame containing the number of transactions for
+\item{num_transaction_assets}{Data frame containing the number of transactions for
 each asset traded by the investor.}
 }
 \value{
 The described functions have different return behaviours.
 
 \describe{
-\item{\code{prz_update}}{returns a numeric value of the new portfolio
+\item{\code{update_price}}{returns a numeric value of the new portfolio
 price of the traded asset.}
-\item{\code{dtt_update}}{returns a datetime value of the new portfolio
+\item{\code{update_datetime}}{returns a datetime value of the new portfolio
 datetime of the traded asset.}
-\item{\code{results_update}}{returns a \link[tibble:tibble-package]{tibble}
+\item{\code{update_realized_and_paper}}{returns a \link[tibble:tibble-package]{tibble}
 containing the realized and paper gains and losses with the updated
 values.}
-\item{\code{meanvalue_compute}}{returns a \link[tibble:tibble-package]{tibble}
+\item{\code{update_expectedvalue}}{returns a \link[tibble:tibble-package]{tibble}
 containing the realized and paper gains and losses with the updated
 values.}
 }
@@ -75,14 +106,19 @@ Unpdate investor's portfolio or realized and paper results
 }
 \section{Functions}{
 \itemize{
-\item \code{prz_update}: Update the portfolio price of the traded asset.
+\item \code{update_price}: Update the portfolio price of the traded asset.
 
-\item \code{dtt_update}: Update the portfolio datetime of the traded asset.
+\item \code{update_datetime}: Update the portfolio datetime of the traded asset.
 
-\item \code{results_update}: Update the realized and paper gains and losses
+\item \code{update_quantity}: Update the portfolio quantity of the traded asset.
+
+\item \code{update_portfolio}: Update the portfolio with the new quantity, price
+and datetime of the traded asset.
+
+\item \code{update_realized_and_paper}: Update the realized and paper gains and losses
 results with the results obtained on the last occurred transaction.
 
-\item \code{meanvalue_compute}: Update the realized and paper gains and losses
+\item \code{update_expectedvalue}: Update the realized and paper gains and losses
 results averaging the total value by the number of transactions
 for each asset.
 }}
@@ -91,7 +127,7 @@ for each asset.
 H. Shefrin & M. Statman, 1985
 }
 \seealso{
-\code{\link{portfolio_update}}, \code{\link{gains_and_losses}}
+\code{\link{portfolio_compute}}, \code{\link{gains_and_losses}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

@@ -6,10 +6,10 @@
 #'
 #' @details
 #'
-#' @param portfolio_df Data frame of the investor's portfolio at time t.
-#' @param trx_date POSIXct value of the transaction date.
-#' @inheritParams closest_historical_price
-#' @param statistics Logical. If TRUE some statistical indexes are computed
+#' @param portfolio Data frame of the investor's portfolio at time t.
+#' @param transaction_datetime POSIXct value of the transaction date.
+#' @inheritParams closest_market_price
+#' @param portfolio_statistics Logical. If TRUE some statistical indexes are computed
 #'   on the portfolio and returned.
 #'
 #' @return The portfolio value as the sum of each asset quantity times the
@@ -19,24 +19,29 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_update}}, \code{\link{gains_and_losses}},
-#'   \code{\link{closest_historical_price}}
+#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_and_losses}},
+#'   \code{\link{closest_market_price}}
 #'
 #' @export
-evaluate_portfolio <- function(portfolio_df, trx_date, df_asset_prices, statistics = FALSE) {
+evaluate_portfolio <- function(portfolio,
+															 transaction_datetime,
+															 market_prices,
+															 unit = "15 mins",
+															 portfolio_statistics = FALSE) {
 
-	portfolio_df <- portfolio_df[which(!is.na(portfolio_df$qty)),] # remove asset with missing qty
+	portfolio <- portfolio[which(!is.na(portfolio$quantity)),] # remove asset with missing qty
 
-	if (nrow(portfolio_df) == 0) {
+	if (nrow(portfolio) == 0) {
 		# check on rows: if zero initial condition where the portfolio is empty
 		value <- NULL
 
 	} else {
 
-		market_values <- purrr::map_dbl(portfolio_df$asset, closest_historical_price, trx_date, df_asset_prices)
-		value <- sum(portfolio_df$qty * (market_values - portfolio_df$prz))
+		market_values <- purrr::map_dbl(portfolio$asset, closest_market_price,
+																		transaction_datetime, market_prices, unit)
+		value <- sum(portfolio$quantity * (market_values - portfolio$price))
 
-		if (statistics) {
+		if (portfolio_statistics) {
 			# compute some other portfolio statistics
 		}
 

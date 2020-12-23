@@ -10,77 +10,77 @@
 \title{Realized estimation}
 \usage{
 realized_count(
-  ptf_qty,
-  ptf_prz,
-  trx_qty,
-  trx_prz,
-  trx_type,
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type,
   allow_short = FALSE,
   realized_only = FALSE
 )
 
 realized_total(
-  ptf_qty,
-  ptf_prz,
-  trx_qty,
-  trx_prz,
-  trx_type,
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type,
   allow_short = FALSE,
   realized_only = FALSE
 )
 
 realized_value(
-  ptf_qty,
-  ptf_prz,
-  trx_qty,
-  trx_prz,
-  trx_type,
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type,
   allow_short = FALSE,
   realized_only = FALSE
 )
 
 realized_duration(
-  ptf_qty,
-  ptf_prz,
-  trx_qty,
-  trx_prz,
-  trx_type,
-  initial_dtt,
-  last_dtt,
-  trx_dtt,
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type,
+  previous_transaction_datetime,
+  previous_datetime,
+  transaction_datetime,
   allow_short = FALSE,
   realized_only = FALSE
 )
 
 realized_compute(
-  ptf_qty,
-  ptf_prz,
-  trx_qty,
-  trx_prz,
-  trx_type,
-  initial_dtt,
-  last_dtt,
-  trx_dtt,
-  trx_asset,
+  portfolio_quantity,
+  portfolio_price,
+  transaction_quantity,
+  transaction_price,
+  transaction_type,
+  previous_transaction_datetime,
+  previous_datetime,
+  transaction_datetime,
+  transaction_asset,
   allow_short = FALSE,
   realized_only = FALSE,
   method = "all"
 )
 
-realized_empty(trx_asset, method = "all")
+realized_empty(transaction_asset, method = "all")
 }
 \arguments{
-\item{ptf_qty}{Numeric vector. The portfolio quantities of assets into the
+\item{portfolio_quantity}{Numeric vector. The portfolio quantities of assets into the
 investor's portfolio.}
 
-\item{ptf_prz}{Numeric vector. The portfolio prices of assets into the
+\item{portfolio_price}{Numeric vector. The portfolio prices of assets into the
 investor's portfolio.}
 
-\item{trx_qty}{Numeric value. The quantity of the traded asset.}
+\item{transaction_quantity}{Numeric value. The quantity of the traded asset.}
 
-\item{trx_prz}{Numeric value. The market price of the traded asset.}
+\item{transaction_price}{Numeric value. The market price of the traded asset.}
 
-\item{trx_type}{Character string. Either "B" = buy or "S" = sell.}
+\item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
@@ -89,16 +89,16 @@ long positions are allowed.}
 losses are computed. Otherwise also paper gains and paper losses on excess
 quantity of the traded asset are computed.}
 
-\item{initial_dtt}{POSIXct value. The portfolio date-time related to the
+\item{previous_transaction_datetime}{POSIXct value. The portfolio date-time related to the
 last transaction of the traded asset.}
 
-\item{last_dtt}{POSIXct value. The date-time of the last transaction
+\item{previous_datetime}{POSIXct value. The date-time of the last transaction
 performed by the investor.}
 
-\item{trx_dtt}{POSIXct value. The date-time at which the transaction
+\item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
 
-\item{trx_asset}{Character string. The name of the traded asset.}
+\item{transaction_asset}{Character string. The name of the traded asset.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}

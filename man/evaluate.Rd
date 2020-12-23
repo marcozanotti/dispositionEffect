@@ -5,16 +5,26 @@
 \alias{evaluate_portfolio}
 \title{Portfolio evaluation}
 \usage{
-evaluate_portfolio(portfolio_df, trx_date, df_asset_prices, statistics = FALSE)
+evaluate_portfolio(
+  portfolio,
+  transaction_datetime,
+  market_prices,
+  unit = "15 mins",
+  portfolio_statistics = FALSE
+)
 }
 \arguments{
-\item{portfolio_df}{Data frame of the investor's portfolio at time t.}
+\item{portfolio}{Data frame of the investor's portfolio at time t.}
 
-\item{trx_date}{POSIXct value of the transaction date.}
+\item{transaction_datetime}{POSIXct value of the transaction date.}
 
-\item{df_asset_prices}{Data frame containing the market prices.}
+\item{market_prices}{Data frame containing the market prices.}
 
-\item{statistics}{Logical. If TRUE some statistical indexes are computed
+\item{unit}{Character string specifying a time unit or a multiple of a
+unit to be rounded to. Valid base units are second, minute, hour, day,
+week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.}
+
+\item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}
 }
 \value{
@@ -31,8 +41,8 @@ Portfolio evaluation
 H. Shefrin & M. Statman, 1985
 }
 \seealso{
-\code{\link{portfolio_update}}, \code{\link{gains_and_losses}},
-\code{\link{closest_historical_price}}
+\code{\link{portfolio_compute}}, \code{\link{gains_and_losses}},
+\code{\link{closest_market_price}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

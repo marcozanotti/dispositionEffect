@@ -20,14 +20,14 @@
 #'
 #' @return
 #'   \describe{
-#'     \item{\code{financial_difftime}}{returns a numeric value in hours.
+#'     \item{\code{difftime_financial}}{returns a numeric value in hours.
 #'       To convert in a different time unit use
 #'       \code{base::\link[base:as.numeric]{as.numeric}} and specify the
 #'       \code{units} argument (units = c("secs", "mins", "hours", "days",
 #'       "weeks")).}
-#'     \item{\code{compare_difftime}}{returns a character string whose possible
+#'     \item{\code{difftime_compare}}{returns a character string whose possible
 #'       values are "greater" or "smaller", indicating whether the
-#'       \code{financial_difftime} evaluated between the two dates is greater or
+#'       \code{difftime_financial} evaluated between the two dates is greater or
 #'       smaller than the chosen threshold.}
 #'   }
 #'
@@ -36,18 +36,18 @@
 #'   to <- as.POSIXct("2020-01-01 18:00:00", tz = "UTC")
 #'   difftime(to, from)
 #'   as.numeric(difftime(to, from))
-#'   financial_difftime(from, to)
+#'   difftime_financial(from, to)
 #'
 #'   from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
 #'   to <- as.POSIXct("2020-01-02 18:00:00", tz = "UTC")
 #'   difftime(to, from)
 #'   as.numeric(difftime(to, from), units = "hours")
-#'   financial_difftime(from, to)
-#'   financial_difftime(from, to, after_market = 19) # Italian market
+#'   difftime_financial(from, to)
+#'   difftime_financial(from, to, after_market = 19) # Italian market
 #'
-#'   compare_difftime(from, to, "5 mins")
-#'   compare_difftime(from, to, "5 hours")
-#'   compare_difftime(from, to, "5 days")
+#'   difftime_compare(from, to, "5 mins")
+#'   difftime_compare(from, to, "5 hours")
+#'   difftime_compare(from, to, "5 days")
 #'
 #' @author L. Mazzucchelli & M. Zanotti
 #'
@@ -62,7 +62,10 @@ NULL
 #'   actual financial difftime taking into account pre and after market
 #'   moments and financial markets closing days.
 #' @export
-financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
+difftime_financial <- function(from,
+															 to,
+															 pre_market = 08,
+															 after_market = 22) {
 
 	upp_from <- as.POSIXct(paste0(as.Date(from), " ", after_market, ":00:00")) # upper bound first day
 	low_to <- as.POSIXct(paste0(as.Date(to), " ", pre_market, ":00:00")) # lower bound last day
@@ -79,7 +82,7 @@ financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
 	} else {
 		# if different dates, then new difftime
 		s <- seq(as.Date(from), as.Date(to), by = "days") %>%
-			lubridate::wday(week_start = 1)
+			lubridate::wday(x = ., week_start = 1)
 		len <- which(s %in% 1:5) %>% length() - 2 # num working days -2 (first and last)
 		h <- after_market - pre_market # financial working hours in a day (from 8.00 to 19.00)
 		res <- len * h # total financial working hours between the two dates
@@ -93,10 +96,12 @@ financial_difftime <- function(from, to, pre_market = 08, after_market = 22) {
 }
 
 
-#' @describeIn difference_in_time Comparison of the \code{financial_difftime}
+#' @describeIn difference_in_time Comparison of the \code{difftime_financial}
 #'   with respect to a given time threshold.
 #' @export
-compare_difftime <- function(from, to, time_threshold = "0 mins") {
+difftime_compare <- function(from,
+														 to,
+														 time_threshold = "0 mins") {
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
 	if (length(strsplit(time_threshold, "\\s")[[1]]) <= 1) {
@@ -107,8 +112,8 @@ compare_difftime <- function(from, to, time_threshold = "0 mins") {
 	value <- strsplit(time_threshold, "\\s")[[1]][1] %>%
 		as.numeric()
 
-	dtt_diff <- financial_difftime(from, to) %>%
-		as.difftime(units = "hours") %>% # financial_difftime returns in hours
+	dtt_diff <- difftime_financial(from, to) %>%
+		as.difftime(units = "hours") %>% # difftime_financial returns in hours
 		as.numeric(units = units)
 
 	if (dtt_diff >= value) {

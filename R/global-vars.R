@@ -1,0 +1,3 @@
+globalVariables(
+	names = c(".")
+)

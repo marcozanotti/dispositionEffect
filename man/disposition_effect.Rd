@@ -75,9 +75,6 @@ by L. Mazzucchelli et al.
 \references{
 H. Shefrin & M. Statman, 1985
 }
-\seealso{
-
-}
 \author{
 L. Mazzucchelli & M. Zanotti
 }

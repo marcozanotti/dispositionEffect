@@ -32,8 +32,6 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso
-#'
 #' @examples
 #'   data(portfolio_results)
 #'

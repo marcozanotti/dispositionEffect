@@ -4,12 +4,12 @@
 #'
 #' @description Unpdate investor's portfolio or realized and paper results
 #'
-#' @details
-#'
 #' @param portfolio_price Numeric value. The portfolio price of the traded asset.
 #' @param portfolio_quantity Numeric value. The portfolio quantity of the traded asset.
+#' @param portfolio_datetime POSIXct value. The date-time of the traded asset.
 #' @inheritParams realized_compute
 #' @inheritParams paper_compute
+#' @inheritParams gains_and_losses
 #' @param realized_and_paper Data frame containing the realized and paper gains and
 #'   losses results to be updated.
 #' @param new_realized_and_paper Data frame containing the realized and paper gains and
@@ -54,10 +54,10 @@ NULL
 #' @describeIn updates Update the portfolio price of the traded asset.
 #' @export
 update_price <- function(portfolio_quantity,
-											 portfolio_price,
-											 transaction_quantity,
-											 transaction_price,
-											 transaction_type) {
+											   portfolio_price,
+											   transaction_quantity,
+											   transaction_price,
+											   transaction_type) {
 
 	# short positions are allowed but qty have to be negative
 
@@ -121,16 +121,16 @@ update_price <- function(portfolio_quantity,
 #' @describeIn updates Update the portfolio datetime of the traded asset.
 #' @export
 update_datetime <- function(portfolio_quantity,
-											 portfolio_datetime,
-											 transaction_quantity,
-											 transaction_datetime,
-											 transaction_type) {
+											      portfolio_datetime,
+											      transaction_quantity,
+											      transaction_datetime,
+											      transaction_type) {
 
 	# short positions are allowed but qty have to be negative
 
 	# cases:
-	# 0) portfolio_quantity + transaction_quantity = 0         =>  new_dtt = transaction_datetime
-	# 1) portfolio_quantity = 0                   =>  new_dtt = transaction_datetime
+	# 0) portfolio_quantity + transaction_quantity = 0    =>  new_dtt = transaction_datetime
+	# 1) portfolio_quantity = 0                           =>  new_dtt = transaction_datetime
 	# 2) portfolio_quantity > 0 & transaction_type = B    =>  new_dtt = portfolio_datetime
 	# 3) portfolio_quantity < 0 & transaction_type = S    =>  new_dtt = portfolio_datetime
 
@@ -187,7 +187,7 @@ update_datetime <- function(portfolio_quantity,
 #' @describeIn updates Update the portfolio quantity of the traded asset.
 #' @export
 update_quantity <- function(portfolio_quantity,
-											 transaction_quantity) {
+											      transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
 	# summing up the transaction quantity
@@ -240,8 +240,8 @@ update_portfolio <- function(portfolio,
 #'   results with the results obtained on the last occurred transaction.
 #' @export
 update_realized_and_paper <- function(realized_and_paper,
-													 new_realized_and_paper,
-													 method = "all") {
+													            new_realized_and_paper,
+													            method = "all") {
 
 	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
 	new_realized_and_paper <- dplyr::arrange(new_realized_and_paper, !!rlang::sym("asset"))
@@ -379,7 +379,7 @@ update_realized_and_paper <- function(realized_and_paper,
 #' @export
 #  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 update_expectedvalue <- function(realized_and_paper,
-															num_transaction_assets) {
+															   num_transaction_assets) {
 
 	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
 	num_transaction_assets <- dplyr::arrange(num_transaction_assets, !!rlang::sym("asset"))

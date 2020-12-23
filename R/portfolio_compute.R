@@ -3,8 +3,6 @@
 #' @description Computation of all the transaction updates and the
 #'   realized and paper gains and losses for each assets.
 #'
-#' @details
-#'
 #' @param portfolio_transactions Data frame. The investor's transactions data frame.
 #' @inheritParams closest_market_price
 #' @inheritParams paper_compute

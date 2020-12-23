@@ -4,8 +4,6 @@
 #'
 #' @description Difference in time
 #'
-#' @details
-#'
 #' @param from POSIXct for the initial date.
 #' @param to POSIXct for the final date.
 #' @param pre_market numeric or character representing the hour of the day at

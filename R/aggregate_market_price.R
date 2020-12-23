@@ -3,8 +3,6 @@
 #' @description Aggregate the data frame of market prices with a
 #'   specific aggregate function within a time interval.
 #'
-#' @details
-#'
 #' @param market_prices Data frame containing the market prices.
 #' @param unit Character string specifying a time unit or a multiple of a
 #'   unit to be rounded to. Valid base units are second, minute, hour, day,

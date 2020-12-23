@@ -40,9 +40,6 @@ A character string containing an error message or NULL.
 \description{
 Functions to perform checks on arguments.
 }
-\details{
-
-}
 \section{Functions}{
 \itemize{
 \item \code{check_df_names}: Check consistency of data frame variables' names.

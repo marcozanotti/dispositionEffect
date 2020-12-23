@@ -10,5 +10,9 @@ disposition effect using financial market data.
 }
 \section{dispositionEffect functions}{
 
+\describe{
+\item{disposition_effect}{Compute the disposition effect based on
+realized and paper gains and losses}
+}
 }
 

@@ -27,9 +27,6 @@ The data frame of aggregated market prices.
 Aggregate the data frame of market prices with a
 specific aggregate function within a time interval.
 }
-\details{
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }

@@ -64,9 +64,6 @@ computed by means of the chosen method on each portfolio assets.
 Computation of all the transaction updates and the
 realized and paper gains and losses for each assets.
 }
-\details{
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }

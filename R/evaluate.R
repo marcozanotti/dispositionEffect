@@ -4,8 +4,6 @@
 #'
 #' @description Portfolio evaluation
 #'
-#' @details
-#'
 #' @param portfolio Data frame of the investor's portfolio at time t.
 #' @param transaction_datetime POSIXct value of the transaction date.
 #' @inheritParams closest_market_price

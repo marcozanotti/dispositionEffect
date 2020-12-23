@@ -43,9 +43,6 @@ smaller than the chosen threshold.}
 \description{
 Difference in time
 }
-\details{
-
-}
 \section{Functions}{
 \itemize{
 \item \code{difftime_financial}: Extension of the

@@ -134,9 +134,6 @@ In particular:
 \description{
 Realized estimation
 }
-\details{
-
-}
 \section{Functions}{
 \itemize{
 \item \code{realized_count}: Computation, as simple counts, of realized

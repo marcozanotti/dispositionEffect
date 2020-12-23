@@ -103,9 +103,6 @@ In particular:
 \description{
 Papers' estimation
 }
-\details{
-
-}
 \section{Functions}{
 \itemize{
 \item \code{paper_count}: Computation of paper gains and paper losses as

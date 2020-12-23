@@ -25,9 +25,6 @@ The value of the asset's price.
 Find the market price closest to a certain datetime and for
 as specific asset.
 }
-\details{
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }

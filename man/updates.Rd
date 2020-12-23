@@ -56,8 +56,12 @@ update_expectedvalue(realized_and_paper, num_transaction_assets)
 
 \item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
+\item{portfolio_datetime}{POSIXct value. The date-time of the traded asset.}
+
 \item{transaction_datetime}{POSIXct value. The date-time at which the transaction
 is going to occur.}
+
+\item{portfolio}{Data frame of the investor's portfolio at time t.}
 
 \item{transaction_asset}{Character string. The name of the traded asset.}
 
@@ -100,9 +104,6 @@ In particular:
 }
 \description{
 Unpdate investor's portfolio or realized and paper results
-}
-\details{
-
 }
 \section{Functions}{
 \itemize{

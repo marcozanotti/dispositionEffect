@@ -3,8 +3,6 @@
 #' @description Find the market price closest to a certain datetime and for
 #'   as specific asset.
 #'
-#' @details
-#'
 #' @param asset Character name of the asset to look for.
 #' @param datetime POSIXct of the datetime at which looking for the asset's
 #'   price.

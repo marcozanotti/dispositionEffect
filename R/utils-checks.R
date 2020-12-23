@@ -4,8 +4,6 @@
 #'
 #' @description Functions to perform checks on arguments.
 #'
-#' @details
-#'
 #' @param df_name Chr
 #' @param df_names Chr
 #' @param target_names Chr

@@ -5,7 +5,13 @@
 \alias{\%!in\%}
 \title{Negative match operator}
 \usage{
-lhs \%!in\% rhs
+x \%!in\% table
+}
+\arguments{
+\item{x}{vector or NULL: the values to be matched. Long vectors are supported.}
+
+\item{table}{vector or NULL: the values to be matched against. Long vectors are
+not supported.}
 }
 \description{
 See \code{base::\link[base:match]{\%in\%}} for details on the

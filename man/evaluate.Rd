@@ -34,9 +34,6 @@ excess return of each asset with respect to the market.
 \description{
 Portfolio evaluation
 }
-\details{
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }

@@ -4,8 +4,6 @@
 #'
 #' @description Papers' estimation
 #'
-#' @details
-#'
 #' @param portfolio_quantity Numeric vector. The portfolio quantities of assets into the
 #'   investor's portfolio.
 #' @param portfolio_price Numeric vector. The portfolio prices of assets into the

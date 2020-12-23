@@ -4,8 +4,6 @@
 #'
 #' @description See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
 #'
-#' @usage lhs \%>\% rhs
-#'
 #' @rdname pipe
 #' @keywords internal
 #' @importFrom magrittr %>%
@@ -21,11 +19,15 @@ NULL
 #'   The negative match operator is simply the negation of the match operator
 #'   obtained via the \code{base::\link[base:Negate]{Negate}} function.
 #'
-#' @usage lhs \%!in\% rhs
+#' @usage x \%!in\% table
+#'
+#' @param x vector or NULL: the values to be matched. Long vectors are supported.
+#' @param table vector or NULL: the values to be matched against. Long vectors are
+#'   not supported.
 #'
 #' @rdname negative_match
 #' @keywords internal
-`%!in%` <- Negate(`%in%`)
+`%!in%` <- function(x, table) !(match(x, table, nomatch = 0) > 0)
 
 
 #' @title Element-wise mean calculation

@@ -30,4 +30,4 @@ RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/marcozanotti/dispositionEffect
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)

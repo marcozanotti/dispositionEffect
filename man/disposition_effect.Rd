@@ -3,11 +3,17 @@
 \name{disposition_effect}
 \alias{disposition_effect}
 \alias{disposition_difference}
+\alias{disposition_compute}
+\alias{disposition_summary}
 \title{Disposition Effect}
 \usage{
 disposition_effect(realized_gains, paper_gains, realized_losses, paper_losses)
 
 disposition_difference(gains, losses)
+
+disposition_compute(portfolio, aggregate_fun = NULL)
+
+disposition_summary(portfolio, plot = FALSE)
 }
 \arguments{
 \item{realized_gains}{Numeric vector (or scalar) containing realized gains
@@ -25,10 +31,22 @@ values.}
 \item{gains}{Numeric vector (or scalar) containing gains.}
 
 \item{losses}{Numeric vector (or scalar) containing losses.}
+
+\item{portfolio}{Data frame, the portfolio of the investor containing the
+realized and paper gains and losses results (as those obtained via
+\code{\link{portfolio_compute}}).}
+
+\item{aggregate_fun}{Function to use to aggregate results.
+Default to \code{NULL}, that is no aggregation is performed and the
+results of each asset are shown.}
+
+\item{plot}{Logical. If TRUE some useful graphs of the disposition effect
+results are plotted.}
 }
 \value{
 Numeric vector (or scalar) with the value(s) of disposition
 effect(s) or disposition difference(s).
+A \link[tibble:tibble-package]{tibble} is returned by ................
 }
 \description{
 Compute the disposition effect in a vectorized way.
@@ -50,6 +68,13 @@ by L. Mazzucchelli et al.
 
 \item \code{disposition_difference}: Compute the disposition difference as defined
 by L. Mazzucchelli et al.
+
+\item \code{disposition_compute}: Compute the disposition effect directly on
+the investor's portfolio containing realized and paper gains and losses
+results.
+
+\item \code{disposition_summary}: Wrapper that returns the most important
+summary statistics related to the disposition effect.
 }}
 
 \examples{

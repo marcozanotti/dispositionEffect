@@ -7,7 +7,7 @@
 aggregate_market_price(
   market_prices,
   unit = "15 mins",
-  aggregate_price_fun = mean()
+  aggregate_price_fun = mean
 )
 }
 \arguments{

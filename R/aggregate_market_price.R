@@ -22,7 +22,7 @@
 #' @export
 aggregate_market_price <- function(market_prices,
 															     unit = "15 mins",
-															     aggregate_price_fun = mean()) {
+															     aggregate_price_fun = mean) {
 
 	market_prices <- market_prices %>%
 		dplyr::arrange(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%

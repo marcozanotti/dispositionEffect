@@ -167,11 +167,14 @@ disposition_summary <- function(portfolio, plot = FALSE) {
 	)
 
 	cat(paste("Investor", portfolio$investor[1], "\n\n"))
-	cat(knitr::kable(de_summary))
+	cat(knitr::kable(de_summary, digits = 3))
 
 	if (plot) {
 		# new function that creates ggplot graphs based on count, total, value and duration
 	}
+
+	res <- list("de" = de, "stats" = de_aggr)
+	return(invisible(res))
 
 }
 

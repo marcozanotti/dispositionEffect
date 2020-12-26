@@ -63,7 +63,7 @@ portfolio_longer <- function(portfolio) {
 
 	portfolio <- portfolio %>%
 		tidyr::pivot_longer(dplyr::contains("_")) %>%
-		tidyr::separate(!!rlang::sym("name"), c("gainloss", "method"), sep = "_")
+		tidyr::separate(!!rlang::sym("name"), c("type", "method"), sep = "_")
 
 	return(portfolio)
 
@@ -75,7 +75,7 @@ portfolio_longer <- function(portfolio) {
 portfolio_wider <- function(portfolio) {
 
 	portfolio <- portfolio %>%
-		tidyr::unite("name", c("gainloss", "method"), sep = "_") %>%
+		tidyr::unite("name", c("type", "method"), sep = "_") %>%
 		tidyr::pivot_wider(names_from = !!rlang::sym("name"),
 											 values_from = !!rlang::sym("value"))
 

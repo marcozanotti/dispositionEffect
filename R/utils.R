@@ -59,11 +59,12 @@ ewise_mean <- function(x, y, na.rm = FALSE, zero.substitute = FALSE) {
 
 #' @describeIn utils Turn portfolio of results to longer format.
 #' @keywords internal
+#' @export
 portfolio_longer <- function(portfolio) {
 
 	portfolio <- portfolio %>%
 		tidyr::pivot_longer(dplyr::contains("_")) %>%
-		tidyr::separate(!!rlang::sym("name"), c("type", "method"), sep = "_")
+		tidyr::separate(!!rlang::sym("name"), c("analysis", "method"), sep = "_")
 
 	return(portfolio)
 
@@ -72,10 +73,11 @@ portfolio_longer <- function(portfolio) {
 
 #' @describeIn utils Turn portfolio of results to wider format.
 #' @keywords internal
+#' @export
 portfolio_wider <- function(portfolio) {
 
 	portfolio <- portfolio %>%
-		tidyr::unite("name", c("type", "method"), sep = "_") %>%
+		tidyr::unite("name", c("analysis", "method"), sep = "_") %>%
 		tidyr::pivot_wider(names_from = !!rlang::sym("name"),
 											 values_from = !!rlang::sym("value"))
 

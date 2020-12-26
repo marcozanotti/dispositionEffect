@@ -157,7 +157,7 @@ disposition_summary <- function(portfolio, plot = FALSE) {
 
 	de <- disposition_compute(portfolio)
 	de_aggr <- dplyr::bind_rows(disposition_compute(portfolio, function(x) mean(x, na.rm = TRUE)),
-															disposition_compute(portfolio, function(x) median(x, na.rm = TRUE)),
+															disposition_compute(portfolio, function(x) stats::median(x, na.rm = TRUE)),
 															disposition_compute(portfolio, function(x) min(x, na.rm = TRUE)),
 															disposition_compute(portfolio, function(x) max(x, na.rm = TRUE))) %>%
 		dplyr::mutate(stat = c("Mean", "Median", "Min", "Max"), .after = "investor")

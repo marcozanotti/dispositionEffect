@@ -156,10 +156,10 @@ disposition_compute <- function(portfolio, aggregate_fun = NULL) {
 disposition_summary <- function(portfolio, plot = FALSE) {
 
 	de <- disposition_compute(portfolio)
-	de_aggr <- dplyr::bind_rows(disposition_compute(portfolio, mean),
-															disposition_compute(portfolio, median),
-															disposition_compute(portfolio, min),
-															disposition_compute(portfolio, max)) %>%
+	de_aggr <- dplyr::bind_rows(disposition_compute(portfolio, function(x) mean(x, na.rm = TRUE)),
+															disposition_compute(portfolio, function(x) median(x, na.rm = TRUE)),
+															disposition_compute(portfolio, function(x) min(x, na.rm = TRUE)),
+															disposition_compute(portfolio, function(x) max(x, na.rm = TRUE))) %>%
 		dplyr::mutate(stat = c("Mean", "Median", "Min", "Max"), .after = "investor")
 	de_summary <- list(
 		"Disposition Effects by Assets" = de[, -1],

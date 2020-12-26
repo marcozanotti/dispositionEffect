@@ -180,7 +180,7 @@ portfolio_compute <- function(portfolio_transactions,
 
 		if (progress) { pb$tick() } # update progress bar
 
-	}
+	} # close loop
 
 
 	# compute the mean expected return for RG, RL, PG, and PL
@@ -204,7 +204,7 @@ portfolio_compute <- function(portfolio_transactions,
 			neg_results_df$type <- "negative"
 			results_df <- dplyr::bind_rows(pos_results_df, neg_results_df)
 			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset")) %>%
-				dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("price"))
+				dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("datetime"))
 		}
 
 	} else {

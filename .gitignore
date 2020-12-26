@@ -4,3 +4,4 @@
 .Ruserdata
 inst/doc
 test-functions.R
+data/test-large

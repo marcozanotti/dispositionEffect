@@ -20,7 +20,8 @@ Imports:
     progress,
     glue,
     rlang,
-    furrr
+    furrr,
+    future
 Suggests: 
     tidyverse,
     devtools,

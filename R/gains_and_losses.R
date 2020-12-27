@@ -80,7 +80,7 @@ gains_and_losses <- function(transaction_type,
 
 		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
 
-			if (verb) message("\nComputing paper gains and losses..")
+			if (verb) message("Computing paper gains and losses..")
 			# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
 			market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
 																    transaction_datetime, market_prices, unit)
@@ -102,7 +102,7 @@ gains_and_losses <- function(transaction_type,
 
 			if (!length(ptf_assets)) { # if there are no other assets but the transaction_asset, just compute on transaction_asset
 
-				if (verb) message("\nComputing realized gains and losses..")
+				if (verb) message("Computing realized gains and losses..")
 				realized_paper_df <- realized_compute(ptf_qty,
 																							ptf_prz,
 																							transaction_quantity,
@@ -124,7 +124,7 @@ gains_and_losses <- function(transaction_type,
 				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
 				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
 				# compute realized and paper gains and losses
-				if (verb) message("\nComputing realized and paper gains and losses..")
+				if (verb) message("Computing realized and paper gains and losses..")
 				realized_df <- realized_compute(ptf_qty,
 																				ptf_prz,
 																				transaction_quantity,
@@ -162,7 +162,7 @@ gains_and_losses <- function(transaction_type,
 
 		} else {# compute gains and losses for all the assets
 
-			if (verb) message("\nComputing realized gains and losses..")
+			if (verb) message("Computing realized gains and losses..")
 			realized_paper_df <- realized_compute(ptf_qty,
 																						ptf_prz,
 																						transaction_quantity,

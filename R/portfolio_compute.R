@@ -1,3 +1,5 @@
+#' @name portfolio_compute
+#'
 #' @title Portfolio Compute
 #'
 #' @description Computation of all the transaction updates and the
@@ -37,13 +39,13 @@
 portfolio_compute <- function(portfolio_transactions,
 														  market_prices,
 														  method = "all",
-														  allow_short = FALSE,
+														  allow_short = TRUE,
 														  unit = "15 mins",
-														  time_threshold = "5 mins",
+														  time_threshold = "0 mins",
 														  posneg_portfolios = FALSE,
 														  portfolio_statistics = FALSE,
 														  verbose = c(0, 0),
-														  progress = TRUE) {
+														  progress = FALSE) {
 
 	# checks on inputs
 	# assumes that portfolio_transactions is ordered by datetime
@@ -104,7 +106,7 @@ portfolio_compute <- function(portfolio_transactions,
 	# progress bar
 	if (progress) {
 		# initialize progress bar
-		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed",
+		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed\n\n",
 													           total = nrow(portfolio_transactions),
 													           clear = FALSE,
 																		 width = 60,
@@ -128,7 +130,7 @@ portfolio_compute <- function(portfolio_transactions,
 
 		# compute RG/RL/PG/PL
 		if (method != "none") {
-			if (verb_lvl1) message("\nStart computing RG/RL/PG/PL..")
+			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
 			gainloss_df <- gains_and_losses(trx_type,
 																	    trx_asset,
 																	    trx_qty,
@@ -178,6 +180,7 @@ portfolio_compute <- function(portfolio_transactions,
 
 		}
 
+		if (verb_lvl1) message("Done!")
 		if (progress) { pb$tick() } # update progress bar
 
 	} # close loop
@@ -215,3 +218,32 @@ portfolio_compute <- function(portfolio_transactions,
 
 }
 
+
+#' @describeIn portfolio_compute Temporary parallel version of portfolio_compute
+#' @export
+portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ...) {
+
+	investors_id <- purrr::map_chr(trx, ~purrr::pluck(., "investor")[1])
+
+	ncores <- future::availableCores()
+	# if there are more than 2 cores than use parallel computing
+	# otherwise use sequential computing
+	# RULE: always leave at least 1 free core
+	if ((ncores - 1) > 1) {
+		new_plan <- "multiprocess"
+	} else {
+		new_plan <- "sequential"
+	}
+	old_plan <- future::plan(strategy = new_plan)
+
+	res <- furrr::future_map2(portfolio_transactions,
+														market_prices,
+														portfolio_compute,
+														...)
+	names(res) <- investors_id
+
+	future::plan(old_plan)
+
+	return(res)
+
+}

@@ -2,20 +2,23 @@
 % Please edit documentation in R/portfolio_compute.R
 \name{portfolio_compute}
 \alias{portfolio_compute}
+\alias{portfolio_compute_parallel}
 \title{Portfolio Compute}
 \usage{
 portfolio_compute(
   portfolio_transactions,
   market_prices,
   method = "all",
-  allow_short = FALSE,
+  allow_short = TRUE,
   unit = "15 mins",
-  time_threshold = "5 mins",
+  time_threshold = "0 mins",
   posneg_portfolios = FALSE,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
-  progress = TRUE
+  progress = FALSE
 )
+
+portfolio_compute_parallel(portfolio_transactions, market_prices, ...)
 }
 \arguments{
 \item{portfolio_transactions}{Data frame. The investor's transactions data frame.}
@@ -64,6 +67,11 @@ computed by means of the chosen method on each portfolio assets.
 Computation of all the transaction updates and the
 realized and paper gains and losses for each assets.
 }
+\section{Functions}{
+\itemize{
+\item \code{portfolio_compute_parallel}: Temporary parallel version of portfolio_compute
+}}
+
 \references{
 H. Shefrin & M. Statman, 1985
 }

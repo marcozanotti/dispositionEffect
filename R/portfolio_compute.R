@@ -223,7 +223,7 @@ portfolio_compute <- function(portfolio_transactions,
 #' @export
 portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ...) {
 
-	investors_id <- purrr::map_chr(trx, ~purrr::pluck(., "investor")[1])
+	investors_id <- purrr::map_chr(portfolio_transactions, ~purrr::pluck(., "investor")[1])
 
 	ncores <- future::availableCores()
 	# if there are more than 2 cores than use parallel computing

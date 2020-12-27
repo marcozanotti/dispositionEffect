@@ -4,7 +4,7 @@ Title: Analysis Of Disposition Effect On Financial Portfolios
 Version: 0.0.0.9015
 Authors@R: c(
     person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
-    person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = "cre"))
+    person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = c("aut", "cre")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
@@ -30,5 +30,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/marcozanotti/dispositionEffect
+BugReports: https://github.com/marcozanotti/dispositionEffect/issues
 Depends: 
     R (>= 3.5.0)

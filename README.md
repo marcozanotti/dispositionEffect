@@ -28,13 +28,6 @@ install.packages("devtools")
 devtools::install_github("marcozanotti/dispositionEffect")
 ```
 
-<!--``` {r, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("marcozanotti/dispositionEffect",
-                         ref = "branch_name",
-                         auth_token = "cf248fcfa25a81c3caea95896beb28f4e9878ff6")
-```-->
-
 ## Example
 
 The following simple example with real data shows the implemented

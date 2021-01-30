@@ -1,13 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dispositionEffect <img src='man/figures/logo.png' align="right" height="139" />
+# dispositionEffect
 
-<!-- badges: start
-[![CRAN status](https://www.r-pkg.org/badges/version/dplyr)](https://cran.r-project.org/package=dplyr)
-[![R build status](https://github.com/tidyverse/dplyr/workflows/R-CMD-check/badge.svg)](https://github.com/tidyverse/dplyr/actions?workflow=R-CMD-check)
-[![Codecov test coverage](https://codecov.io/gh/tidyverse/dplyr/branch/master/graph/badge.svg)](https://codecov.io/gh/tidyverse/dplyr?branch=master)
-badges: end -->
+<!--<img src='man/figures/logo.png' align="right" height="139" />-->
+<!-- badges: start -->
+<!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence
 of disposition effect’s behaviors of an investor based solely on his

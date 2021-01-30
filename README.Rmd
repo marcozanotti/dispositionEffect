@@ -17,13 +17,11 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 ```
 
 
-# dispositionEffect <img src='man/figures/logo.png' align="right" height="139" />
+# dispositionEffect
+<!--<img src='man/figures/logo.png' align="right" height="139" />-->
 
-<!-- badges: start
-[![CRAN status](https://www.r-pkg.org/badges/version/dplyr)](https://cran.r-project.org/package=dplyr)
-[![R build status](https://github.com/tidyverse/dplyr/workflows/R-CMD-check/badge.svg)](https://github.com/tidyverse/dplyr/actions?workflow=R-CMD-check)
-[![Codecov test coverage](https://codecov.io/gh/tidyverse/dplyr/branch/master/graph/badge.svg)](https://codecov.io/gh/tidyverse/dplyr?branch=master)
-badges: end -->
+<!-- badges: start -->
+<!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence of 
 disposition effect’s behaviors of an investor based solely on his transactions 
@@ -91,6 +89,7 @@ Compute the disposition effect with different methods.
 de <- disposition_compute(portfolio_results)
 de
 ```
+
 Summarise the behavior of the investor.
 
 ```{r, eval = TRUE}

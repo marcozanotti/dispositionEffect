@@ -17,7 +17,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 ```
 
 
-# dispositionEffect <a <img src='man/figures/logo.png' align="right" height="139" /></a>
+# dispositionEffect <img src='man/figures/logo.png' align="right" height="139" />
 
 <!-- badges: start
 [![CRAN status](https://www.r-pkg.org/badges/version/dplyr)](https://cran.r-project.org/package=dplyr)
@@ -59,25 +59,25 @@ devtools::install_github("marcozanotti/dispositionEffect",
 
 The following simple example with real data shows the implemented functionalities. 
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 library(dispositionEffect)
 ```
 
 Portfolio of trasactions of a real investor.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 investor %>% head()
 ```
 
 Dataset of market prices of the traded assets.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 marketprices %>% head()
 ```
 
 Compute realized gains, realized losses, paper gains and paper losses.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 portfolio_results <- portfolio_compute(
 	portfolio_transactions = investor, 
 	market_prices = marketprices, 
@@ -88,7 +88,7 @@ portfolio_results <- portfolio_compute(
 Summarise the behavior of the investor and plot the results to spot the presence
 of the disposition effect.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 
 ```
 

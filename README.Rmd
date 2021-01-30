@@ -59,25 +59,25 @@ devtools::install_github("marcozanotti/dispositionEffect",
 
 The following simple example with real data shows the implemented functionalities. 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 library(dispositionEffect)
 ```
 
 Portfolio of trasactions of a real investor.
 
-```{r, eval = FALSE}
-investor %>% head()
+```{r, eval = TRUE}
+head(investor)
 ```
 
 Dataset of market prices of the traded assets.
 
-```{r, eval = FALSE}
-marketprices %>% head()
+```{r, eval = TRUE}
+head(marketprices)
 ```
 
 Compute realized gains, realized losses, paper gains and paper losses.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 portfolio_results <- portfolio_compute(
 	portfolio_transactions = investor, 
 	market_prices = marketprices, 
@@ -85,15 +85,42 @@ portfolio_results <- portfolio_compute(
 	)
 ```
 
-Summarise the behavior of the investor and plot the results to spot the presence
-of the disposition effect.
+Compute the disposition effect with different methods.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
+de <- disposition_compute(portfolio_results)
+de
+```
+Summarise the behavior of the investor.
 
+```{r, eval = TRUE}
+disposition_summary(portfolio_results)
+```
+
+Plot the results to spot the presence of the disposition effect.
+
+```{r, eval = TRUE}
+library(ggplot2)
+ggplot(de, aes(x = asset, y = DE_count, fill = asset)) +
+	geom_col() +
+	scale_fill_viridis_d() +
+	labs(
+		title = "Disposition Effect results for the traded assets.",
+		subtitle = "Method Count",
+		x = "", y = ""
+		)
 ```
 
 Since financial data may be potentially huge in size, efficiency concerns are
 solved through the parallelized versions of the main functions.
+
+```{r, eval = FALSE}
+portfolio_results_parallel <- portfolio_compute_parallel(
+	portfolio_transactions = investors, 
+	market_prices = marketprices, 
+	allow_short = TRUE
+	)
+```
 
 
 ## Getting help
@@ -101,7 +128,8 @@ solved through the parallelized versions of the main functions.
 If you encounter a clear bug, please file an issue with a minimal reproducible 
 example on [GitHub](https://github.com/marcozanotti/dispositionEffect/issues). 
 
-For questions and other discussion, mail us at **zanottimarco17@gmail.com**.  
+For questions and other discussion, mail us at <zanottimarco17@gmail.com>.  
+
 
 ---
 Please note that this package is free and open source software, licensed under MIT.

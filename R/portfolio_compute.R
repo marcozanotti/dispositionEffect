@@ -242,7 +242,7 @@ portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ..
 														...)
 	names(res) <- investors_id
 
-	future::plan(old_plan)
+	future::plan(old_plan) # set back the old plan
 
 	return(res)
 

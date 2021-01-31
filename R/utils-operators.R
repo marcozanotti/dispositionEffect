@@ -7,6 +7,7 @@
 #' @rdname pipe
 #' @keywords internal
 #' @importFrom magrittr %>%
+#' @export
 NULL
 
 

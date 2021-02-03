@@ -224,6 +224,7 @@ portfolio_compute <- function(portfolio_transactions,
 portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ...) {
 
 	investors_id <- purrr::map_chr(portfolio_transactions, ~purrr::pluck(., "investor")[1])
+	portfolio_compute_safe <- purrr::safely(portfolio_compute)
 
 	ncores <- future::availableCores()
 	# if there are more than 2 cores than use parallel computing
@@ -238,9 +239,11 @@ portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ..
 
 	res <- furrr::future_map(
 		portfolio_transactions,
-		portfolio_compute,
+		portfolio_compute_safe,
 		market_prices,
 		...)
+
+	res <- purrr::transpose(res)$result
 	names(res) <- investors_id
 
 	future::plan(old_plan) # set back the old plan

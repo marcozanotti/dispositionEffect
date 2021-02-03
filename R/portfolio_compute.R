@@ -236,10 +236,11 @@ portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ..
 	}
 	old_plan <- future::plan(strategy = new_plan)
 
-	res <- furrr::future_map2(portfolio_transactions,
-														market_prices,
-														portfolio_compute,
-														...)
+	res <- furrr::future_map(
+		portfolio_transactions,
+		portfolio_compute,
+		market_prices,
+		...)
 	names(res) <- investors_id
 
 	future::plan(old_plan) # set back the old plan

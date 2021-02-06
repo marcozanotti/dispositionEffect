@@ -24,10 +24,9 @@
 evaluate_portfolio <- function(portfolio,
 															 transaction_datetime,
 															 market_prices,
-															 unit = "15 mins",
 															 portfolio_statistics = FALSE) {
 
-	portfolio <- portfolio[which(!is.na(portfolio$quantity)),] # remove asset with missing qty
+	portfolio <- portfolio[!is.na(portfolio$quantity),] # remove asset with missing qty
 
 	if (nrow(portfolio) == 0) {
 		# check on rows: if zero initial condition where the portfolio is empty
@@ -36,7 +35,7 @@ evaluate_portfolio <- function(portfolio,
 	} else {
 
 		market_values <- purrr::map_dbl(portfolio$asset, closest_market_price,
-																		transaction_datetime, market_prices, unit)
+																		transaction_datetime, market_prices, price_only = TRUE)
 		value <- sum(portfolio$quantity * (market_values - portfolio$price))
 
 		if (portfolio_statistics) {

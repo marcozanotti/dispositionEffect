@@ -257,8 +257,7 @@ update_realized_and_paper <- function(realized_and_paper,
 	if (method == "count") {
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
-			dplyr::mutate(
+			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
 				RG_count = dplyr::case_when(is.na(RG_count) ~ new_realized_and_paper$RG_count,
 														        TRUE ~ RG_count + new_realized_and_paper$RG_count),
 				RL_count = dplyr::case_when(is.na(RL_count) ~ new_realized_and_paper$RL_count,
@@ -272,8 +271,7 @@ update_realized_and_paper <- function(realized_and_paper,
 	} else if (method == "total") {
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
-			dplyr::mutate(
+			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
 				RG_total = dplyr::case_when(is.na(RG_total) ~ new_realized_and_paper$RG_total,
 														        TRUE ~ RG_total + new_realized_and_paper$RG_total),
 				RL_total = dplyr::case_when(is.na(RL_total) ~ new_realized_and_paper$RL_total,
@@ -287,8 +285,7 @@ update_realized_and_paper <- function(realized_and_paper,
 	} else if (method == "value") {
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
-			dplyr::mutate(
+			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
 				RG_value = dplyr::case_when(is.na(RG_value) ~ new_realized_and_paper$RG_value,
 														        TRUE ~ RG_value + new_realized_and_paper$RG_value),
 				RL_value = dplyr::case_when(is.na(RL_value) ~ new_realized_and_paper$RL_value,
@@ -312,8 +309,7 @@ update_realized_and_paper <- function(realized_and_paper,
 	} else if (method == "duration") {
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
-			dplyr::mutate(
+			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
 				RG_duration = dplyr::case_when(is.na(RG_duration) ~ new_realized_and_paper$RG_duration,
 																       TRUE ~ RG_duration + new_realized_and_paper$RG_duration),
 				RL_duration = dplyr::case_when(is.na(RL_duration) ~ new_realized_and_paper$RL_duration,
@@ -327,8 +323,7 @@ update_realized_and_paper <- function(realized_and_paper,
 	} else {# method == "all"
 
 		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			realized_and_paper[realized_and_paper$asset %in% assets,] %>%
-			dplyr::mutate(
+			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
 				RG_count = dplyr::case_when(is.na(RG_count) ~ new_realized_and_paper$RG_count,
 													        	 TRUE ~ RG_count + new_realized_and_paper$RG_count),
 				RL_count = dplyr::case_when(is.na(RL_count) ~ new_realized_and_paper$RL_count,

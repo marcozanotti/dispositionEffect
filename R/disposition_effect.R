@@ -166,7 +166,7 @@ disposition_summary <- function(portfolio, plot = FALSE) {
 		"Summary Stastistics"           = de_aggr[, -1]
 	)
 
-	cat(paste("Investor", portfolio$investor[1], "\n\n"))
+	cat(paste("\n\nInvestor", portfolio$investor[1], "\n\n"))
 	cat(knitr::kable(de_summary, digits = 3))
 
 	if (plot) {

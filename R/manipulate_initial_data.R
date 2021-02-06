@@ -148,8 +148,8 @@ clean_market_prices <- function(market_prices,
 																aggregate_price_fun = mean) {
 
 	market_prices <- market_prices %>%
-		aggregate_market_price(unit = unit, aggregate_price_fun = aggregate_price_fun) %>%
-		subset_market_price(portfolio_transactions, unit = unit)
+		aggregate_market_prices(unit = unit, aggregate_price_fun = aggregate_price_fun) %>%
+		subset_market_prices(portfolio_transactions, unit = unit)
 
 	return(market_prices)
 

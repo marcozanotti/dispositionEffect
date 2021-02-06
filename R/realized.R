@@ -1206,8 +1206,7 @@ realized_compute <- function(portfolio_quantity,
 																allow_short,
 																realized_only)
 		# convert results to a df
-		res_df <- c("asset" = transaction_asset, as.list(rgl_count)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_count)))
 
 	} else if (method == "total") {
 
@@ -1220,8 +1219,7 @@ realized_compute <- function(portfolio_quantity,
 																allow_short,
 																realized_only)
 		# convert results to a df
-		res_df <- c("asset" = transaction_asset, as.list(rgl_total)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_total)))
 
 	} else if (method == "value") {
 
@@ -1233,8 +1231,7 @@ realized_compute <- function(portfolio_quantity,
 																transaction_type,
 																allow_short,
 																realized_only)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_value)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_value)))
 
 	} else if (method == "duration") {
 
@@ -1249,8 +1246,7 @@ realized_compute <- function(portfolio_quantity,
 																			transaction_datetime,
 																			allow_short,
 																			realized_only)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_duration)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_duration)))
 
 	} else {# method == "all"
 
@@ -1287,12 +1283,14 @@ realized_compute <- function(portfolio_quantity,
 																			allow_short,
 																			realized_only)
 		# convert results to a df
-		res_df <- c("asset" = transaction_asset,
-								as.list(rgl_count),
-								as.list(rgl_total),
-								as.list(rgl_value),
-								as.list(rgl_duration)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(
+			c("asset" = transaction_asset,
+			  as.list(rgl_count),
+			  as.list(rgl_total),
+			  as.list(rgl_value),
+			  as.list(rgl_duration)
+			)
+		)
 
 	}
 
@@ -1309,26 +1307,22 @@ realized_empty <- function(transaction_asset, method = "all") {
 	if (method == "count") {
 
 		rgl_count <- c("RG_count" = 0, "RL_count" = 0, "PG_count" = 0, "PL_count" = 0)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_count)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_count)))
 
 	} else if (method == "total") {
 
 		rgl_total <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_total)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_total)))
 
 	} else if (method == "value") {
 
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_value)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_value)))
 
 	} else if (method == "duration") {
 
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-		res_df <- c("asset" = transaction_asset, as.list(rgl_duration)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_duration)))
 
 	} else {# method == "all"
 
@@ -1337,12 +1331,14 @@ realized_empty <- function(transaction_asset, method = "all") {
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
 		# convert results to a df
-		res_df <- c("asset" = transaction_asset,
-								as.list(rgl_count),
-								as.list(rgl_total),
-								as.list(rgl_value),
-								as.list(rgl_duration)) %>%
-			tibble::as_tibble()
+		res_df <- tibble::as_tibble(
+			c("asset" = transaction_asset,
+				as.list(rgl_count),
+				as.list(rgl_total),
+			  as.list(rgl_value),
+			  as.list(rgl_duration)
+			)
+		)
 
 	}
 

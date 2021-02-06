@@ -10,7 +10,9 @@
 #'   which the pre-market begins.
 #' @param after_market numeric or character representing the hour of the day at
 #'   which the after-market ends.
-#' @param time_threshold character in the format "value units" indicating the
+#' @param units Character string specifying a time unit.
+#'   (See \code{base::\link[base:difftime]{difftime}}).
+#' @param time_threshold Character in the format "value units" indicating the
 #'   time threshold at which the computed financial difftime has to be evaluated
 #'   (for instance "05 mins" or "20 hours").
 #'   The allowed units are "secs", "mins", "hours", "days" and "weeks"

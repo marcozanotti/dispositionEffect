@@ -6,7 +6,13 @@
 \alias{difftime_compare}
 \title{Difference in time}
 \usage{
-difftime_financial(from, to, pre_market = 8, after_market = 22)
+difftime_financial(
+  from,
+  to,
+  pre_market = 8,
+  after_market = 22,
+  units = "hours"
+)
 
 difftime_compare(from, to, time_threshold = "0 mins")
 }
@@ -21,7 +27,10 @@ which the pre-market begins.}
 \item{after_market}{numeric or character representing the hour of the day at
 which the after-market ends.}
 
-\item{time_threshold}{character in the format "value units" indicating the
+\item{units}{Character string specifying a time unit.
+(See \code{base::\link[base:difftime]{difftime}}).}
+
+\item{time_threshold}{Character in the format "value units" indicating the
 time threshold at which the computed financial difftime has to be evaluated
 (for instance "05 mins" or "20 hours").
 The allowed units are "secs", "mins", "hours", "days" and "weeks"

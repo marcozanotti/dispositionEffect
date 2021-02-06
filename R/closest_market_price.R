@@ -7,9 +7,6 @@
 #' @param datetime POSIXct of the datetime at which looking for the asset's
 #'   price.
 #' @param market_prices Data frame containing the market prices.
-#' @param unit Character string specifying a time unit or a multiple of a
-#'   unit to be rounded to. Valid base units are second, minute, hour, day,
-#'   week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.
 #' @param price_only Logical. If TRUE then only the price is returned.
 #'
 #' @return The value of the asset's price.

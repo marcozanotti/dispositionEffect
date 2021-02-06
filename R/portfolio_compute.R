@@ -23,6 +23,7 @@
 #' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
+#' @param ... Further arguments to be passed to \code{portfolio_compute}.
 #'
 #' @return A [tibble][tibble::tibble-package] containing the investor's
 #'   portfolio and the values of realized and paper gains and losses

@@ -3,7 +3,8 @@
 
 # dispositionEffect
 
-<!--<img src='man/figures/logo.png' align="right" height="139" />-->
+<img src='man/figures/logo.png' align="right" height="139" />
+
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -94,11 +95,6 @@ Summarise the behavior of the investor.
 disposition_summary(portfolio_results)
 #> Investor ID123 
 #> 
-#> <table class="kable_wrapper">
-#> <tbody>
-#>   <tr>
-#>    <td> 
-#> 
 #> |asset | DE_count| DE_total| DD_value| DD_duration|
 #> |:-----|--------:|--------:|--------:|-----------:|
 #> |ACO   |    0.143|    0.041|    0.009|     439.894|
@@ -107,20 +103,12 @@ disposition_summary(portfolio_results)
 #> |AST   |   -1.000|   -1.000|   -0.075|    -165.119|
 #> |TFI   |    0.000|    0.000|    0.000|       0.000|
 #> 
-#>  </td>
-#>    <td> 
-#> 
 #> |stat   | DE_count| DE_total| DD_value| DD_duration|
 #> |:------|--------:|--------:|--------:|-----------:|
 #> |Mean   |   -0.305|   -0.321|   -0.017|     325.887|
 #> |Median |    0.000|    0.000|    0.000|       0.000|
 #> |Min    |   -1.000|   -1.000|   -0.075|    -165.119|
 #> |Max    |    0.333|    0.355|    0.011|    1411.595|
-#> 
-#>  </td>
-#>   </tr>
-#> </tbody>
-#> </table>
 ```
 
 Plot the results to spot the presence of the disposition effect.

@@ -40,7 +40,6 @@ portfolio_compute <- function(portfolio_transactions,
 														  market_prices,
 														  method = "all",
 														  allow_short = TRUE,
-														  unit = "15 mins",
 														  time_threshold = "0 mins",
 														  posneg_portfolios = FALSE,
 														  portfolio_statistics = FALSE,
@@ -139,7 +138,6 @@ portfolio_compute <- function(portfolio_transactions,
 																	    previous_dtt,
 																	    portfolio,
 																	    market_prices,
-																			unit,
 																	    time_threshold,
 																	    method,
 																	    allow_short,
@@ -151,7 +149,6 @@ portfolio_compute <- function(portfolio_transactions,
 		portfolio_value <- evaluate_portfolio(portfolio,
 																					trx_dtt,
 																					market_prices,
-																					unit,
 																					portfolio_statistics)
 
 		# update the portfolio
@@ -206,8 +203,8 @@ portfolio_compute <- function(portfolio_transactions,
 			pos_results_df$type <- "positive"
 			neg_results_df$type <- "negative"
 			results_df <- dplyr::bind_rows(pos_results_df, neg_results_df)
-			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset")) %>%
-				dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("datetime"))
+			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
+		  final_res <- dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("datetime"))
 		}
 
 	} else {

@@ -10,6 +10,7 @@
 #' @param unit Character string specifying a time unit or a multiple of a
 #'   unit to be rounded to. Valid base units are second, minute, hour, day,
 #'   week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.
+#' @param price_only Logical. If TRUE then only the price is returned.
 #'
 #' @return The value of the asset's price.
 #'
@@ -24,19 +25,19 @@
 closest_market_price <- function(asset,
 																 datetime,
 																 market_prices,
-																 unit = "15 mins") {
-
-	# convert datetime into some rounded unit
-	datetime <- lubridate::floor_date(datetime, unit = unit)
+																 price_only = FALSE) {
 
 	# filter historical przs for asset and datetime
-	market_prices <- market_prices[(market_prices$asset == asset) &
-																 (market_prices$datetime <= datetime), ]
+	res <- market_prices[market_prices$asset == asset &
+											 	market_prices$datetime <= datetime, ]
 	# extract the closest date which is before the datetime
-	closest_date <- which.min(abs(datetime - market_prices$datetime))
+	res <- res[nrow(res),]
 	# extract the price
-	res <- market_prices[closest_date, ]$price
+	if (price_only) {
+		res <- res$price
+	}
 
 	return(res)
 
 }
+

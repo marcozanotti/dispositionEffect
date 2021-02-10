@@ -5,7 +5,6 @@
 #' @description Portfolio evaluation
 #'
 #' @param portfolio Data frame of the investor's portfolio at time t.
-#' @param transaction_datetime POSIXct value of the transaction date.
 #' @inheritParams closest_market_price
 #' @param portfolio_statistics Logical. If TRUE some statistical indexes are computed
 #'   on the portfolio and returned.
@@ -22,26 +21,16 @@
 #'
 #' @export
 evaluate_portfolio <- function(portfolio,
-															 transaction_datetime,
 															 market_prices,
 															 portfolio_statistics = FALSE) {
 
 	portfolio <- portfolio[!is.na(portfolio$quantity),] # remove asset with missing qty
+	market_prices <- market_prices[market_prices$asset %in% portfolio$asset, ]$price
 
-	if (nrow(portfolio) == 0) {
-		# check on rows: if zero initial condition where the portfolio is empty
-		value <- NULL
+	value <- sum(portfolio$quantity * (market_prices - portfolio$price))
 
-	} else {
-
-		market_values <- purrr::map_dbl(portfolio$asset, closest_market_price,
-																		transaction_datetime, market_prices, price_only = TRUE)
-		value <- sum(portfolio$quantity * (market_values - portfolio$price))
-
-		if (portfolio_statistics) {
-			# compute some other portfolio statistics
-		}
-
+	if (portfolio_statistics) {
+		# compute some other portfolio statistics
 	}
 
 	return(value)

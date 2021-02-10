@@ -124,33 +124,44 @@ portfolio_compute <- function(portfolio_transactions,
 		trx_dtt <- portfolio_transactions[i, ]$datetime # trx datetime
 		previous_dtt <- portfolio_transactions[i - 1, ]$datetime
 
-		if (trx_type == "S") { # if it's a sell transaction then consider qty as negative
-			trx_qty <- trx_qty * -1L
-		}
+		# if it's a sell transaction then consider qty as negative
+		if (trx_type == "S") { trx_qty <- trx_qty * -1L }
 
-		# compute RG/RL/PG/PL
-		if (method != "none") {
+		# extract assets already into portfolio
+		ptf_assets <- portfolio[!is.na(portfolio$quantity), ]$asset
+
+		market_przs <- gainloss_df <- portfolio_value <- NULL
+
+		# if method is not "none" and the portfolio is not empty (initial condition),
+		# then calls closest_market_price, gains_and_losses and evaluate_portfolio
+		if (method != "none" && length(ptf_assets) > 0) {
+
+			# extract the market prices at transaction_datetime of all the portfolio assets
+			market_przs <- purrr::map_df(ptf_assets, closest_market_price,
+																	 trx_dtt, market_prices, price_only = FALSE)[, -2]
+
+			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
-			gainloss_df <- gains_and_losses(trx_type,
-																	    trx_asset,
-																	    trx_qty,
-																	    trx_prz,
-																	    trx_dtt,
-																	    previous_dtt,
-																	    portfolio,
-																	    market_prices,
-																	    time_threshold,
-																	    method,
-																	    allow_short,
-																	    verb_lvl2)
-		}
+			gainloss_df <- gains_and_losses(transaction_type = trx_type,
+																			transaction_asset = trx_asset,
+																			transaction_quantity = trx_qty,
+																			transaction_price = trx_prz,
+																			transaction_datetime = trx_dtt,
+																			previous_datetime = previous_dtt,
+																			portfolio = portfolio,
+																			market_prices = market_przs,
+																			time_threshold = time_threshold,
+																			method = method,
+																			allow_short = allow_short,
+																			verbose = verb_lvl2)
 
-		# evaluate global portfolio value
-		if (verb_lvl1) message("Evaluating global portfolio position..")
-		portfolio_value <- evaluate_portfolio(portfolio,
-																					trx_dtt,
-																					market_prices,
-																					portfolio_statistics)
+			# evaluate global portfolio value
+			if (verb_lvl1) message("Evaluating global portfolio position..")
+			portfolio_value <- evaluate_portfolio(portfolio,
+																						market_przs,
+																						portfolio_statistics)
+
+		}
 
 		# update the portfolio
 		if (verb_lvl1) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))
@@ -163,8 +174,6 @@ portfolio_compute <- function(portfolio_transactions,
 
 		# update the results_df
 		if (method != "none" && !is.null(gainloss_df)) {
-			# if empty portfolio, then gains_and_losses() returns NULL
-			# if empty portfolio, then evaluate_portfolio() returns NULL
 			if (verb_lvl1) message("Updating realized and paper results..")
 			if (!posneg_portfolios) {
 				results_df <- update_realized_and_paper(results_df, gainloss_df, method)
@@ -181,11 +190,15 @@ portfolio_compute <- function(portfolio_transactions,
 		if (verb_lvl1) message("Done!")
 		if (progress) { pb$tick() } # update progress bar
 
+		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt,
+			 ptf_assets, market_przs, gainloss_df, portfolio_value)
+
+
 	} # close loop
 
 
-	# compute the mean expected return for RG, RL, PG, and PL
-	if (method == "value" | method == "all") {
+	# compute the mean expected return for RG, RL, PG, and PL value
+	if (method %in% c("value", "all")) {
 		if (!posneg_portfolios) {
 			results_df <- update_expectedvalue(results_df, asset_numtrx)
 		} else {

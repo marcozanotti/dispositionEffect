@@ -109,7 +109,8 @@ difftime_compare <- function(from,
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
 	if (length(strsplit(time_threshold, "\\s")[[1]]) <= 1) {
-		stop(paste("Please correctly specify the time_threshold argument. Possibly a space is missing."))
+		stop(paste("Please correctly specify the time_threshold argument.
+							 Possibly a space is missing."))
 	}
 
 	chrs <- unlist(strsplit(time_threshold, "\\s"))

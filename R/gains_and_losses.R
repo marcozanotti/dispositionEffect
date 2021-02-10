@@ -68,39 +68,40 @@ gains_and_losses <- function(transaction_type,
 
 	# extract assets already into portfolio
 	ptf_assets <- portfolio[!is.na(portfolio$quantity), ]$asset
-	if (!length(ptf_assets)) {
-		# if the portfolio is empty (initial condition), exit the function
-		return(NULL)
-	}
+	# remove transaction_asset from assets already into portfolio
+	ptf_assets <- ptf_assets[ptf_assets != transaction_asset]
 
-
+	# if the difference transaction_datetime - previous_datetime >= time_threshold
+	# --> compute realized and paper
 	if (difftime_compare(previous_datetime, transaction_datetime, time_threshold) == "greater") {
-		# if the difference transaction_datetime - previous_datetime >= time_threshold --> compute realized and paper
 
-		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
+		# if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
+		if (is.na(ptf_qty) || ptf_qty == 0) {
 
-			if (verb) message("Computing paper gains and losses..")
-			# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
-			market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
-																    transaction_datetime, market_prices, price_only = TRUE)
-			pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
-			pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
-			# compute paper gains and losses
-			realized_paper_df <- paper_compute(pft_assets_qtys,
-																				 pft_assets_przs,
-																				 market_przs,
-																				 previous_datetime,
-																				 transaction_datetime,
-																				 ptf_assets,
-																				 allow_short,
-																				 method)
+			# if there are no other assets but the transaction_asset, return an empty df
+			if (!length(ptf_assets)) {
+				realized_paper_df <- realized_empty(transaction_asset, method)
+			} else {
+				if (verb) message("Computing paper gains and losses..")
+				# extract the portfolio assets' quantities, prices and market prices
+				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity
+				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price
+				ptf_assets_market_przs <- market_prices[market_prices$asset %in% ptf_assets, ]$price
+				# compute paper gains and losses
+				realized_paper_df <- paper_compute(pft_assets_qtys,
+																					 pft_assets_przs,
+																					 ptf_assets_market_przs,
+																					 previous_datetime,
+																					 transaction_datetime,
+																					 ptf_assets,
+																					 allow_short,
+																					 method)
+			}
 
 		} else {# compute gains and losses for all the assets
 
-			ptf_assets <- ptf_assets[ptf_assets != transaction_asset] # remove transaction_asset from assets already into portfolio
-
-			if (!length(ptf_assets)) { # if there are no other assets but the transaction_asset, just compute on transaction_asset
-
+			# if there are no other assets but the transaction_asset, compute on transaction_asset
+			if (!length(ptf_assets)) {
 				if (verb) message("Computing realized gains and losses..")
 				realized_paper_df <- realized_compute(ptf_qty,
 																							ptf_prz,
@@ -114,14 +115,12 @@ gains_and_losses <- function(transaction_type,
 																							allow_short,
 																							realized_only = FALSE,
 																							method)
-
 			} else {# compute on both, transaction_asset and ptf_assets
 
-				# extract the market prices at transaction_datetime of all the portfolio assets but the transaction_asset
-				market_przs <- purrr::map_dbl(ptf_assets, closest_market_price,
-																	    transaction_datetime, market_prices, price_only = TRUE)
-				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity # extract the portfolio asset quantities but the transaction_asset
-				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price # extract the portfolio asset prices but the transaction_asset
+				# extract the portfolio assets' quantities, prices and market prices
+				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity
+				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price
+				ptf_assets_market_przs <- market_prices[market_prices$asset %in% ptf_assets, ]$price
 				# compute realized and paper gains and losses
 				if (verb) message("Computing realized and paper gains and losses..")
 				realized_df <- realized_compute(ptf_qty,
@@ -138,7 +137,7 @@ gains_and_losses <- function(transaction_type,
 																				method)
 				paper_df <- paper_compute(pft_assets_qtys,
 																	pft_assets_przs,
-																	market_przs,
+																	ptf_assets_market_przs,
 																	previous_datetime,
 																	transaction_datetime,
 																	ptf_assets,
@@ -152,14 +151,14 @@ gains_and_losses <- function(transaction_type,
 		}
 
 
+		# if the difference transaction_datetime - previous_datetime < time_threshold
+		# --> compute only realized
 	} else {
 
-		# if the difference transaction_datetime - previous_datetime < time_threshold --> compute only realized
-		if (is.na(ptf_qty) || ptf_qty == 0) { # if ptf_qty (qty of transaction_asset) is NA or 0, return an empty df
-
+		# if ptf_qty (qty of transaction_asset) is NA or 0, return an empty df
+		if (is.na(ptf_qty) || ptf_qty == 0) {
 			realized_paper_df <- realized_empty(transaction_asset, method)
-
-		} else {# compute gains and losses for all the assets
+		} else {# compute realized gains and losses for the transaction_asset
 
 			if (verb) message("Computing realized gains and losses..")
 			realized_paper_df <- realized_compute(ptf_qty,
@@ -176,7 +175,6 @@ gains_and_losses <- function(transaction_type,
 																						method)
 
 		}
-
 
 	}
 

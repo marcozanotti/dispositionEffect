@@ -185,16 +185,17 @@ portfolio_compute <- function(portfolio_transactions,
 
 
 	# compute the mean expected return for RG, RL, PG, and PL
-	if (!posneg_portfolios) {
-		results_df <- update_expectedvalue(results_df, asset_numtrx)
-	} else {
-		if (portfolio_value >= 0) {
-			pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
+	if (method == "value" | method == "all") {
+		if (!posneg_portfolios) {
+			results_df <- update_expectedvalue(results_df, asset_numtrx)
 		} else {
-			neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
+			if (portfolio_value >= 0) {
+				pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
+			} else {
+				neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
+			}
 		}
 	}
-
 
 	# join the dataframes and return a single result dataframe
 	if (method != "none") {

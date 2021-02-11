@@ -68,10 +68,12 @@ difftime_financial <- function(from,
 															 after_market = 22,
 															 units = "hours") {
 
-	from_date <- as.Date(from)
-	to_date <- as.Date(to)
-	upp_from <- paste0(from_date, " ", after_market, ":00:00") # upper bound first day
-	low_to <- paste0(to_date, " ", pre_market, ":00:00") # lower bound last day
+	from_chr <- as.character(from, format = "%Y-%m-%d")
+	to_chr <-	as.character(to, format = "%Y-%m-%d")
+	upp_from_chr <- paste0(from_chr, " ", after_market, ":00:00") # upper bound first day
+	low_to_chr <- paste0(to_chr, " ", pre_market, ":00:00") # lower bound last day
+	upp_from <- lubridate::fast_strptime(upp_from_chr, "%Y-%m-%d %H:%M:%S")
+	low_to <- lubridate::fast_strptime(low_to_chr, "%Y-%m-%d %H:%M:%S")
 
 	if (from > upp_from) {
 		from <- upp_from
@@ -80,12 +82,12 @@ difftime_financial <- function(from,
 		to <- low_to
 	}
 
-	if (from_date == to_date) {
+	if (from_chr == to_chr) {
 		# if same date, then simple difftime by days
 		res <- as.numeric(difftime(to, from, units = units))
 	} else {
 		# if different dates, then new difftime
-		s <- lubridate::wday(seq(from_date, to_date, by = "days"), week_start = 1)
+		s <- lubridate::wday(seq(from, to, by = "days"), week_start = 1)
 		len <- sum(s %in% 1:5) - 2 # num working days -2 (first and last)
 		h <- after_market - pre_market # financial working hours in a day (from 8.00 to 19.00)
 		res <- as.numeric(
@@ -95,7 +97,7 @@ difftime_financial <- function(from,
 		)
 	}
 
-	return(res) # return result in hours
+	return(res)
 
 }
 

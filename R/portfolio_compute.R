@@ -106,11 +106,11 @@ portfolio_compute <- function(portfolio_transactions,
 	# progress bar
 	if (progress) {
 		# initialize progress bar
-		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed\n\n",
-													           total = nrow(portfolio_transactions),
-													           clear = FALSE,
-																		 width = 60,
-																		 show_after = 0)
+		pb <- progress::progress_bar$new(
+			format = ":current  [:bar] :percent in :elapsed\n\n",
+			total = nrow(portfolio_transactions),
+			clear = FALSE, width = 60, show_after = 0
+		)
 		pb$tick(0)
 	}
 
@@ -128,7 +128,7 @@ portfolio_compute <- function(portfolio_transactions,
 		if (trx_type == "S") { trx_qty <- trx_qty * -1L }
 
 		# extract assets already into portfolio
-		ptf_assets <- portfolio[!is.na(portfolio$quantity), ]$asset
+		ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
 
 		market_przs <- gainloss_df <- portfolio_value <- NULL
 
@@ -137,8 +137,10 @@ portfolio_compute <- function(portfolio_transactions,
 		if (method != "none" && length(ptf_assets) > 0) {
 
 			# extract the market prices at transaction_datetime of all the portfolio assets
-			market_przs <- purrr::map_df(ptf_assets, closest_market_price,
-																	 trx_dtt, market_prices, price_only = FALSE)[, -2]
+			# think about filter out from market prices all what happened before trx_dtt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
+																					price_only = FALSE)[, -2]
+			market_przs <- dplyr::arrange(market_przs, factor(asset, levels = ptf_assets))
 
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
@@ -157,8 +159,8 @@ portfolio_compute <- function(portfolio_transactions,
 
 			# evaluate global portfolio value
 			if (verb_lvl1) message("Evaluating global portfolio position..")
-			portfolio_value <- evaluate_portfolio(portfolio,
-																						market_przs,
+			portfolio_value <- evaluate_portfolio(portfolio = portfolio,
+																						market_prices = market_przs,
 																						portfolio_statistics)
 
 		}

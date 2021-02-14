@@ -66,13 +66,6 @@ realized_count <- function(portfolio_quantity,
 													 allow_short = FALSE,
 													 realized_only = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(transaction_quantity) ||
-			!is.numeric(transaction_price)) {
-		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
-	}
-
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
 
@@ -342,12 +335,6 @@ realized_total <- function(portfolio_quantity,
 													 allow_short = FALSE,
 													 realized_only = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(transaction_quantity) ||
-			!is.numeric(transaction_price)) {
-		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
-	}
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
@@ -617,13 +604,6 @@ realized_value <- function(portfolio_quantity,
 													 transaction_price,
 													 transaction_type,
 													 allow_short = FALSE, realized_only = FALSE) {
-
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(transaction_quantity) ||
-			!is.numeric(transaction_price)) {
-		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
-	}
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
@@ -899,28 +879,10 @@ realized_duration <- function(portfolio_quantity,
 															allow_short = FALSE,
 															realized_only = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(transaction_quantity) ||
-			!is.numeric(transaction_price)) {
-		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
-	}
-
-	if (!lubridate::is.POSIXct(previous_transaction_datetime) ||
-			!lubridate::is.POSIXct(previous_datetime) ||
-			!lubridate::is.POSIXct(transaction_datetime)) {
-		stop("Arguments *dtt must be POSIXct.", call. = FALSE)
-	}
-
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
-	# dtt_diff <- difftime(transaction_datetime, previous_datetime, units = "days") %>% # duration of paper gain/loss
-	# as.numeric() # to avoid conversion errors
 	dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
-	# dtt_diff0 <- difftime(transaction_datetime, previous_transaction_datetime, units = "days") %>% # duration of realized gain/loss
-	#   as.numeric() # to avoid conversion errors
 	dtt_diff0 <- difftime_financial(previous_transaction_datetime, transaction_datetime)
-	# by default the duration returned is in days, conversion is left to the user
 
 
 	if (realized_only) {
@@ -1197,92 +1159,100 @@ realized_compute <- function(portfolio_quantity,
 
 	if (method == "count") {
 
-		# compute Realized and Paper Gain and Loss with realized_count()
-		rgl_count <- realized_count(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
-		# convert results to a df
+		rgl_count <- realized_count(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
 		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_count)))
 
 	} else if (method == "total") {
 
-		# compute Realized and Paper Gain and Loss with realized_total()
-		rgl_total <- realized_total(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
-		# convert results to a df
+		rgl_total <- realized_total(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
 		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_total)))
 
 	} else if (method == "value") {
 
-		# compute Realized and Paper Gain and Loss with realized_value()
-		rgl_value <- realized_value(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
+		rgl_value <- realized_value(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
 		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_value)))
 
 	} else if (method == "duration") {
 
-		# compute Realized and Paper Gain and Loss with realized_value()
-		rgl_duration <- realized_duration(portfolio_quantity,
-																			portfolio_price,
-																			transaction_quantity,
-																			transaction_price,
-																			transaction_type,
-																			previous_transaction_datetime,
-																			previous_datetime,
-																			transaction_datetime,
-																			allow_short,
-																			realized_only)
+		rgl_duration <- realized_duration(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			previous_transaction_datetime,
+			previous_datetime,
+			transaction_datetime,
+			allow_short,
+			realized_only
+		)
 		res_df <- tibble::as_tibble(c("asset" = transaction_asset, as.list(rgl_duration)))
 
 	} else {# method == "all"
 
-		# compute Realized and Paper Gain and Loss with all functions and wrap-up results
-		rgl_count <- realized_count(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
-		rgl_total <- realized_total(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
-		rgl_value <- realized_value(portfolio_quantity,
-																portfolio_price,
-																transaction_quantity,
-																transaction_price,
-																transaction_type,
-																allow_short,
-																realized_only)
-		rgl_duration <- realized_duration(portfolio_quantity,
-																			portfolio_price,
-																			transaction_quantity,
-																			transaction_price,
-																			transaction_type,
-																			previous_transaction_datetime,
-																			previous_datetime,
-																			transaction_datetime,
-																			allow_short,
-																			realized_only)
-		# convert results to a df
+		rgl_count <- realized_count(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
+		rgl_total <- realized_total(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
+		rgl_value <- realized_value(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			allow_short,
+			realized_only
+		)
+		rgl_duration <- realized_duration(
+			portfolio_quantity,
+			portfolio_price,
+			transaction_quantity,
+			transaction_price,
+			transaction_type,
+			previous_transaction_datetime,
+			previous_datetime,
+			transaction_datetime,
+			allow_short,
+			realized_only
+		)
 		res_df <- tibble::as_tibble(
 			c("asset" = transaction_asset,
 			  as.list(rgl_count),
@@ -1330,7 +1300,6 @@ realized_empty <- function(transaction_asset, method = "all") {
 		rgl_total <- c("RG_total" = 0, "RL_total" = 0, "PG_total" = 0, "PL_total" = 0)
 		rgl_value <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = 0)
 		rgl_duration <- c("RG_duration" = 0, "RL_duration" = 0, "PG_duration" = 0, "PL_duration" = 0)
-		# convert results to a df
 		res_df <- tibble::as_tibble(
 			c("asset" = transaction_asset,
 				as.list(rgl_count),

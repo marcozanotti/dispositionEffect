@@ -140,7 +140,7 @@ portfolio_compute <- function(portfolio_transactions,
 			# think about filter out from market prices all what happened before trx_dtt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
 																					price_only = FALSE)[, -2]
-			market_przs <- dplyr::arrange(market_przs, factor(asset, levels = ptf_assets))
+			market_przs <- dplyr::arrange(market_przs, factor(!!rlang::sym("asset"), levels = ptf_assets))
 
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")

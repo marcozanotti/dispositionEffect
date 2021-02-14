@@ -67,7 +67,7 @@ gains_and_losses <- function(transaction_type,
 	ptf_dtt <- portfolio[portfolio$asset == transaction_asset, ]$datetime
 
 	# extract assets already into portfolio
-	ptf_assets <- portfolio[!is.na(portfolio$quantity), ]$asset
+	ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
 	# remove transaction_asset from assets already into portfolio
 	ptf_assets <- ptf_assets[ptf_assets != transaction_asset]
 
@@ -76,7 +76,7 @@ gains_and_losses <- function(transaction_type,
 	if (difftime_compare(previous_datetime, transaction_datetime, time_threshold) == "greater") {
 
 		# if ptf_qty (qty of transaction_asset) is NA or 0, compute paper g&l of other assets
-		if (is.na(ptf_qty) || ptf_qty == 0) {
+		if (is.na(ptf_qty) | ptf_qty == 0) {
 
 			# if there are no other assets but the transaction_asset, return an empty df
 			if (!length(ptf_assets)) {
@@ -121,6 +121,7 @@ gains_and_losses <- function(transaction_type,
 				pft_assets_qtys <- portfolio[portfolio$asset %in% ptf_assets, ]$quantity
 				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price
 				ptf_assets_market_przs <- market_prices[market_prices$asset %in% ptf_assets, ]$price
+
 				# compute realized and paper gains and losses
 				if (verb) message("Computing realized and paper gains and losses..")
 				realized_df <- realized_compute(ptf_qty,
@@ -144,7 +145,7 @@ gains_and_losses <- function(transaction_type,
 																	allow_short,
 																	method)
 				# bind rows of transaction_asset and ptf_assets results
-				realized_paper_df <- rbind(realized_df, paper_df)
+				realized_paper_df <- dplyr::bind_rows(realized_df, paper_df)
 
 			}
 
@@ -156,7 +157,7 @@ gains_and_losses <- function(transaction_type,
 	} else {
 
 		# if ptf_qty (qty of transaction_asset) is NA or 0, return an empty df
-		if (is.na(ptf_qty) || ptf_qty == 0) {
+		if (is.na(ptf_qty) | ptf_qty == 0) {
 			realized_paper_df <- realized_empty(transaction_asset, method)
 		} else {# compute realized gains and losses for the transaction_asset
 
@@ -178,7 +179,7 @@ gains_and_losses <- function(transaction_type,
 
 	}
 
-	realized_paper_df <- tibble::as_tibble(cbind(portfolio[1, "investor"], realized_paper_df))
+	realized_paper_df <- dplyr::bind_cols(portfolio[1, "investor"], realized_paper_df)
 
 	return(realized_paper_df)
 

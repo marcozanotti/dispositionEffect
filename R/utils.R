@@ -41,10 +41,12 @@ ewise_mean <- function(x, y, na.rm = FALSE, zero.substitute = FALSE) {
 
 	if (zero.substitute) {
 
-		ewm <- dplyr::case_when(x == 0 & y == 0 ~ 0,
-														x == 0 & y != 0 ~ y,
-														x != 0 & y == 0 ~ x,
-														TRUE ~ purrr::map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm)))
+		ewm <- dplyr::case_when(
+			x == 0 & y == 0 ~ 0,
+			x == 0 & y != 0 ~ y,
+			x != 0 & y == 0 ~ x,
+			TRUE ~ purrr::map2_dbl(x, y, ~ mean(c(.x,.y), na.rm = na.rm))
+		)
 
 	} else {
 

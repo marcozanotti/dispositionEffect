@@ -7,7 +7,7 @@
 closest_market_price(asset, datetime, market_prices, price_only = FALSE)
 }
 \arguments{
-\item{asset}{Character name of the asset to look for.}
+\item{asset}{Character vector of assets' names to look for.}
 
 \item{datetime}{POSIXct of the datetime at which looking for the asset's
 price.}

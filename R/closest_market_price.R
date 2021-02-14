@@ -3,7 +3,7 @@
 #' @description Find the market price closest to a certain datetime and for
 #'   as specific asset.
 #'
-#' @param asset Character name of the assets to look for.
+#' @param asset Character vector of assets' names to look for.
 #' @param datetime POSIXct of the datetime at which looking for the asset's
 #'   price.
 #' @param market_prices Data frame containing the market prices.

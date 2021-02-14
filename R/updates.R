@@ -217,17 +217,17 @@ update_portfolio <- function(portfolio,
 	if (is.na(ptf_qty)) {
 		# if qty is NA (initial condition), simply update the portfolio
 		# with the values of qty, prz and dtt of the transaction
-		portfolio[portfolio$asset == transaction_asset, ]$quantity <- transaction_quantity
-		portfolio[portfolio$asset == transaction_asset, ]$price <- transaction_price
-		portfolio[portfolio$asset == transaction_asset, ]$datetime <- transaction_datetime
+		portfolio[portfolio$asset == transaction_asset, ][["quantity"]] <- transaction_quantity
+		portfolio[portfolio$asset == transaction_asset, ][["price"]] <- transaction_price
+		portfolio[portfolio$asset == transaction_asset, ][["datetime"]] <- transaction_datetime
 	} else {
 		# else sum the qtys
-		portfolio[portfolio$asset == transaction_asset, ]$quantity <-
+		portfolio[portfolio$asset == transaction_asset, ][["quantity"]] <-
 			update_quantity(ptf_qty, transaction_quantity)
 		# and adjust the przs based on conditions
-		portfolio[portfolio$asset == transaction_asset, ]$price <-
+		portfolio[portfolio$asset == transaction_asset, ][["price"]] <-
 			update_price(ptf_qty, ptf_prz, transaction_quantity, transaction_price, transaction_type)
-		portfolio[portfolio$asset == transaction_asset, ]$datetime <-
+		portfolio[portfolio$asset == transaction_asset, ][["datetime"]] <-
 			update_datetime(ptf_qty, ptf_dtt, transaction_quantity, transaction_datetime, transaction_type)
 	}
 
@@ -243,9 +243,10 @@ update_realized_and_paper <- function(realized_and_paper,
 													            new_realized_and_paper,
 													            method = "all") {
 
-	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
-	new_realized_and_paper <- dplyr::arrange(new_realized_and_paper, !!rlang::sym("asset"))
 	assets <- new_realized_and_paper$asset
+	realized_and_paper_filtered <- realized_and_paper[realized_and_paper$asset %in% assets,]
+	realized_and_paper_filtered <- dplyr::arrange(realized_and_paper_filtered,
+																			 factor(!!rlang::sym("asset"), levels = assets))
 
 	# replace the realized_and_paper values corresponding to the assets present into new_realized_and_paper
 	# if values are NA, then they are simply replaced with the new values of new_realized_and_paper
@@ -256,46 +257,49 @@ update_realized_and_paper <- function(realized_and_paper,
 
 	if (method == "count") {
 
-		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
-				RG_count = dplyr::case_when(is.na(RG_count) ~ new_realized_and_paper$RG_count,
-														        TRUE ~ RG_count + new_realized_and_paper$RG_count),
-				RL_count = dplyr::case_when(is.na(RL_count) ~ new_realized_and_paper$RL_count,
-														        TRUE ~ RL_count + new_realized_and_paper$RL_count),
-				PG_count = dplyr::case_when(is.na(PG_count) ~ new_realized_and_paper$PG_count,
-														        TRUE ~ PG_count + new_realized_and_paper$PG_count),
-				PL_count = dplyr::case_when(is.na(PL_count) ~ new_realized_and_paper$PL_count,
-														        TRUE ~ PL_count + new_realized_and_paper$PL_count)
-			)
+		realized_and_paper_filtered[["RG_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_count"]]), new_realized_and_paper$RG_count,
+									 realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count)
+		realized_and_paper_filtered[["RL_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_count"]]), new_realized_and_paper$RL_count,
+						 realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count)
+		realized_and_paper_filtered[["PG_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_count"]]), new_realized_and_paper$PG_count,
+						 realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count)
+		realized_and_paper_filtered[["PL_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_count"]]), new_realized_and_paper$PL_count,
+						 realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count)
 
 	} else if (method == "total") {
 
-		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
-				RG_total = dplyr::case_when(is.na(RG_total) ~ new_realized_and_paper$RG_total,
-														        TRUE ~ RG_total + new_realized_and_paper$RG_total),
-				RL_total = dplyr::case_when(is.na(RL_total) ~ new_realized_and_paper$RL_total,
-														        TRUE ~ RL_total + new_realized_and_paper$RL_total),
-				PG_total = dplyr::case_when(is.na(PG_total) ~ new_realized_and_paper$PG_total,
-														        TRUE ~ PG_total + new_realized_and_paper$PG_total),
-				PL_total = dplyr::case_when(is.na(PL_total) ~ new_realized_and_paper$PL_total,
-														        TRUE ~ PL_total + new_realized_and_paper$PL_total)
-			)
+		realized_and_paper_filtered[["RG_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_total"]]), new_realized_and_paper$RG_total,
+						 realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total)
+		realized_and_paper_filtered[["RL_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_total"]]), new_realized_and_paper$RL_total,
+						 realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total)
+		realized_and_paper_filtered[["PG_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_total"]]), new_realized_and_paper$PG_total,
+						 realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total)
+		realized_and_paper_filtered[["PL_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_total"]]), new_realized_and_paper$PL_total,
+						 realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total)
 
 	} else if (method == "value") {
 
-		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
-				RG_value = dplyr::case_when(is.na(RG_value) ~ new_realized_and_paper$RG_value,
-														        TRUE ~ RG_value + new_realized_and_paper$RG_value),
-				RL_value = dplyr::case_when(is.na(RL_value) ~ new_realized_and_paper$RL_value,
-														        TRUE ~ RL_value + new_realized_and_paper$RL_value),
-				PG_value = dplyr::case_when(is.na(PG_value) ~ new_realized_and_paper$PG_value,
-														        TRUE ~ PG_value + new_realized_and_paper$PG_value),
-				PL_value = dplyr::case_when(is.na(PL_value) ~ new_realized_and_paper$PL_value,
-														        TRUE ~ PL_value + new_realized_and_paper$PL_value)
-			)
-		# dplyr::mutate(
+		realized_and_paper_filtered[["RG_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_value"]]), new_realized_and_paper$RG_value,
+						 realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value)
+		realized_and_paper_filtered[["RL_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_value"]]), new_realized_and_paper$RL_value,
+						 realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value)
+		realized_and_paper_filtered[["PG_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_value"]]), new_realized_and_paper$PG_value,
+						 realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value)
+		realized_and_paper_filtered[["PL_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_value"]]), new_realized_and_paper$PL_value,
+						 realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value)
+		# dplyr::mutate(realized_and_paper
 		#   RG_value = dplyr::case_when(is.na(RG_value) ~ new_realized_and_paper$RG_value,
 		#                               TRUE ~ ewise_mean(RG_value, new_realized_and_paper$RG_value, zero.rm = TRUE)),
 		#   RL_value = dplyr::case_when(is.na(RL_value) ~ new_realized_and_paper$RL_value,
@@ -308,60 +312,78 @@ update_realized_and_paper <- function(realized_and_paper,
 
 	} else if (method == "duration") {
 
-		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
-				RG_duration = dplyr::case_when(is.na(RG_duration) ~ new_realized_and_paper$RG_duration,
-																       TRUE ~ RG_duration + new_realized_and_paper$RG_duration),
-				RL_duration = dplyr::case_when(is.na(RL_duration) ~ new_realized_and_paper$RL_duration,
-																       TRUE ~ RL_duration + new_realized_and_paper$RL_duration),
-				PG_duration = dplyr::case_when(is.na(PG_duration) ~ new_realized_and_paper$PG_duration,
-																       TRUE ~ PG_duration + new_realized_and_paper$PG_duration),
-				PL_duration = dplyr::case_when(is.na(PL_duration) ~ new_realized_and_paper$PL_duration,
-																       TRUE ~ PL_duration + new_realized_and_paper$PL_duration)
-			)
+		realized_and_paper_filtered[["RG_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_duration"]]), new_realized_and_paper$RG_duration,
+						 realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration)
+		realized_and_paper_filtered[["RL_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_duration"]]), new_realized_and_paper$RL_duration,
+						 realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration)
+		realized_and_paper_filtered[["PG_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_duration"]]), new_realized_and_paper$PG_duration,
+						 realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration)
+		realized_and_paper_filtered[["PL_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_duration"]]), new_realized_and_paper$PL_duration,
+						 realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration)
 
 	} else {# method == "all"
 
-		realized_and_paper[realized_and_paper$asset %in% assets,] <-
-			dplyr::mutate(realized_and_paper[realized_and_paper$asset %in% assets,],
-				RG_count = dplyr::case_when(is.na(RG_count) ~ new_realized_and_paper$RG_count,
-													        	 TRUE ~ RG_count + new_realized_and_paper$RG_count),
-				RL_count = dplyr::case_when(is.na(RL_count) ~ new_realized_and_paper$RL_count,
-														        TRUE ~ RL_count + new_realized_and_paper$RL_count),
-				PG_count = dplyr::case_when(is.na(PG_count) ~ new_realized_and_paper$PG_count,
-														        TRUE ~ PG_count + new_realized_and_paper$PG_count),
-				PL_count = dplyr::case_when(is.na(PL_count) ~ new_realized_and_paper$PL_count,
-														        TRUE ~ PL_count + new_realized_and_paper$PL_count),
+		realized_and_paper_filtered[["RG_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_count"]]), new_realized_and_paper$RG_count,
+						 realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count)
+		realized_and_paper_filtered[["RL_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_count"]]), new_realized_and_paper$RL_count,
+						 realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count)
+		realized_and_paper_filtered[["PG_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_count"]]), new_realized_and_paper$PG_count,
+						 realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count)
+		realized_and_paper_filtered[["PL_count"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_count"]]), new_realized_and_paper$PL_count,
+						 realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count)
 
-				RG_total = dplyr::case_when(is.na(RG_total) ~ new_realized_and_paper$RG_total,
-														        TRUE ~ RG_total + new_realized_and_paper$RG_total),
-				RL_total = dplyr::case_when(is.na(RL_total) ~ new_realized_and_paper$RL_total,
-														        TRUE ~ RL_total + new_realized_and_paper$RL_total),
-				PG_total = dplyr::case_when(is.na(PG_total) ~ new_realized_and_paper$PG_total,
-													          TRUE ~ PG_total + new_realized_and_paper$PG_total),
-				PL_total = dplyr::case_when(is.na(PL_total) ~ new_realized_and_paper$PL_total,
-													          TRUE ~ PL_total + new_realized_and_paper$PL_total),
+		realized_and_paper_filtered[["RG_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_total"]]), new_realized_and_paper$RG_total,
+						 realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total)
+		realized_and_paper_filtered[["RL_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_total"]]), new_realized_and_paper$RL_total,
+						 realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total)
+		realized_and_paper_filtered[["PG_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_total"]]), new_realized_and_paper$PG_total,
+						 realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total)
+		realized_and_paper_filtered[["PL_total"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_total"]]), new_realized_and_paper$PL_total,
+						 realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total)
 
-				RG_value = dplyr::case_when(is.na(RG_value) ~ new_realized_and_paper$RG_value,
-														        TRUE ~ RG_value + new_realized_and_paper$RG_value),
-				RL_value = dplyr::case_when(is.na(RL_value) ~ new_realized_and_paper$RL_value,
-														        TRUE ~ RL_value + new_realized_and_paper$RL_value),
-				PG_value = dplyr::case_when(is.na(PG_value) ~ new_realized_and_paper$PG_value,
-														        TRUE ~ PG_value + new_realized_and_paper$PG_value),
-				PL_value = dplyr::case_when(is.na(PL_value) ~ new_realized_and_paper$PL_value,
-														        TRUE ~ PL_value + new_realized_and_paper$PL_value),
+		realized_and_paper_filtered[["RG_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_value"]]), new_realized_and_paper$RG_value,
+						 realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value)
+		realized_and_paper_filtered[["RL_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_value"]]), new_realized_and_paper$RL_value,
+						 realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value)
+		realized_and_paper_filtered[["PG_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_value"]]), new_realized_and_paper$PG_value,
+						 realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value)
+		realized_and_paper_filtered[["PL_value"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_value"]]), new_realized_and_paper$PL_value,
+						 realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value)
 
-				RG_duration = dplyr::case_when(is.na(RG_duration) ~ new_realized_and_paper$RG_duration,
-															         TRUE ~ RG_duration + new_realized_and_paper$RG_duration),
-				RL_duration = dplyr::case_when(is.na(RL_duration) ~ new_realized_and_paper$RL_duration,
-															         TRUE ~ RL_duration + new_realized_and_paper$RL_duration),
-				PG_duration = dplyr::case_when(is.na(PG_duration) ~ new_realized_and_paper$PG_duration,
-																       TRUE ~ PG_duration + new_realized_and_paper$PG_duration),
-				PL_duration = dplyr::case_when(is.na(PL_duration) ~ new_realized_and_paper$PL_duration,
-																       TRUE ~ PL_duration + new_realized_and_paper$PL_duration)
-			)
+		realized_and_paper_filtered[["RG_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RG_duration"]]), new_realized_and_paper$RG_duration,
+						 realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration)
+		realized_and_paper_filtered[["RL_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["RL_duration"]]), new_realized_and_paper$RL_duration,
+						 realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration)
+		realized_and_paper_filtered[["PG_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PG_duration"]]), new_realized_and_paper$PG_duration,
+						 realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration)
+		realized_and_paper_filtered[["PL_duration"]] <-
+			ifelse(is.na(realized_and_paper_filtered[["PL_duration"]]), new_realized_and_paper$PL_duration,
+						 realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration)
 
 	}
+
+	realized_and_paper <- dplyr::rows_update(realized_and_paper,
+																					 realized_and_paper_filtered,
+																					 by = c("investor", "asset"))
 
 	return(realized_and_paper)
 
@@ -376,15 +398,12 @@ update_realized_and_paper <- function(realized_and_paper,
 update_expectedvalue <- function(realized_and_paper,
 															   num_transaction_assets) {
 
-	realized_and_paper <- dplyr::arrange(realized_and_paper, !!rlang::sym("asset"))
-	num_transaction_assets <- dplyr::arrange(num_transaction_assets, !!rlang::sym("asset"))
-
 	weights <- num_transaction_assets[["numtrx"]]
 
-	realized_and_paper[, "RG_value"] <- realized_and_paper[, "RG_value"] / weights
-	realized_and_paper[, "RL_value"] <- realized_and_paper[, "RL_value"] / weights
-	realized_and_paper[, "PG_value"] <- realized_and_paper[, "PG_value"] / weights
-	realized_and_paper[, "PL_value"] <- realized_and_paper[, "PL_value"] / weights
+	realized_and_paper[["RG_value"]] <- realized_and_paper[["RG_value"]] / weights
+	realized_and_paper[["RL_value"]] <- realized_and_paper[["RL_value"]] / weights
+	realized_and_paper[["PG_value"]] <- realized_and_paper[["PG_value"]] / weights
+	realized_and_paper[["PL_value"]] <- realized_and_paper[["PL_value"]] / weights
 
 	return(realized_and_paper)
 

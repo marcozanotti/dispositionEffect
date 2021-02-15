@@ -778,7 +778,7 @@ realized_value <- function(portfolio_quantity,
 
 
 				if (prz_diff > 0) { # Paper Loss
-					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = Er)
+					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = 0, "PL_value" = -Er)
 				} else if (prz_diff < 0) { # Paper Gain
 					res <- c("RG_value" = 0, "RL_value" = 0, "PG_value" = -Er, "PL_value" = 0)
 				} else {# Nothing

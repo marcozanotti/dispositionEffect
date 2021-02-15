@@ -667,9 +667,9 @@ realized_value <- function(portfolio_quantity,
 
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
-						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
+						res <- c("RG_value" = 0, "RL_value" = -Er, "PG_value" = 0, "PL_value" = 0)
 					} else {# + nothing
-						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
+						res <- c("RG_value" = 0, "RL_value" = -Er, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain
@@ -791,9 +791,9 @@ realized_value <- function(portfolio_quantity,
 
 				if (prz_diff > 0) { # Realized Loss
 					if (qty_diff < 0) { # + Paper Loss
-						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = Er)
+						res <- c("RG_value" = 0, "RL_value" = -Er, "PG_value" = 0, "PL_value" = -Er)
 					} else {# + nothing
-						res <- c("RG_value" = 0, "RL_value" = Er, "PG_value" = 0, "PL_value" = 0)
+						res <- c("RG_value" = 0, "RL_value" = -Er, "PG_value" = 0, "PL_value" = 0)
 					}
 				} else if (prz_diff < 0) { # Realized Gain
 					if (qty_diff < 0) { # + Paper Gain

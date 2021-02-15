@@ -162,6 +162,12 @@ portfolio_compute <- function(portfolio_transactions,
 																			method = method,
 																			allow_short = allow_short,
 																			verbose = verb_lvl2)
+			if (method %in% c("value", "all")) {
+				chk_gl <- check_gainloss(gainloss_df)
+				if (!is.null(chk_gl)) {
+					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl))
+				}
+			}
 
 			# evaluate global portfolio value
 			if (verb_lvl1) message("Evaluating global portfolio position..")

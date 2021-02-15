@@ -101,7 +101,7 @@ gains_and_losses <- function(transaction_type,
 		} else {# compute gains and losses for all the assets
 
 			# if there are no other assets but the transaction_asset, compute on transaction_asset
-			if (!length(ptf_assets)) {
+			if (length(ptf_assets) < 1) {
 				if (verb) message("Computing realized gains and losses..")
 				realized_paper_df <- realized_compute(ptf_qty,
 																							ptf_prz,

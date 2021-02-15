@@ -2,11 +2,14 @@
 % Please edit documentation in R/utils-checks.R
 \name{checks}
 \alias{checks}
+\alias{check_gainloss}
 \alias{check_df_names}
 \alias{check_values}
 \alias{check_var_types}
 \title{Checks functions}
 \usage{
+check_gainloss(df)
+
 check_df_names(df_name, df_names, target_names)
 
 check_values(input_name, input_values, target_values, identical = FALSE)
@@ -14,6 +17,8 @@ check_values(input_name, input_values, target_values, identical = FALSE)
 check_var_types(input_name, input_types, target_types, multiple = TRUE)
 }
 \arguments{
+\item{df}{Data frame}
+
 \item{df_name}{Chr}
 
 \item{df_names}{Chr}
@@ -42,6 +47,8 @@ Functions to perform checks on arguments.
 }
 \section{Functions}{
 \itemize{
+\item \code{check_gainloss}: Check consistency of gains and losses "values" results.
+
 \item \code{check_df_names}: Check consistency of data frame variables' names.
 
 \item \code{check_values}: Check consistency of values.

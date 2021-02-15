@@ -33,8 +33,9 @@ paper_duration(
   portfolio_quantity,
   portfolio_price,
   market_price,
-  previous_datetime,
-  transaction_datetime,
+  datetime_difference = NULL,
+  previous_datetime = NULL,
+  transaction_datetime = NULL,
   allow_short = FALSE
 )
 
@@ -61,6 +62,10 @@ investor's portfolio.}
 
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
+
+\item{datetime_difference}{Numeric value of time difference between the previous_datetime
+and the transaction_datetime, computed through \code{\link{difftime_financial}}.
+If NULL, then previous_datetime and transaction_datetime must be specified.}
 
 \item{previous_datetime}{POSIXct value. The date-time of the last transaction
 performed by the investor.}

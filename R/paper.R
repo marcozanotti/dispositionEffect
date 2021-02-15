@@ -10,6 +10,9 @@
 #'   investor's portfolio.
 #' @param market_price Numeric vector. The market prices of assets into the
 #'   investor's portfolio.
+#' @param datetime_difference Numeric value of time difference between the previous_datetime
+#'   and the transaction_datetime, computed through \code{\link{difftime_financial}}.
+#'   If NULL, then previous_datetime and transaction_datetime must be specified.
 #' @param previous_datetime POSIXct value. The date-time of the last transaction
 #'   performed by the investor.
 #' @param transaction_datetime POSIXct value. The date-time at which the transaction
@@ -173,12 +176,18 @@ paper_value <- function(portfolio_quantity,
 paper_duration <- function(portfolio_quantity,
 													 portfolio_price,
 													 market_price,
-													 previous_datetime,
-													 transaction_datetime,
+													 datetime_difference = NULL,
+													 previous_datetime = NULL,
+													 transaction_datetime = NULL,
 													 allow_short = FALSE) {
 
 	prz_diff <- market_price - portfolio_price # price difference
-	dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
+	if (is.null(datetime_difference)) {
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
+	} else {
+		dtt_diff <- datetime_difference
+	}
+
 
 	if (allow_short) {
 		if (portfolio_quantity > 0 && prz_diff > 0) { # Long - Paper Gain
@@ -254,10 +263,11 @@ paper_compute <- function(portfolio_quantity,
 
 	} else if (method == "duration") {
 
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
 		pgl_duration <- purrr::pmap(
 			list(portfolio_quantity, portfolio_price, market_price),
 			paper_duration,
-			previous_datetime, transaction_datetime, allow_short
+			datetime_difference = dtt_diff, allow_short = allow_short
 		)
 		res_df <- dplyr::mutate(
 			dplyr::bind_rows(pgl_duration), asset = assets, .before = dplyr::everything()
@@ -280,10 +290,11 @@ paper_compute <- function(portfolio_quantity,
 			paper_value,
 			allow_short
 		)
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
 		pgl_duration <- purrr::pmap(
 			list(portfolio_quantity, portfolio_price, market_price),
 			paper_duration,
-			previous_datetime, transaction_datetime, allow_short
+			datetime_difference = dtt_diff, allow_short = allow_short
 		)
 		res_df <- dplyr::bind_cols(
 			dplyr::bind_rows(pgl_count),

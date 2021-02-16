@@ -28,13 +28,17 @@ closest_market_price <- function(asset,
 	res <- market_prices[market_prices$asset %in% asset &
 											 	market_prices$datetime <= datetime, ]
 	# extract the closest date which is before the datetime
-	res <- dplyr::ungroup(
-		dplyr::slice(
-			dplyr::group_by(
-				res, !!rlang::sym("asset")
-			), dplyr::n()
+	res <-
+		as.data.frame(
+			dplyr::ungroup(
+				dplyr::slice(
+					dplyr::group_by(
+						res, !!rlang::sym("asset")
+					), dplyr::n()
+				)
+			)
 		)
-	)
+
 	# extract the price
 	if (price_only) {
 		res <- res$price

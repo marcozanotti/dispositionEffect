@@ -32,22 +32,22 @@ check_gainloss <- function(df) {
 
 	msg <- vector("list", 4)
 
-	if (sum(rg) > 0) {
+	if (any(rg)) {
 		msg[[1]] <- paste("RG value < 0 for asset(s)",
 											paste(df$asset[rg], collapse = ", "), "\n")
 	}
 
-	if (sum(rl) > 0) {
+	if (any(rl)) {
 		msg[[2]] <- paste("RL value > 0 for asset(s)",
 											paste(df$asset[rl], collapse = ", "), "\n")
 	}
 
-	if (sum(pg) > 0) {
+	if (any(pg)) {
 		msg[[3]] <- paste("PG value < 0 for asset(s)",
 											paste(df$asset[pg], collapse = ", "), "\n")
 	}
 
-	if (sum(pl) > 0) {
+	if (any(pl)) {
 		msg[[4]] <- paste("PL value > 0 for asset(s)",
 											paste(df$asset[pl], collapse = ", "), "\n")
 	}

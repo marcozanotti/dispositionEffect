@@ -23,7 +23,7 @@ NULL
 #'   of investor's portfolio.
 initializer_portfolio <- function(investor, assets) {
 
-	portfolio <- tibble::tibble(
+	portfolio <- data.frame(
 		investor = investor,
 		asset = assets,
 		quantity = rep(NA_real_, length(assets)),
@@ -42,7 +42,7 @@ initializer_portfolio <- function(investor, assets) {
 initializer_realized_and_paper <- function(investor, assets, method = "all") {
 
 	if (method == "count") {
-		results_df <- tibble::tibble(
+		results_df <- data.frame(
 			investor = investor,
 			asset = assets,
 			RG_count = rep(NA_real_, length(assets)),
@@ -51,7 +51,7 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 			PL_count = rep(NA_real_, length(assets))
 		)
 	} else if (method == "total") {
-		results_df <- tibble::tibble(
+		results_df <- data.frame(
 			investor = investor,
 			asset = assets,
 			RG_total = rep(NA_real_, length(assets)),
@@ -60,7 +60,7 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 			PL_total = rep(NA_real_, length(assets))
 		)
 	} else if (method == "value") {
-		results_df <- tibble::tibble(
+		results_df <- data.frame(
 			investor = investor,
 			asset = assets,
 			RG_value = rep(NA_real_, length(assets)),
@@ -69,7 +69,7 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 			PL_value = rep(NA_real_, length(assets))
 		)
 	} else if (method == "duration") {
-		results_df <- tibble::tibble(
+		results_df <- data.frame(
 			investor = investor,
 			asset = assets,
 			RG_duration = rep(NA_real_, length(assets)),
@@ -78,7 +78,7 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 			PL_duration = rep(NA_real_, length(assets))
 		)
 	} else if (method == "all") {
-		results_df <- tibble::tibble(
+		results_df <- data.frame(
 			investor = investor,
 			asset = assets,
 			RG_count = rep(NA_real_, length(assets)),

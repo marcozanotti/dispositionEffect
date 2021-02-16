@@ -1,3 +1,0 @@
-globalVariables(
-	names = c(".")
-)

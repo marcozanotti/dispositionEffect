@@ -235,9 +235,9 @@ paper_compute <- function(portfolio_quantity,
 			paper_count,
 			allow_short
 		)
-		res_df <- dplyr::mutate(
-			dplyr::bind_rows(pgl_count), asset = assets, .before = dplyr::everything()
-		)
+		res_df <- as.data.frame(do.call(rbind, pgl_count))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "total") {
 
@@ -246,9 +246,9 @@ paper_compute <- function(portfolio_quantity,
 			paper_total,
 			allow_short
 		)
-		res_df <- dplyr::mutate(
-			dplyr::bind_rows(pgl_total), asset = assets, .before = dplyr::everything()
-		)
+		res_df <- as.data.frame(do.call(rbind, pgl_total))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "value") {
 
@@ -257,9 +257,9 @@ paper_compute <- function(portfolio_quantity,
 			paper_value,
 			allow_short
 		)
-		res_df <- dplyr::mutate(
-			dplyr::bind_rows(pgl_value), asset = assets, .before = dplyr::everything()
-		)
+		res_df <- as.data.frame(do.call(rbind, pgl_value))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "duration") {
 
@@ -269,9 +269,9 @@ paper_compute <- function(portfolio_quantity,
 			paper_duration,
 			datetime_difference = dtt_diff, allow_short = allow_short
 		)
-		res_df <- dplyr::mutate(
-			dplyr::bind_rows(pgl_duration), asset = assets, .before = dplyr::everything()
-		)
+		res_df <- as.data.frame(do.call(rbind, pgl_duration))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else {# method == "all"
 
@@ -297,12 +297,13 @@ paper_compute <- function(portfolio_quantity,
 			datetime_difference = dtt_diff, allow_short = allow_short
 		)
 		res_df <- dplyr::bind_cols(
-			dplyr::bind_rows(pgl_count),
-			dplyr::bind_rows(pgl_total),
-			dplyr::bind_rows(pgl_value),
-			dplyr::bind_rows(pgl_duration),
+			as.data.frame(do.call(rbind, pgl_count)),
+			as.data.frame(do.call(rbind, pgl_total)),
+			as.data.frame(do.call(rbind, pgl_value)),
+			as.data.frame(do.call(rbind, pgl_duration)),
 		)
-		res_df <- dplyr::mutate(res_df, asset = assets, .before = dplyr::everything())
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	}
 

@@ -3,15 +3,9 @@
 \name{utils}
 \alias{utils}
 \alias{ewise_mean}
-\alias{portfolio_longer}
-\alias{portfolio_wider}
 \title{Utilities}
 \usage{
 ewise_mean(x, y, na.rm = FALSE, zero.substitute = FALSE)
-
-portfolio_longer(portfolio)
-
-portfolio_wider(portfolio)
 }
 \arguments{
 \item{x, y}{Numeric vectors of the same length.}
@@ -21,10 +15,6 @@ portfolio_wider(portfolio)
 
 \item{zero.substitute}{Logical. If TRUE zero values are substituted with
 corresponding non-missing values whether possible.}
-
-\item{portfolio}{Data frame, the portfolio of the investor containing the
-realized and paper gains and losses results (as those obtained via
-\code{\link{portfolio_compute}}).}
 }
 \value{
 Different return behaviours.
@@ -35,10 +25,6 @@ Functions that help the computations.
 \section{Functions}{
 \itemize{
 \item \code{ewise_mean}: Element-wise mean calculation.
-
-\item \code{portfolio_longer}: Turn portfolio of results to longer format.
-
-\item \code{portfolio_wider}: Turn portfolio of results to wider format.
 }}
 
 \examples{

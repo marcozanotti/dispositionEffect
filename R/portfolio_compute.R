@@ -47,38 +47,6 @@ portfolio_compute <- function(portfolio_transactions,
 														  verbose = c(0, 0),
 														  progress = FALSE) {
 
-	# checks on inputs
-	# assumes that portfolio_transactions is ordered by datetime
-
-	# # portfolio_transactions column names
-	# msg <- check_df_names("portfolio_transactions", names(portfolio_transactions),
-	# 											c("client", "type", "asset", "qty", "prz", "datetime"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # portfolio_transactions column types
-	# typ <- purrr::map(portfolio_transactions, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("portfolio_transactions", typ,
-	# 											 c("client" = "character", "type" = "character",
-	# 											 	"asset" = "character", "qty" = "integer",
-	# 											 	"prz" = "numeric", "datetime" = "POSIXct"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # portfolio_transactions column "type" values
-	# msg <- check_values("portfolio_transactions$type", unique(portfolio_transactions$type), c("B", "S"), identical = TRUE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # market_prices column names
-	# msg <- check_df_names("market_prices", names(market_prices),
-	# 											c("asset", "datetime", "prz", "qty"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # market_prices column types
-	# typ <- purrr::map(market_prices, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("market_prices", typ,
-	# 											 c("asset" = "character", "datetime" = "POSIXct",
-	# 											 	"qty" = "integer", "prz" = "numeric"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # method values
-	# msg <- check_values("method", method,
-	# 										c("count", "total", "value", "duration", "all", "none"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
 	verb_lvl2 <- as.logical(verbose[2])

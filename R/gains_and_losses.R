@@ -38,26 +38,6 @@ gains_and_losses <- function(transaction_type,
 														 allow_short = FALSE,
 														 verbose = FALSE) {
 
-	# # checks on inputs
-	# # transaction_type
-	# msg <- check_var_types("transaction_type", class(transaction_type), "character", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # transaction_asset
-	# msg <- check_var_types("transaction_asset", class(transaction_asset), "character", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # transaction_quantity
-	# msg <- check_var_types("transaction_quantity", class(transaction_quantity), "integer", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # transaction_price
-	# msg <- check_var_types("transaction_price", class(transaction_price), "numeric", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # transaction_datetime
-	# msg <- check_var_types("transaction_datetime", class(transaction_datetime)[1], "POSIXct", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # previous_datetime
-	# msg <- check_var_types("previous_datetime", class(previous_datetime)[1], "POSIXct", multiple = FALSE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-
 	# verbosity
 	verb <- verbose
 

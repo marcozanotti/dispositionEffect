@@ -143,12 +143,11 @@ portfolio_compute <- function(portfolio_transactions,
 			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
 				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
 																						price_only = FALSE)[, -2]
-				#market_przs <- dplyr::arrange(market_przs, factor(!!rlang::sym("asset"), levels = ptf_assets))
 				market_przs <- market_przs[order(
 					factor(market_przs$asset, levels = ptf_assets),
 					method = "radix"),]
 			} else {
-				market_przs <- tibble::tibble("asset" = trx_asset, "price" = trx_prz)
+				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
 			}
 
 			# compute RG/RL/PG/PL

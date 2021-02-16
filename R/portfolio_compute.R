@@ -85,7 +85,7 @@ portfolio_compute <- function(portfolio_transactions,
 
 	# global parameters
 	investor_id <- portfolio_transactions$investor[1]
-	investor_assets <- sort(unique(portfolio_transactions$asset))
+	investor_assets <- sort(unique(portfolio_transactions$asset), method = "radix")
 	asset_numtrx <- portfolio_transactions %>%
 		dplyr::group_by(!!rlang::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
@@ -143,7 +143,10 @@ portfolio_compute <- function(portfolio_transactions,
 			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
 				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
 																						price_only = FALSE)[, -2]
-				market_przs <- dplyr::arrange(market_przs, factor(!!rlang::sym("asset"), levels = ptf_assets))
+				#market_przs <- dplyr::arrange(market_przs, factor(!!rlang::sym("asset"), levels = ptf_assets))
+				market_przs <- market_przs[order(
+					factor(market_przs$asset, levels = ptf_assets),
+					method = "radix"),]
 			} else {
 				market_przs <- tibble::tibble("asset" = trx_asset, "price" = trx_prz)
 			}

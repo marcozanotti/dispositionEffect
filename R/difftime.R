@@ -117,12 +117,15 @@ difftime_compare <- function(from,
 	units <- chrs[2]
 	value <- as.numeric(chrs[1])
 
-	dtt_diff <- difftime_financial(from, to, units = units)
-
-	if (dtt_diff >= value) {
-		res <- "greater"
+	if (value != 0) {
+		dtt_diff <- difftime_financial(from, to, units = units)
+		if (dtt_diff >= value) {
+			res <- "greater"
+		} else {
+			res <- "smaller"
+		}
 	} else {
-		res <- "smaller"
+		res <- "greater"
 	}
 
 	return(res)

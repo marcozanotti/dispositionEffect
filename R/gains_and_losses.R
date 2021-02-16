@@ -179,7 +179,10 @@ gains_and_losses <- function(transaction_type,
 
 	}
 
-	realized_paper_df <- dplyr::bind_cols(portfolio[1, "investor"], realized_paper_df)
+	realized_paper_df <- dplyr::bind_cols(
+		data.frame("investor" = portfolio[["investor"]][1]),
+		realized_paper_df
+	)
 
 	return(realized_paper_df)
 

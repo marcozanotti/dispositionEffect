@@ -245,8 +245,9 @@ update_realized_and_paper <- function(realized_and_paper,
 
 	assets <- new_realized_and_paper$asset
 	realized_and_paper_filtered <- realized_and_paper[realized_and_paper$asset %in% assets,]
-	realized_and_paper_filtered <- dplyr::arrange(realized_and_paper_filtered,
-																			 factor(!!rlang::sym("asset"), levels = assets))
+	realized_and_paper_filtered <- realized_and_paper_filtered[order(
+		factor(realized_and_paper_filtered$asset, levels = assets),
+		method = "radix"),]
 
 	# replace the realized_and_paper values corresponding to the assets present into new_realized_and_paper
 	# if values are NA, then they are simply replaced with the new values of new_realized_and_paper
@@ -381,9 +382,11 @@ update_realized_and_paper <- function(realized_and_paper,
 
 	}
 
-	realized_and_paper <- dplyr::rows_update(realized_and_paper,
-																					 realized_and_paper_filtered,
-																					 by = c("investor", "asset"))
+	realized_and_paper <- dplyr::rows_update(
+		realized_and_paper,
+		realized_and_paper_filtered,
+		by = c("investor", "asset")
+	)
 
 	return(realized_and_paper)
 

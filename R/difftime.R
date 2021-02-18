@@ -10,7 +10,9 @@
 #'   which the pre-market begins.
 #' @param after_market numeric or character representing the hour of the day at
 #'   which the after-market ends.
-#' @param time_threshold character in the format "value units" indicating the
+#' @param units Character string specifying a time unit.
+#'   (See \code{base::\link[base:difftime]{difftime}}).
+#' @param time_threshold Character in the format "value units" indicating the
 #'   time threshold at which the computed financial difftime has to be evaluated
 #'   (for instance "05 mins" or "20 hours").
 #'   The allowed units are "secs", "mins", "hours", "days" and "weeks"
@@ -63,10 +65,14 @@ NULL
 difftime_financial <- function(from,
 															 to,
 															 pre_market = 08,
-															 after_market = 22) {
+															 after_market = 22,
+															 units = "hours") {
 
-	upp_from <- as.POSIXct(paste0(as.Date(from), " ", after_market, ":00:00")) # upper bound first day
-	low_to <- as.POSIXct(paste0(as.Date(to), " ", pre_market, ":00:00")) # lower bound last day
+	from_date <- as.Date(from)
+	to_date <- as.Date(to)
+	upp_from <- paste0(from_date, " ", after_market, ":00:00") # upper bound first day
+	low_to <- paste0(to_date, " ", pre_market, ":00:00") # lower bound last day
+
 	if (from > upp_from) {
 		from <- upp_from
 	}
@@ -74,22 +80,22 @@ difftime_financial <- function(from,
 		to <- low_to
 	}
 
-	if (as.Date(from) == as.Date(to)) {
+	if (from_date == to_date) {
 		# if same date, then simple difftime by days
-		res <- difftime(to, from, units = "hours") %>% as.numeric()
+		res <- as.numeric(difftime(to, from, units = units))
 	} else {
 		# if different dates, then new difftime
-		s <- seq(as.Date(from), as.Date(to), by = "days") %>%
-			lubridate::wday(x = ., week_start = 1)
-		len <- which(s %in% 1:5) %>% length() - 2 # num working days -2 (first and last)
+		s <- lubridate::wday(seq(from_date, to_date, by = "days"), week_start = 1)
+		len <- sum(s %in% 1:5) - 2 # num working days -2 (first and last)
 		h <- after_market - pre_market # financial working hours in a day (from 8.00 to 19.00)
-		res <- len * h # total financial working hours between the two dates
-
-		res <- res + difftime(upp_from, from, units = "hours") %>% as.numeric()
-		res <- res + difftime(to, low_to, units = "hours") %>% as.numeric()
+		res <- as.numeric(
+			len * h + # total financial working "hours" (units) between the two dates
+				difftime(upp_from, from, units = units) +
+				difftime(to, low_to, units = units)
+		)
 	}
 
-	return(res) # return result in hours
+	return(res)
 
 }
 
@@ -103,21 +109,23 @@ difftime_compare <- function(from,
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
 	if (length(strsplit(time_threshold, "\\s")[[1]]) <= 1) {
-		stop(paste("Please correctly specify the time_threshold argument. Possibly a space is missing."))
+		stop(paste("Please correctly specify the time_threshold argument.
+							 Possibly a space is missing."))
 	}
 
-	units <- strsplit(time_threshold, "\\s")[[1]][2]
-	value <- strsplit(time_threshold, "\\s")[[1]][1] %>%
-		as.numeric()
+	chrs <- unlist(strsplit(time_threshold, "\\s"))
+	units <- chrs[2]
+	value <- as.numeric(chrs[1])
 
-	dtt_diff <- difftime_financial(from, to) %>%
-		as.difftime(units = "hours") %>% # difftime_financial returns in hours
-		as.numeric(units = units)
-
-	if (dtt_diff >= value) {
-		res <- "greater"
+	if (value != 0) {
+		dtt_diff <- difftime_financial(from, to, units = units)
+		if (dtt_diff >= value) {
+			res <- "greater"
+		} else {
+			res <- "smaller"
+		}
 	} else {
-		res <- "smaller"
+		res <- "greater"
 	}
 
 	return(res)

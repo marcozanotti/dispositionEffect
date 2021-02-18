@@ -23,6 +23,7 @@
 #' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
+#' @param ... Further arguments to be passed to \code{portfolio_compute}.
 #'
 #' @return A [tibble][tibble::tibble-package] containing the investor's
 #'   portfolio and the values of realized and paper gains and losses
@@ -40,44 +41,11 @@ portfolio_compute <- function(portfolio_transactions,
 														  market_prices,
 														  method = "all",
 														  allow_short = TRUE,
-														  unit = "15 mins",
 														  time_threshold = "0 mins",
 														  posneg_portfolios = FALSE,
 														  portfolio_statistics = FALSE,
 														  verbose = c(0, 0),
 														  progress = FALSE) {
-
-	# checks on inputs
-	# assumes that portfolio_transactions is ordered by datetime
-
-	# # portfolio_transactions column names
-	# msg <- check_df_names("portfolio_transactions", names(portfolio_transactions),
-	# 											c("client", "type", "asset", "qty", "prz", "datetime"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # portfolio_transactions column types
-	# typ <- purrr::map(portfolio_transactions, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("portfolio_transactions", typ,
-	# 											 c("client" = "character", "type" = "character",
-	# 											 	"asset" = "character", "qty" = "integer",
-	# 											 	"prz" = "numeric", "datetime" = "POSIXct"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # portfolio_transactions column "type" values
-	# msg <- check_values("portfolio_transactions$type", unique(portfolio_transactions$type), c("B", "S"), identical = TRUE)
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # market_prices column names
-	# msg <- check_df_names("market_prices", names(market_prices),
-	# 											c("asset", "datetime", "prz", "qty"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # market_prices column types
-	# typ <- purrr::map(market_prices, class) %>% purrr::map(1) %>% unlist()
-	# msg <- check_var_types("market_prices", typ,
-	# 											 c("asset" = "character", "datetime" = "POSIXct",
-	# 											 	"qty" = "integer", "prz" = "numeric"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
-	# # method values
-	# msg <- check_values("method", method,
-	# 										c("count", "total", "value", "duration", "all", "none"))
-	# if (!is.null(msg)) { stop(msg, call. = FALSE) }
 
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
@@ -85,7 +53,7 @@ portfolio_compute <- function(portfolio_transactions,
 
 	# global parameters
 	investor_id <- portfolio_transactions$investor[1]
-	investor_assets <- unique(portfolio_transactions$asset)
+	investor_assets <- sort(unique(portfolio_transactions$asset), method = "radix")
 	asset_numtrx <- portfolio_transactions %>%
 		dplyr::group_by(!!rlang::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
@@ -106,11 +74,11 @@ portfolio_compute <- function(portfolio_transactions,
 	# progress bar
 	if (progress) {
 		# initialize progress bar
-		pb <- progress::progress_bar$new(format = ":current  [:bar] :percent in :elapsed\n\n",
-													           total = nrow(portfolio_transactions),
-													           clear = FALSE,
-																		 width = 60,
-																		 show_after = 0)
+		pb <- progress::progress_bar$new(
+			format = ":current  [:bar] :percent in :elapsed\n\n",
+			total = nrow(portfolio_transactions),
+			clear = FALSE, width = 60, show_after = 0
+		)
 		pb$tick(0)
 	}
 
@@ -124,35 +92,60 @@ portfolio_compute <- function(portfolio_transactions,
 		trx_dtt <- portfolio_transactions[i, ]$datetime # trx datetime
 		previous_dtt <- portfolio_transactions[i - 1, ]$datetime
 
-		if (trx_type == "S") { # if it's a sell transaction then consider qty as negative
-			trx_qty <- trx_qty * -1L
-		}
+		# if it's a sell transaction then consider qty as negative
+		if (trx_type == "S") { trx_qty <- trx_qty * -1L }
 
-		# compute RG/RL/PG/PL
-		if (method != "none") {
+		# extract assets already into portfolio
+		ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
+
+		market_przs <- gainloss_df <- portfolio_value <- NULL
+
+		# if method is not "none" and the portfolio is not empty (initial condition),
+		# then calls closest_market_price, gains_and_losses and evaluate_portfolio
+		if (method != "none" && length(ptf_assets) > 0) {
+
+			# think about filter out from market prices all what happened before trx_dtt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+			# if the portfolio contains more assets than the traded asset, then extract
+			# the market prices at transaction_datetime of all the portfolio assets
+			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
+				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
+																						price_only = FALSE)[, -2]
+				market_przs <- market_przs[order(
+					factor(market_przs$asset, levels = ptf_assets),
+					method = "radix"),]
+			} else {
+				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
+			}
+
+			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
-			gainloss_df <- gains_and_losses(trx_type,
-																	    trx_asset,
-																	    trx_qty,
-																	    trx_prz,
-																	    trx_dtt,
-																	    previous_dtt,
-																	    portfolio,
-																	    market_prices,
-																			unit,
-																	    time_threshold,
-																	    method,
-																	    allow_short,
-																	    verb_lvl2)
-		}
+			gainloss_df <- gains_and_losses(transaction_type = trx_type,
+																			transaction_asset = trx_asset,
+																			transaction_quantity = trx_qty,
+																			transaction_price = trx_prz,
+																			transaction_datetime = trx_dtt,
+																			previous_datetime = previous_dtt,
+																			portfolio = portfolio,
+																			market_prices = market_przs,
+																			time_threshold = time_threshold,
+																			method = method,
+																			allow_short = allow_short,
+																			verbose = verb_lvl2)
+			if (method %in% c("value", "all")) {
+				chk_gl <- check_gainloss(gainloss_df)
+				if (!is.null(chk_gl)) {
+					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl))
+				}
+			}
 
-		# evaluate global portfolio value
-		if (verb_lvl1) message("Evaluating global portfolio position..")
-		portfolio_value <- evaluate_portfolio(portfolio,
-																					trx_dtt,
-																					market_prices,
-																					unit,
-																					portfolio_statistics)
+			# evaluate global portfolio value
+			if (verb_lvl1) message("Evaluating global portfolio position..")
+			portfolio_value <- evaluate_portfolio(portfolio = portfolio,
+																						market_prices = market_przs,
+																						portfolio_statistics)
+
+		}
 
 		# update the portfolio
 		if (verb_lvl1) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))
@@ -165,8 +158,6 @@ portfolio_compute <- function(portfolio_transactions,
 
 		# update the results_df
 		if (method != "none" && !is.null(gainloss_df)) {
-			# if empty portfolio, then gains_and_losses() returns NULL
-			# if empty portfolio, then evaluate_portfolio() returns NULL
 			if (verb_lvl1) message("Updating realized and paper results..")
 			if (!posneg_portfolios) {
 				results_df <- update_realized_and_paper(results_df, gainloss_df, method)
@@ -183,20 +174,25 @@ portfolio_compute <- function(portfolio_transactions,
 		if (verb_lvl1) message("Done!")
 		if (progress) { pb$tick() } # update progress bar
 
+		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt,
+			 ptf_assets, market_przs, gainloss_df, portfolio_value)
+
+
 	} # close loop
 
 
-	# compute the mean expected return for RG, RL, PG, and PL
-	if (!posneg_portfolios) {
-		results_df <- update_expectedvalue(results_df, asset_numtrx)
-	} else {
-		if (portfolio_value >= 0) {
-			pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
+	# compute the mean expected return for RG, RL, PG, and PL value
+	if (method %in% c("value", "all")) {
+		if (!posneg_portfolios) {
+			results_df <- update_expectedvalue(results_df, asset_numtrx)
 		} else {
-			neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
+			if (portfolio_value >= 0) {
+				pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
+			} else {
+				neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
+			}
 		}
 	}
-
 
 	# join the dataframes and return a single result dataframe
 	if (method != "none") {
@@ -206,8 +202,8 @@ portfolio_compute <- function(portfolio_transactions,
 			pos_results_df$type <- "positive"
 			neg_results_df$type <- "negative"
 			results_df <- dplyr::bind_rows(pos_results_df, neg_results_df)
-			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset")) %>%
-				dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("datetime"))
+			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
+		  final_res <- dplyr::relocate(!!rlang::sym("type"), .after = !!rlang::sym("datetime"))
 		}
 
 	} else {

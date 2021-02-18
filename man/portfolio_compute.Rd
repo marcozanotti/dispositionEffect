@@ -10,7 +10,6 @@ portfolio_compute(
   market_prices,
   method = "all",
   allow_short = TRUE,
-  unit = "15 mins",
   time_threshold = "0 mins",
   posneg_portfolios = FALSE,
   portfolio_statistics = FALSE,
@@ -33,11 +32,7 @@ investor's portfolio update. Otherwise it has to be one of "count", "total",
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
 
-\item{unit}{Character string specifying a time unit or a multiple of a
-unit to be rounded to. Valid base units are second, minute, hour, day,
-week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.}
-
-\item{time_threshold}{character in the format "value units" indicating the
+\item{time_threshold}{Character in the format "value units" indicating the
 time threshold at which the computed financial difftime has to be evaluated
 (for instance "05 mins" or "20 hours").
 The allowed units are "secs", "mins", "hours", "days" and "weeks"
@@ -57,6 +52,8 @@ on the portfolio and returned.}
 for the function verbosity.}
 
 \item{progress}{Logical. If TRUE a progress bar is displayed.}
+
+\item{...}{Further arguments to be passed to \code{portfolio_compute}.}
 }
 \value{
 A \link[tibble:tibble-package]{tibble} containing the investor's

@@ -2,37 +2,13 @@
 % Please edit documentation in R/utils-checks.R
 \name{checks}
 \alias{checks}
-\alias{check_df_names}
-\alias{check_values}
-\alias{check_var_types}
+\alias{check_gainloss}
 \title{Checks functions}
 \usage{
-check_df_names(df_name, df_names, target_names)
-
-check_values(input_name, input_values, target_values, identical = FALSE)
-
-check_var_types(input_name, input_types, target_types, multiple = TRUE)
+check_gainloss(df)
 }
 \arguments{
-\item{df_name}{Chr}
-
-\item{df_names}{Chr}
-
-\item{target_names}{Chr}
-
-\item{input_name}{Chr}
-
-\item{input_values}{Chr}
-
-\item{target_values}{Chr}
-
-\item{identical}{Lgl}
-
-\item{input_types}{Chr}
-
-\item{target_types}{Chr}
-
-\item{multiple}{Lgl}
+\item{df}{Data frame}
 }
 \value{
 A character string containing an error message or NULL.
@@ -42,11 +18,7 @@ Functions to perform checks on arguments.
 }
 \section{Functions}{
 \itemize{
-\item \code{check_df_names}: Check consistency of data frame variables' names.
-
-\item \code{check_values}: Check consistency of values.
-
-\item \code{check_var_types}: Check consistency of variables' types.
+\item \code{check_gainloss}: Check consistency of gains and losses "values" results.
 }}
 
 \keyword{internal}

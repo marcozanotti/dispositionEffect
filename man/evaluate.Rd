@@ -5,24 +5,12 @@
 \alias{evaluate_portfolio}
 \title{Portfolio evaluation}
 \usage{
-evaluate_portfolio(
-  portfolio,
-  transaction_datetime,
-  market_prices,
-  unit = "15 mins",
-  portfolio_statistics = FALSE
-)
+evaluate_portfolio(portfolio, market_prices, portfolio_statistics = FALSE)
 }
 \arguments{
 \item{portfolio}{Data frame of the investor's portfolio at time t.}
 
-\item{transaction_datetime}{POSIXct value of the transaction date.}
-
 \item{market_prices}{Data frame containing the market prices.}
-
-\item{unit}{Character string specifying a time unit or a multiple of a
-unit to be rounded to. Valid base units are second, minute, hour, day,
-week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.}
 
 \item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}

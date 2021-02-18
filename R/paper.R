@@ -10,6 +10,9 @@
 #'   investor's portfolio.
 #' @param market_price Numeric vector. The market prices of assets into the
 #'   investor's portfolio.
+#' @param datetime_difference Numeric value of time difference between the previous_datetime
+#'   and the transaction_datetime, computed through \code{\link{difftime_financial}}.
+#'   If NULL, then previous_datetime and transaction_datetime must be specified.
 #' @param previous_datetime POSIXct value. The date-time of the last transaction
 #'   performed by the investor.
 #' @param transaction_datetime POSIXct value. The date-time at which the transaction
@@ -63,12 +66,6 @@ paper_count <- function(portfolio_quantity,
 												market_price,
 												allow_short = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(market_price)) {
-		stop("Arguments must be numeric.", call. = FALSE)
-	}
-
 	prz_diff <- market_price - portfolio_price # price difference
 
 	if (allow_short) {
@@ -105,12 +102,6 @@ paper_total <- function(portfolio_quantity,
 												portfolio_price,
 												market_price,
 												allow_short = FALSE) {
-
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(market_price)) {
-		stop("Arguments must be numeric.", call. = FALSE)
-	}
 
 	prz_diff <- market_price - portfolio_price # price difference
 
@@ -149,12 +140,6 @@ paper_value <- function(portfolio_quantity,
 												market_price,
 												allow_short = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(market_price)) {
-		stop("Arguments must be numeric.", call. = FALSE)
-	}
-
 	prz_diff <- market_price - portfolio_price # price difference
 	Er <- prz_diff / portfolio_price # asset expected return
 
@@ -191,26 +176,18 @@ paper_value <- function(portfolio_quantity,
 paper_duration <- function(portfolio_quantity,
 													 portfolio_price,
 													 market_price,
-													 previous_datetime,
-													 transaction_datetime,
+													 datetime_difference = NULL,
+													 previous_datetime = NULL,
+													 transaction_datetime = NULL,
 													 allow_short = FALSE) {
 
-	if (!is.numeric(portfolio_quantity) ||
-			!is.numeric(portfolio_price) ||
-			!is.numeric(market_price)) {
-		stop("Arguments *qty and *prz must be numeric.", call. = FALSE)
-	}
-
-	if (!lubridate::is.POSIXct(previous_datetime) ||
-			!lubridate::is.POSIXct(transaction_datetime)) {
-		stop("Arguments *dtt must be POSIXct.", call. = FALSE)
-	}
-
 	prz_diff <- market_price - portfolio_price # price difference
-	# dtt_diff <- difftime(transaction_datetime, previous_datetime, units = "days") %>% # duration
-	#   as.numeric() # to avoid conversion errors
-	dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
-	# by default the duration returned is in days, conversion is left to the user
+	if (is.null(datetime_difference)) {
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
+	} else {
+		dtt_diff <- datetime_difference
+	}
+
 
 	if (allow_short) {
 		if (portfolio_quantity > 0 && prz_diff > 0) { # Long - Paper Gain
@@ -236,8 +213,6 @@ paper_duration <- function(portfolio_quantity,
 
 	return(res)
 
-
-
 }
 
 
@@ -255,64 +230,83 @@ paper_compute <- function(portfolio_quantity,
 
 	if (method == "count") {
 
-		# compute Paper Gain and Paper Loss with paper_count()
-		pgl_count <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_count, allow_short)
-		names(pgl_count) <- assets
-		# convert results to a df
-		res_df <- do.call(rbind, pgl_count) %>%
-			as.data.frame() %>%
-			tibble::rownames_to_column(.data = ., var = "asset")
+		pgl_count <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_count,
+			allow_short
+		)
+		res_df <- as.data.frame(do.call(rbind, pgl_count))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "total") {
 
-		# compute Paper Gain and Paper Loss with paper_total()
-		pgl_total <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_total, allow_short)
-		names(pgl_total) <- assets
-		# convert results to a df
-		res_df <- do.call(rbind, pgl_total) %>%
-			as.data.frame() %>%
-			tibble::rownames_to_column(.data = ., var = "asset")
+		pgl_total <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_total,
+			allow_short
+		)
+		res_df <- as.data.frame(do.call(rbind, pgl_total))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "value") {
 
-		# compute Paper Gain and Paper Loss values with paper_value()
-		pgl_value <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_value, allow_short)
-		names(pgl_value) <- assets
-		# convert results to a df
-		res_df <- do.call(rbind, pgl_value) %>%
-			as.data.frame() %>%
-			tibble::rownames_to_column(.data = ., var = "asset")
+		pgl_value <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_value,
+			allow_short
+		)
+		res_df <- as.data.frame(do.call(rbind, pgl_value))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else if (method == "duration") {
 
-		# compute Paper Gain and Paper Loss duration with paper_duration()
-		pgl_duration <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_duration,
-												 previous_datetime, transaction_datetime, allow_short)
-		names(pgl_duration) <- assets
-		# convert results to a df
-		res_df <- do.call(rbind, pgl_duration) %>%
-			as.data.frame() %>%
-			tibble::rownames_to_column(.data = ., var = "asset")
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
+		pgl_duration <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_duration,
+			datetime_difference = dtt_diff, allow_short = allow_short
+		)
+		res_df <- as.data.frame(do.call(rbind, pgl_duration))
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	} else {# method == "all"
 
-		# compute Paper Gain and Paper Loss with all functions and wrap-up results
-		pgl_count <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_count, allow_short)
-		pgl_total <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_total, allow_short)
-		pgl_value <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_value, allow_short)
-		pgl_duration <- purrr::pmap(list(portfolio_quantity, portfolio_price, market_price), paper_duration,
-												             previous_datetime, transaction_datetime, allow_short)
-		names(pgl_count) <- names(pgl_total) <- names(pgl_value) <- names(pgl_duration) <- assets
-		# convert results to a df
-		res_df <- cbind(do.call(rbind, pgl_count) %>% as.data.frame(), # as.data.frame() because as_tibble() removes rownames
-										do.call(rbind, pgl_total) %>% as.data.frame(),
-										do.call(rbind, pgl_value) %>% as.data.frame(),
-										do.call(rbind, pgl_duration) %>% as.data.frame()) %>%
-			tibble::rownames_to_column(.data = ., var = "asset")
+		pgl_count <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_count,
+			allow_short
+		)
+		pgl_total <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_total,
+			allow_short
+		)
+		pgl_value <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_value,
+			allow_short
+		)
+		dtt_diff <- difftime_financial(previous_datetime, transaction_datetime)
+		pgl_duration <- purrr::pmap(
+			list(portfolio_quantity, portfolio_price, market_price),
+			paper_duration,
+			datetime_difference = dtt_diff, allow_short = allow_short
+		)
+		res_df <- dplyr::bind_cols(
+			as.data.frame(do.call(rbind, pgl_count)),
+			as.data.frame(do.call(rbind, pgl_total)),
+			as.data.frame(do.call(rbind, pgl_value)),
+			as.data.frame(do.call(rbind, pgl_duration)),
+		)
+		res_df[["asset"]] <- assets
+		res_df <- res_df[c(ncol(res_df), 1:(ncol(res_df) - 1))]
 
 	}
 
-	res_df <- tibble::as_tibble(res_df)
 	return(res_df)
 
 }

@@ -37,15 +37,17 @@
 #'   \code{\link{gains_and_losses}}
 #'
 #' @export
-portfolio_compute <- function(portfolio_transactions,
-														  market_prices,
-														  method = "all",
-														  allow_short = TRUE,
-														  time_threshold = "0 mins",
-														  posneg_portfolios = FALSE,
-														  portfolio_statistics = FALSE,
-														  verbose = c(0, 0),
-														  progress = FALSE) {
+portfolio_compute <- function(
+	portfolio_transactions,
+	market_prices,
+	method = "all",
+	allow_short = TRUE,
+	time_threshold = "0 mins",
+	posneg_portfolios = FALSE,
+	portfolio_statistics = FALSE,
+	verbose = c(0, 0),
+	progress = FALSE
+) {
 
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
@@ -120,18 +122,20 @@ portfolio_compute <- function(portfolio_transactions,
 
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
-			gainloss_df <- gains_and_losses(transaction_type = trx_type,
-																			transaction_asset = trx_asset,
-																			transaction_quantity = trx_qty,
-																			transaction_price = trx_prz,
-																			transaction_datetime = trx_dtt,
-																			previous_datetime = previous_dtt,
-																			portfolio = portfolio,
-																			market_prices = market_przs,
-																			time_threshold = time_threshold,
-																			method = method,
-																			allow_short = allow_short,
-																			verbose = verb_lvl2)
+			gainloss_df <- gains_and_losses(
+				transaction_type = trx_type,
+				transaction_asset = trx_asset,
+				transaction_quantity = trx_qty,
+				transaction_price = trx_prz,
+				transaction_datetime = trx_dtt,
+				previous_datetime = previous_dtt,
+				portfolio = portfolio,
+				market_prices = market_przs,
+				time_threshold = time_threshold,
+				method = method,
+				allow_short = allow_short,
+				verbose = verb_lvl2
+			)
 			if (method %in% c("value", "all")) {
 				chk_gl <- check_gainloss(gainloss_df)
 				if (!is.null(chk_gl)) {
@@ -141,20 +145,17 @@ portfolio_compute <- function(portfolio_transactions,
 
 			# evaluate global portfolio value
 			if (verb_lvl1) message("Evaluating global portfolio position..")
-			portfolio_value <- evaluate_portfolio(portfolio = portfolio,
-																						market_prices = market_przs,
-																						portfolio_statistics)
+			portfolio_value <- evaluate_portfolio(
+				portfolio = portfolio,
+				market_prices = market_przs,
+				portfolio_statistics
+			)
 
 		}
 
 		# update the portfolio
 		if (verb_lvl1) message(paste0("Updating portfolio.. (", trx_asset, " asset)"))
-		portfolio <- update_portfolio(portfolio,
-																	trx_asset,
-																	trx_qty,
-																	trx_prz,
-																	trx_dtt,
-																	trx_type)
+		portfolio <- update_portfolio(portfolio, trx_asset, trx_qty, trx_prz, trx_dtt, trx_type)
 
 		# update the results_df
 		if (method != "none" && !is.null(gainloss_df)) {
@@ -174,8 +175,7 @@ portfolio_compute <- function(portfolio_transactions,
 		if (verb_lvl1) message("Done!")
 		if (progress) { pb$tick() } # update progress bar
 
-		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt,
-			 ptf_assets, market_przs, gainloss_df, portfolio_value)
+		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt, ptf_assets, market_przs, gainloss_df, portfolio_value)
 
 
 	} # close loop

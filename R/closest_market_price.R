@@ -19,22 +19,23 @@
 #'   \code{lubridate::\link[lubridate:round_date]{round_date}}
 #'
 #' @export
-closest_market_price <- function(asset,
-																 datetime,
-																 market_prices,
-																 price_only = FALSE) {
+closest_market_price <- function(
+	asset,
+	datetime,
+	market_prices,
+	price_only = FALSE
+) {
 
 	# filter historical przs for asset and datetime
-	res <- market_prices[market_prices$asset %in% asset &
-											 	market_prices$datetime <= datetime, ]
+	res <- market_prices[market_prices$asset %in% asset & market_prices$datetime <= datetime, ]
+
 	# extract the closest date which is before the datetime
 	res <-
 		as.data.frame(
 			dplyr::ungroup(
 				dplyr::slice(
-					dplyr::group_by(
-						res, !!rlang::sym("asset")
-					), dplyr::n()
+					dplyr::group_by(res, !!rlang::sym("asset")),
+					dplyr::n()
 				)
 			)
 		)

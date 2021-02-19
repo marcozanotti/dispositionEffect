@@ -62,11 +62,7 @@ NULL
 #'   actual financial difftime taking into account pre and after market
 #'   moments and financial markets closing days.
 #' @export
-difftime_financial <- function(from,
-															 to,
-															 pre_market = 08,
-															 after_market = 22,
-															 units = "hours") {
+difftime_financial <- function(from, to, pre_market = 08,	after_market = 22, units = "hours") {
 
 	from_date <- as.Date(from)
 	to_date <- as.Date(to)
@@ -103,14 +99,11 @@ difftime_financial <- function(from,
 #' @describeIn difference_in_time Comparison of the \code{difftime_financial}
 #'   with respect to a given time threshold.
 #' @export
-difftime_compare <- function(from,
-														 to,
-														 time_threshold = "0 mins") {
+difftime_compare <- function(from, to, time_threshold = "0 mins") {
 	# units = c("secs", "mins", "hours", "days", "weeks")
 
 	if (length(strsplit(time_threshold, "\\s")[[1]]) <= 1) {
-		stop(paste("Please correctly specify the time_threshold argument.
-							 Possibly a space is missing."))
+		stop(paste("Please correctly specify the time_threshold argument. Possibly a space is missing."))
 	}
 
 	chrs <- unlist(strsplit(time_threshold, "\\s"))

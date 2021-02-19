@@ -53,11 +53,7 @@ NULL
 
 #' @describeIn updates Update the portfolio price of the traded asset.
 #' @export
-update_price <- function(portfolio_quantity,
-											   portfolio_price,
-											   transaction_quantity,
-											   transaction_price,
-											   transaction_type) {
+update_price <- function(portfolio_quantity, portfolio_price, transaction_quantity, transaction_price, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
 
@@ -85,14 +81,12 @@ update_price <- function(portfolio_quantity,
 
 	} else if (portfolio_quantity > 0 && transaction_type == "B") {
 
-		new_prz <- (portfolio_price * portfolio_quantity +
-									transaction_price * abs(transaction_quantity)) /
+		new_prz <- (portfolio_price * portfolio_quantity + transaction_price * abs(transaction_quantity)) /
 			(portfolio_quantity + abs(transaction_quantity))
 
 	} else if (portfolio_quantity < 0 && transaction_type == "S") {
 
-		new_prz <- (portfolio_price * abs(portfolio_quantity) +
-									transaction_price * abs(transaction_quantity)) /
+		new_prz <- (portfolio_price * abs(portfolio_quantity) + transaction_price * abs(transaction_quantity)) /
 			(abs(portfolio_quantity) + abs(transaction_quantity))
 
 	} else if (portfolio_quantity > 0 && transaction_type == "S") {
@@ -120,11 +114,7 @@ update_price <- function(portfolio_quantity,
 
 #' @describeIn updates Update the portfolio datetime of the traded asset.
 #' @export
-update_datetime <- function(portfolio_quantity,
-											      portfolio_datetime,
-											      transaction_quantity,
-											      transaction_datetime,
-											      transaction_type) {
+update_datetime <- function(portfolio_quantity, portfolio_datetime, transaction_quantity, transaction_datetime, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
 
@@ -186,8 +176,7 @@ update_datetime <- function(portfolio_quantity,
 
 #' @describeIn updates Update the portfolio quantity of the traded asset.
 #' @export
-update_quantity <- function(portfolio_quantity,
-											      transaction_quantity) {
+update_quantity <- function(portfolio_quantity, transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
 	# summing up the transaction quantity
@@ -202,12 +191,7 @@ update_quantity <- function(portfolio_quantity,
 #' @describeIn updates Update the portfolio with the new quantity, price
 #'   and datetime of the traded asset.
 #' @export
-update_portfolio <- function(portfolio,
-														 transaction_asset,
-														 transaction_quantity,
-														 transaction_price,
-														 transaction_datetime,
-														 transaction_type) {
+update_portfolio <- function(portfolio, transaction_asset, transaction_quantity, transaction_price, transaction_datetime, transaction_type) {
 
 	# qty, prz and dtt of transaction asset already into portfolio
 	ptf_qty <- portfolio[portfolio$asset == transaction_asset, ]$quantity
@@ -239,9 +223,7 @@ update_portfolio <- function(portfolio,
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results with the results obtained on the last occurred transaction.
 #' @export
-update_realized_and_paper <- function(realized_and_paper,
-													            new_realized_and_paper,
-													            method = "all") {
+update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper, method = "all") {
 
 	assets <- new_realized_and_paper$asset
 	realized_and_paper_filtered <- realized_and_paper[realized_and_paper$asset %in% assets,]
@@ -259,126 +241,212 @@ update_realized_and_paper <- function(realized_and_paper,
 	if (method == "count") {
 
 		realized_and_paper_filtered[["RG_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_count"]]), new_realized_and_paper$RG_count,
-									 realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_count"]]),
+				new_realized_and_paper$RG_count,
+				realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count
+			)
 		realized_and_paper_filtered[["RL_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_count"]]), new_realized_and_paper$RL_count,
-						 realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_count"]]),
+				new_realized_and_paper$RL_count,
+				realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count
+			)
 		realized_and_paper_filtered[["PG_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_count"]]), new_realized_and_paper$PG_count,
-						 realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_count"]]),
+				new_realized_and_paper$PG_count,
+				realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count
+			)
 		realized_and_paper_filtered[["PL_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_count"]]), new_realized_and_paper$PL_count,
-						 realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_count"]]),
+				new_realized_and_paper$PL_count,
+				realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count
+			)
 
 	} else if (method == "total") {
 
 		realized_and_paper_filtered[["RG_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_total"]]), new_realized_and_paper$RG_total,
-						 realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_total"]]),
+				new_realized_and_paper$RG_total,
+				realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total
+			)
 		realized_and_paper_filtered[["RL_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_total"]]), new_realized_and_paper$RL_total,
-						 realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_total"]]),
+				new_realized_and_paper$RL_total,
+				realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total
+			)
 		realized_and_paper_filtered[["PG_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_total"]]), new_realized_and_paper$PG_total,
-						 realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_total"]]),
+				new_realized_and_paper$PG_total,
+				realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total
+			)
 		realized_and_paper_filtered[["PL_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_total"]]), new_realized_and_paper$PL_total,
-						 realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_total"]]),
+				new_realized_and_paper$PL_total,
+				realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total
+			)
 
 	} else if (method == "value") {
 
 		realized_and_paper_filtered[["RG_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_value"]]), new_realized_and_paper$RG_value,
-						 realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_value"]]),
+				new_realized_and_paper$RG_value,
+				realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value
+			)
 		realized_and_paper_filtered[["RL_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_value"]]), new_realized_and_paper$RL_value,
-						 realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_value"]]),
+				new_realized_and_paper$RL_value,
+				realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value
+			)
 		realized_and_paper_filtered[["PG_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_value"]]), new_realized_and_paper$PG_value,
-						 realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_value"]]),
+				new_realized_and_paper$PG_value,
+				realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value
+			)
 		realized_and_paper_filtered[["PL_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_value"]]), new_realized_and_paper$PL_value,
-						 realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value)
-		# dplyr::mutate(realized_and_paper
-		#   RG_value = dplyr::case_when(is.na(RG_value) ~ new_realized_and_paper$RG_value,
-		#                               TRUE ~ ewise_mean(RG_value, new_realized_and_paper$RG_value, zero.rm = TRUE)),
-		#   RL_value = dplyr::case_when(is.na(RL_value) ~ new_realized_and_paper$RL_value,
-		#                               TRUE ~ ewise_mean(RL_value, new_realized_and_paper$RL_value, zero.rm = TRUE)),
-		#   PG_value = dplyr::case_when(is.na(PG_value) ~ new_realized_and_paper$PG_value,
-		#                               TRUE ~ ewise_mean(PG_value, new_realized_and_paper$PG_value, zero.rm = TRUE)),
-		#   PL_value = dplyr::case_when(is.na(PL_value) ~ new_realized_and_paper$PL_value,
-		#                               TRUE ~ ewise_mean(PL_value, new_realized_and_paper$PL_value, zero.rm = TRUE))
-		#   )
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_value"]]),
+				new_realized_and_paper$PL_value,
+				realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value
+			)
 
 	} else if (method == "duration") {
 
 		realized_and_paper_filtered[["RG_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_duration"]]), new_realized_and_paper$RG_duration,
-						 realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_duration"]]),
+				new_realized_and_paper$RG_duration,
+				realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration
+			)
 		realized_and_paper_filtered[["RL_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_duration"]]), new_realized_and_paper$RL_duration,
-						 realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_duration"]]),
+				new_realized_and_paper$RL_duration,
+				realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration
+			)
 		realized_and_paper_filtered[["PG_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_duration"]]), new_realized_and_paper$PG_duration,
-						 realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_duration"]]),
+				new_realized_and_paper$PG_duration,
+				realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration
+			)
 		realized_and_paper_filtered[["PL_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_duration"]]), new_realized_and_paper$PL_duration,
-						 realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_duration"]]),
+				new_realized_and_paper$PL_duration,
+				realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration
+			)
 
 	} else {# method == "all"
 
 		realized_and_paper_filtered[["RG_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_count"]]), new_realized_and_paper$RG_count,
-						 realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_count"]]),
+				new_realized_and_paper$RG_count,
+				realized_and_paper_filtered[["RG_count"]] + new_realized_and_paper$RG_count
+			)
 		realized_and_paper_filtered[["RL_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_count"]]), new_realized_and_paper$RL_count,
-						 realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_count"]]),
+				new_realized_and_paper$RL_count,
+				realized_and_paper_filtered[["RL_count"]] + new_realized_and_paper$RL_count
+			)
 		realized_and_paper_filtered[["PG_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_count"]]), new_realized_and_paper$PG_count,
-						 realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_count"]]),
+			  new_realized_and_paper$PG_count,
+				realized_and_paper_filtered[["PG_count"]] + new_realized_and_paper$PG_count
+			)
 		realized_and_paper_filtered[["PL_count"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_count"]]), new_realized_and_paper$PL_count,
-						 realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_count"]]),
+				new_realized_and_paper$PL_count,
+				realized_and_paper_filtered[["PL_count"]] + new_realized_and_paper$PL_count
+			)
 
 		realized_and_paper_filtered[["RG_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_total"]]), new_realized_and_paper$RG_total,
-						 realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_total"]]),
+				new_realized_and_paper$RG_total,
+				realized_and_paper_filtered[["RG_total"]] + new_realized_and_paper$RG_total
+			)
 		realized_and_paper_filtered[["RL_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_total"]]), new_realized_and_paper$RL_total,
-						 realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_total"]]),
+				new_realized_and_paper$RL_total,
+				realized_and_paper_filtered[["RL_total"]] + new_realized_and_paper$RL_total
+			)
 		realized_and_paper_filtered[["PG_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_total"]]), new_realized_and_paper$PG_total,
-						 realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_total"]]),
+				new_realized_and_paper$PG_total,
+				realized_and_paper_filtered[["PG_total"]] + new_realized_and_paper$PG_total
+			)
 		realized_and_paper_filtered[["PL_total"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_total"]]), new_realized_and_paper$PL_total,
-						 realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_total"]]),
+				new_realized_and_paper$PL_total,
+				realized_and_paper_filtered[["PL_total"]] + new_realized_and_paper$PL_total
+			)
 
 		realized_and_paper_filtered[["RG_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_value"]]), new_realized_and_paper$RG_value,
-						 realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_value"]]),
+				new_realized_and_paper$RG_value,
+				realized_and_paper_filtered[["RG_value"]] + new_realized_and_paper$RG_value
+			)
 		realized_and_paper_filtered[["RL_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_value"]]), new_realized_and_paper$RL_value,
-						 realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_value"]]),
+				new_realized_and_paper$RL_value,
+				realized_and_paper_filtered[["RL_value"]] + new_realized_and_paper$RL_value
+			)
 		realized_and_paper_filtered[["PG_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_value"]]), new_realized_and_paper$PG_value,
-						 realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_value"]]),
+				new_realized_and_paper$PG_value,
+				realized_and_paper_filtered[["PG_value"]] + new_realized_and_paper$PG_value
+			)
 		realized_and_paper_filtered[["PL_value"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_value"]]), new_realized_and_paper$PL_value,
-						 realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_value"]]),
+				new_realized_and_paper$PL_value,
+				realized_and_paper_filtered[["PL_value"]] + new_realized_and_paper$PL_value
+			)
 
 		realized_and_paper_filtered[["RG_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RG_duration"]]), new_realized_and_paper$RG_duration,
-						 realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RG_duration"]]),
+				new_realized_and_paper$RG_duration,
+				realized_and_paper_filtered[["RG_duration"]] + new_realized_and_paper$RG_duration
+			)
 		realized_and_paper_filtered[["RL_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["RL_duration"]]), new_realized_and_paper$RL_duration,
-						 realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["RL_duration"]]),
+				new_realized_and_paper$RL_duration,
+				realized_and_paper_filtered[["RL_duration"]] + new_realized_and_paper$RL_duration
+			)
 		realized_and_paper_filtered[["PG_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PG_duration"]]), new_realized_and_paper$PG_duration,
-						 realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PG_duration"]]),
+				new_realized_and_paper$PG_duration,
+				realized_and_paper_filtered[["PG_duration"]] + new_realized_and_paper$PG_duration
+			)
 		realized_and_paper_filtered[["PL_duration"]] <-
-			ifelse(is.na(realized_and_paper_filtered[["PL_duration"]]), new_realized_and_paper$PL_duration,
-						 realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration)
+			ifelse(
+				is.na(realized_and_paper_filtered[["PL_duration"]]),
+				new_realized_and_paper$PL_duration,
+				realized_and_paper_filtered[["PL_duration"]] + new_realized_and_paper$PL_duration
+			)
 
 	}
 
@@ -398,8 +466,7 @@ update_realized_and_paper <- function(realized_and_paper,
 #'   for each asset.
 #' @export
 #  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-update_expectedvalue <- function(realized_and_paper,
-															   num_transaction_assets) {
+update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 
 	weights <- num_transaction_assets[["numtrx"]]
 

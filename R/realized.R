@@ -58,13 +58,15 @@ NULL
 #' @describeIn realized_compute Computation, as simple counts, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
-realized_count <- function(portfolio_quantity,
-													 portfolio_price,
-													 transaction_quantity,
-													 transaction_price,
-													 transaction_type,
-													 allow_short = FALSE,
-													 realized_only = FALSE) {
+realized_count <- function(
+	portfolio_quantity,
+	portfolio_price,
+	transaction_quantity,
+	transaction_price,
+	transaction_type,
+	allow_short = FALSE,
+	realized_only = FALSE
+) {
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
@@ -327,13 +329,15 @@ realized_count <- function(portfolio_quantity,
 #' @describeIn realized_compute Computation, as simple quantity, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
-realized_total <- function(portfolio_quantity,
-													 portfolio_price,
-													 transaction_quantity,
-													 transaction_price,
-													 transaction_type,
-													 allow_short = FALSE,
-													 realized_only = FALSE) {
+realized_total <- function(
+	portfolio_quantity,
+	portfolio_price,
+	transaction_quantity,
+	transaction_price,
+	transaction_type,
+	allow_short = FALSE,
+	realized_only = FALSE
+) {
 
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then portfolio_quantity < 0)
@@ -598,12 +602,15 @@ realized_total <- function(portfolio_quantity,
 #' @describeIn realized_compute Computation, as simple expected return, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
-realized_value <- function(portfolio_quantity,
-													 portfolio_price,
-													 transaction_quantity,
-													 transaction_price,
-													 transaction_type,
-													 allow_short = FALSE, realized_only = FALSE) {
+realized_value <- function(
+	portfolio_quantity,
+	portfolio_price,
+	transaction_quantity,
+	transaction_price,
+	transaction_type,
+	allow_short = FALSE,
+	realized_only = FALSE
+) {
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
@@ -868,16 +875,18 @@ realized_value <- function(portfolio_quantity,
 #' @describeIn realized_compute Computation, as simple financial duration, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
-realized_duration <- function(portfolio_quantity,
-															portfolio_price,
-															transaction_quantity,
-															transaction_price,
-															transaction_type,
-															previous_transaction_datetime,
-															previous_datetime,
-															transaction_datetime,
-															allow_short = FALSE,
-															realized_only = FALSE) {
+realized_duration <- function(
+	portfolio_quantity,
+	portfolio_price,
+	transaction_quantity,
+	transaction_price,
+	transaction_type,
+	previous_transaction_datetime,
+	previous_datetime,
+	transaction_datetime,
+	allow_short = FALSE,
+	realized_only = FALSE
+) {
 
 	qty_diff <- portfolio_quantity + transaction_quantity # quantity difference (if transaction_type == "S" then transaction_quantity < 0)
 	prz_diff <- transaction_price - portfolio_price # price difference
@@ -1144,18 +1153,20 @@ realized_duration <- function(portfolio_quantity,
 #'   compute realized gains and realized losses of the traded asset based on the
 #'   chosen method.
 #' @export
-realized_compute <- function(portfolio_quantity,
-														 portfolio_price,
-														 transaction_quantity,
-														 transaction_price,
-														 transaction_type,
-														 previous_transaction_datetime,
-														 previous_datetime,
-														 transaction_datetime,
-														 transaction_asset,
-														 allow_short = FALSE,
-														 realized_only = FALSE,
-														 method = "all") {
+realized_compute <- function(
+	portfolio_quantity,
+	portfolio_price,
+	transaction_quantity,
+	transaction_price,
+	transaction_type,
+	previous_transaction_datetime,
+	previous_datetime,
+	transaction_datetime,
+	transaction_asset,
+	allow_short = FALSE,
+	realized_only = FALSE,
+	method = "all"
+) {
 
 	if (method == "count") {
 

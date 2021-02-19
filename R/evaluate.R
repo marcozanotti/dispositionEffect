@@ -20,11 +20,11 @@
 #'   \code{\link{closest_market_price}}
 #'
 #' @export
-evaluate_portfolio <- function(portfolio,
-															 market_prices,
-															 portfolio_statistics = FALSE) {
+evaluate_portfolio <- function(portfolio, market_prices, portfolio_statistics = FALSE) {
 
-	portfolio <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0,] # remove asset with missing qty
+	# remove asset with missing qty
+	portfolio <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0,]
+	# extract prices of assets still into portfolio
 	market_prices <- market_prices[market_prices$asset %in% portfolio$asset, ]$price
 
 	value <- sum(portfolio$quantity * (market_prices - portfolio$price))

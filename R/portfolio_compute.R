@@ -123,14 +123,14 @@ portfolio_compute <- function(
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
 			gainloss_df <- gains_and_losses(
+				portfolio = portfolio,
+				market_prices = market_przs,
 				transaction_type = trx_type,
 				transaction_asset = trx_asset,
 				transaction_quantity = trx_qty,
 				transaction_price = trx_prz,
 				transaction_datetime = trx_dtt,
 				previous_datetime = previous_dtt,
-				portfolio = portfolio,
-				market_prices = market_przs,
 				time_threshold = time_threshold,
 				method = method,
 				allow_short = allow_short,

@@ -23,23 +23,19 @@ check_gainloss <- function(df) {
 	msg <- vector("character", 4)
 
 	if (any(rg)) {
-		msg[1] <- paste("RG value < 0 for asset(s)",
-										paste(df$asset[rg], collapse = ", "), "\n")
+		msg[1] <- paste("RG value < 0 for asset(s)", paste(df$asset[rg], collapse = ", "), "\n")
 	}
 
 	if (any(rl)) {
-		msg[2] <- paste("RL value > 0 for asset(s)",
-										paste(df$asset[rl], collapse = ", "), "\n")
+		msg[2] <- paste("RL value > 0 for asset(s)", paste(df$asset[rl], collapse = ", "), "\n")
 	}
 
 	if (any(pg)) {
-		msg[3] <- paste("PG value < 0 for asset(s)",
-										paste(df$asset[pg], collapse = ", "), "\n")
+		msg[3] <- paste("PG value < 0 for asset(s)", paste(df$asset[pg], collapse = ", "), "\n")
 	}
 
 	if (any(pl)) {
-		msg[4] <- paste("PL value > 0 for asset(s)",
-										paste(df$asset[pl], collapse = ", "), "\n")
+		msg[4] <- paste("PL value > 0 for asset(s)", paste(df$asset[pl], collapse = ", "), "\n")
 	}
 
 	res_msg <- paste(msg, collapse = "")

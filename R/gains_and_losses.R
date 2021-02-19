@@ -25,18 +25,20 @@
 #'   \code{\link{portfolio_compute}}
 #'
 #' @export
-gains_and_losses <- function(transaction_type,
-														 transaction_asset,
-														 transaction_quantity,
-														 transaction_price,
-														 transaction_datetime,
-														 previous_datetime,
-														 portfolio,
-														 market_prices,
-														 time_threshold = "5 mins",
-														 method = "all",
-														 allow_short = FALSE,
-														 verbose = FALSE) {
+gains_and_losses <- function(
+	portfolio,
+	market_prices,
+	transaction_type,
+	transaction_asset,
+	transaction_quantity,
+	transaction_price,
+	transaction_datetime,
+	previous_datetime,
+	time_threshold = "0 mins",
+	method = "all",
+	allow_short = FALSE,
+	verbose = FALSE
+) {
 
 	# verbosity
 	verb <- verbose
@@ -68,14 +70,16 @@ gains_and_losses <- function(transaction_type,
 				pft_assets_przs <- portfolio[portfolio$asset %in% ptf_assets, ]$price
 				ptf_assets_market_przs <- market_prices[market_prices$asset %in% ptf_assets, ]$price
 				# compute paper gains and losses
-				realized_paper_df <- paper_compute(pft_assets_qtys,
-																					 pft_assets_przs,
-																					 ptf_assets_market_przs,
-																					 previous_datetime,
-																					 transaction_datetime,
-																					 ptf_assets,
-																					 allow_short,
-																					 method)
+				realized_paper_df <- paper_compute(
+					pft_assets_qtys,
+					pft_assets_przs,
+					ptf_assets_market_przs,
+					previous_datetime,
+					transaction_datetime,
+					ptf_assets,
+					allow_short,
+					method
+				)
 			}
 
 		} else {# compute gains and losses for all the assets
@@ -83,18 +87,20 @@ gains_and_losses <- function(transaction_type,
 			# if there are no other assets but the transaction_asset, compute on transaction_asset
 			if (length(ptf_assets) < 1) {
 				if (verb) message("Computing realized gains and losses..")
-				realized_paper_df <- realized_compute(ptf_qty,
-																							ptf_prz,
-																							transaction_quantity,
-																							transaction_price,
-																							transaction_type,
-																							ptf_dtt,
-																							previous_datetime,
-																							transaction_datetime,
-																							transaction_asset,
-																							allow_short,
-																							realized_only = FALSE,
-																							method)
+				realized_paper_df <- realized_compute(
+					ptf_qty,
+					ptf_prz,
+					transaction_quantity,
+					transaction_price,
+					transaction_type,
+					ptf_dtt,
+					previous_datetime,
+					transaction_datetime,
+					transaction_asset,
+					allow_short,
+					realized_only = FALSE,
+					method
+				)
 			} else {# compute on both, transaction_asset and ptf_assets
 
 				# extract the portfolio assets' quantities, prices and market prices
@@ -104,26 +110,30 @@ gains_and_losses <- function(transaction_type,
 
 				# compute realized and paper gains and losses
 				if (verb) message("Computing realized and paper gains and losses..")
-				realized_df <- realized_compute(ptf_qty,
-																				ptf_prz,
-																				transaction_quantity,
-																				transaction_price,
-																				transaction_type,
-																				ptf_dtt,
-																				previous_datetime,
-																				transaction_datetime,
-																				transaction_asset,
-																				allow_short,
-																				realized_only = FALSE,
-																				method)
-				paper_df <- paper_compute(pft_assets_qtys,
-																	pft_assets_przs,
-																	ptf_assets_market_przs,
-																	previous_datetime,
-																	transaction_datetime,
-																	ptf_assets,
-																	allow_short,
-																	method)
+				realized_df <- realized_compute(
+					ptf_qty,
+					ptf_prz,
+					transaction_quantity,
+					transaction_price,
+					transaction_type,
+					ptf_dtt,
+					previous_datetime,
+					transaction_datetime,
+					transaction_asset,
+					allow_short,
+					realized_only = FALSE,
+					method
+				)
+				paper_df <- paper_compute(
+					pft_assets_qtys,
+					pft_assets_przs,
+					ptf_assets_market_przs,
+					previous_datetime,
+					transaction_datetime,
+					ptf_assets,
+					allow_short,
+					method
+				)
 				# bind rows of transaction_asset and ptf_assets results
 				realized_paper_df <- dplyr::bind_rows(realized_df, paper_df)
 
@@ -142,18 +152,20 @@ gains_and_losses <- function(transaction_type,
 		} else {# compute realized gains and losses for the transaction_asset
 
 			if (verb) message("Computing realized gains and losses..")
-			realized_paper_df <- realized_compute(ptf_qty,
-																						ptf_prz,
-																						transaction_quantity,
-																						transaction_price,
-																						transaction_type,
-																						ptf_dtt,
-																						previous_datetime,
-																						transaction_datetime,
-																						transaction_asset,
-																						allow_short,
-																						realized_only = TRUE,
-																						method)
+			realized_paper_df <- realized_compute(
+				ptf_qty,
+				ptf_prz,
+				transaction_quantity,
+				transaction_price,
+				transaction_type,
+				ptf_dtt,
+				previous_datetime,
+				transaction_datetime,
+				transaction_asset,
+				allow_short,
+				realized_only = TRUE,
+				method
+			)
 
 		}
 

@@ -3,8 +3,7 @@
 
 # dispositionEffect
 
-<img src='man/figures/logo.png' align="right" height="139" />
-
+<!--<img src='man/figures/logo.png' align="right" height="139" /> -->
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -93,6 +92,8 @@ Summarise the behavior of the investor.
 
 ``` r
 disposition_summary(portfolio_results)
+#> 
+#> 
 #> Investor ID123 
 #> 
 #> |asset | DE_count| DE_total| DD_value| DD_duration|
@@ -109,6 +110,7 @@ disposition_summary(portfolio_results)
 #> |Median |    0.000|    0.000|    0.000|       0.000|
 #> |Min    |   -1.000|   -1.000|   -0.075|    -165.119|
 #> |Max    |    0.333|    0.355|    0.011|    1411.595|
+#> 
 ```
 
 Plot the results to spot the presence of the disposition effect.

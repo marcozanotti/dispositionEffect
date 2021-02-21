@@ -69,7 +69,7 @@ NULL
 disposition_effect <- function(realized_gains, paper_gains, realized_losses, paper_losses) {
 
 	gains <- realized_gains / (realized_gains + paper_gains)
-	losses <- abs( realized_losses / (realized_losses + paper_losses) )
+	losses <- abs(realized_losses / (realized_losses + paper_losses))
 
 	gains[is.nan(gains)] <- 0
 	losses[is.nan(losses)] <- 0
@@ -177,4 +177,3 @@ disposition_summary <- function(portfolio, plot = FALSE) {
 	return(invisible(res))
 
 }
-

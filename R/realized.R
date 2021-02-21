@@ -1325,4 +1325,3 @@ realized_empty <- function(transaction_asset, method = "all") {
 	return(res_df)
 
 }
-

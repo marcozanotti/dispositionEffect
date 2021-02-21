@@ -305,4 +305,3 @@ paper_compute <- function(
 	return(res_df)
 
 }
-

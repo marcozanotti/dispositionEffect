@@ -84,7 +84,7 @@ portfolio_compute <- function(
 		pb$tick(0)
 	}
 
-	for (i in 1:nrow(portfolio_transactions)) {
+	for (i in seq_len(nrow(portfolio_transactions))) {
 
 		# extract scalars (trx = transaction)
 		trx_type <- portfolio_transactions[i, ]$type # trx type
@@ -95,7 +95,9 @@ portfolio_compute <- function(
 		previous_dtt <- portfolio_transactions[i - 1, ]$datetime
 
 		# if it's a sell transaction then consider qty as negative
-		if (trx_type == "S") { trx_qty <- trx_qty * -1L }
+		if (trx_type == "S") {
+			trx_qty <- trx_qty * -1L
+		}
 
 		# extract assets already into portfolio
 		ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
@@ -106,16 +108,11 @@ portfolio_compute <- function(
 		# then calls closest_market_price, gains_and_losses and evaluate_portfolio
 		if (method != "none" && length(ptf_assets) > 0) {
 
-			# think about filter out from market prices all what happened before trx_dtt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 			# if the portfolio contains more assets than the traded asset, then extract
 			# the market prices at transaction_datetime of all the portfolio assets
 			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
-				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices,
-																						price_only = FALSE)[, -2]
-				market_przs <- market_przs[order(
-					factor(market_przs$asset, levels = ptf_assets),
-					method = "radix"),]
+				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, price_only = FALSE)[, -2]
+				market_przs <- market_przs[order(factor(market_przs$asset, levels = ptf_assets), method = "radix"), ]
 			} else {
 				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
 			}
@@ -173,7 +170,9 @@ portfolio_compute <- function(
 		}
 
 		if (verb_lvl1) message("Done!")
-		if (progress) { pb$tick() } # update progress bar
+		if (progress) {
+			pb$tick()
+		} # update progress bar
 
 		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt, ptf_assets, market_przs, gainloss_df, portfolio_value)
 

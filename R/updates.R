@@ -478,4 +478,3 @@ update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 	return(realized_and_paper)
 
 }
-

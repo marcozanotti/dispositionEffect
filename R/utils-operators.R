@@ -28,4 +28,6 @@ NULL
 #'
 #' @rdname negative_match
 #' @keywords internal
-`%!in%` <- function(x, table) {!(match(x, table, nomatch = 0) > 0)}
+`%!in%` <- function(x, table) {
+	!(match(x, table, nomatch = 0) > 0)
+}

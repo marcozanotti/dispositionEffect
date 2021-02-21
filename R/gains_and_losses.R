@@ -179,4 +179,3 @@ gains_and_losses <- function(
 	return(realized_paper_df)
 
 }
-

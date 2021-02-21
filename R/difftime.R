@@ -124,4 +124,3 @@ difftime_compare <- function(from, to, time_threshold = "0 mins") {
 	return(res)
 
 }
-

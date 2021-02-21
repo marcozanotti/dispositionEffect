@@ -8,6 +8,8 @@
 
 [![R build
 status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/master/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
 <!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence
@@ -98,7 +100,7 @@ disposition_summary(portfolio_results)
 #> 
 #> 
 #> Investor ID123 
-#>
+#> 
 #> |asset | DE_count| DE_total| DD_value| DD_duration|
 #> |:-----|--------:|--------:|--------:|-----------:|
 #> |ACO   |    0.143|    0.041|    0.009|     439.894|

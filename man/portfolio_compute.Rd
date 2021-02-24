@@ -11,7 +11,7 @@ portfolio_compute(
   method = "all",
   allow_short = TRUE,
   time_threshold = "0 mins",
-  posneg_portfolios = FALSE,
+  portfolio_driven = FALSE,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
   progress = FALSE
@@ -38,7 +38,7 @@ time threshold at which the computed financial difftime has to be evaluated
 The allowed units are "secs", "mins", "hours", "days" and "weeks"
 (See \code{base::\link[base:difftime]{difftime}}).}
 
-\item{posneg_portfolios}{Logical. If TRUE the realized and paper gains and
+\item{portfolio_driven}{Logical. If TRUE the realized and paper gains and
 losses for the positive (that is when the investor's portfolio value, as
 computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 and the negative (that is when the investor's portfolio value, as computed

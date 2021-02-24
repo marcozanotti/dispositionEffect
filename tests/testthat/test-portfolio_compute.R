@@ -1,5 +1,7 @@
 context("portfolio_compute")
 
+portfolio_results <- dispositionEffect::portfolio_results
+
 test_that("portfolio_compute works (arg method)", {
 	expect_equal(portfolio_compute(investor, marketprices, method = "none"), portfolio_results[, c(1:5)])
 	expect_equal(portfolio_compute(investor, marketprices, method = "count"), portfolio_results[, c(1:5, 6:9)])

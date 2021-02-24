@@ -26,7 +26,7 @@ closest_market_price <- function(
 	price_only = FALSE
 ) {
 
-	# filter historical przs for asset and datetime
+	# filter historical prices for asset and datetime
 	res <- market_prices[market_prices$asset %in% asset & market_prices$datetime <= datetime, ]
 
 	# extract the closest date which is before the datetime

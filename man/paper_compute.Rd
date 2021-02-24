@@ -12,21 +12,21 @@ paper_count(
   portfolio_quantity,
   portfolio_price,
   market_price,
-  allow_short = FALSE
+  allow_short = TRUE
 )
 
 paper_total(
   portfolio_quantity,
   portfolio_price,
   market_price,
-  allow_short = FALSE
+  allow_short = TRUE
 )
 
 paper_value(
   portfolio_quantity,
   portfolio_price,
   market_price,
-  allow_short = FALSE
+  allow_short = TRUE
 )
 
 paper_duration(
@@ -36,7 +36,7 @@ paper_duration(
   datetime_difference = NULL,
   previous_datetime = NULL,
   transaction_datetime = NULL,
-  allow_short = FALSE
+  allow_short = TRUE
 )
 
 paper_compute(
@@ -46,7 +46,7 @@ paper_compute(
   previous_datetime,
   transaction_datetime,
   assets,
-  allow_short = FALSE,
+  allow_short = TRUE,
   method = "all"
 )
 }

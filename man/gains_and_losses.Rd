@@ -5,21 +5,25 @@
 \title{Gains & Losses}
 \usage{
 gains_and_losses(
+  portfolio,
+  market_prices,
   transaction_type,
   transaction_asset,
   transaction_quantity,
   transaction_price,
   transaction_datetime,
   previous_datetime,
-  portfolio,
-  market_prices,
-  time_threshold = "5 mins",
+  time_threshold = "0 mins",
   method = "all",
   allow_short = FALSE,
   verbose = FALSE
 )
 }
 \arguments{
+\item{portfolio}{Data frame of the investor's portfolio at time t.}
+
+\item{market_prices}{Data frame containing the market prices.}
+
 \item{transaction_type}{Character string. Either "B" = buy or "S" = sell.}
 
 \item{transaction_asset}{Character string. The name of the traded asset.}
@@ -33,10 +37,6 @@ is going to occur.}
 
 \item{previous_datetime}{POSIXct value. The date-time of the last transaction
 performed by the investor.}
-
-\item{portfolio}{Data frame of the investor's portfolio at time t.}
-
-\item{market_prices}{Data frame containing the market prices.}
 
 \item{time_threshold}{Character in the format "value units" indicating the
 time threshold at which the computed financial difftime has to be evaluated

@@ -15,7 +15,7 @@ realized_count(
   transaction_quantity,
   transaction_price,
   transaction_type,
-  allow_short = FALSE,
+  allow_short = TRUE,
   realized_only = FALSE
 )
 
@@ -25,7 +25,7 @@ realized_total(
   transaction_quantity,
   transaction_price,
   transaction_type,
-  allow_short = FALSE,
+  allow_short = TRUE,
   realized_only = FALSE
 )
 
@@ -35,7 +35,7 @@ realized_value(
   transaction_quantity,
   transaction_price,
   transaction_type,
-  allow_short = FALSE,
+  allow_short = TRUE,
   realized_only = FALSE
 )
 
@@ -48,7 +48,7 @@ realized_duration(
   previous_transaction_datetime,
   previous_datetime,
   transaction_datetime,
-  allow_short = FALSE,
+  allow_short = TRUE,
   realized_only = FALSE
 )
 
@@ -62,7 +62,7 @@ realized_compute(
   previous_datetime,
   transaction_datetime,
   transaction_asset,
-  allow_short = FALSE,
+  allow_short = TRUE,
   realized_only = FALSE,
   method = "all"
 )

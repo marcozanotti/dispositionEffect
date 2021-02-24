@@ -64,6 +64,15 @@ NULL
 #' @export
 difftime_financial <- function(from, to, pre_market = 08,	after_market = 22, units = "hours") {
 
+	check_from <- lubridate::wday(from, week_start = 1) %in% 6:7
+	check_to <- lubridate::wday(to, week_start = 1) %in% 6:7
+	if (check_from) {
+		warning("from argument is not a valid trading day.")
+	}
+	if (check_to) {
+		warning("to argument is not a valid trading day.")
+	}
+
 	from_date <- as.Date(from)
 	to_date <- as.Date(to)
 	upp_from <- paste0(from_date, " ", after_market, ":00:00") # upper bound first day
@@ -84,11 +93,17 @@ difftime_financial <- function(from, to, pre_market = 08,	after_market = 22, uni
 		s <- lubridate::wday(seq(from_date, to_date, by = "days"), week_start = 1)
 		len <- sum(s %in% 1:5) - 2 # num working days -2 (first and last)
 		h <- after_market - pre_market # financial working hours in a day (from 8.00 to 19.00)
-		res <- as.numeric(
-			len * h + # total financial working "hours" (units) between the two dates
-				difftime(upp_from, from, units = units) +
-				difftime(to, low_to, units = units)
-		)
+		if (len < 0) { # dates are weekend days
+			res <- 0
+		} else {
+			res <- as.numeric(
+				len * h + # total financial working "hours" (units) between the two dates
+					difftime(upp_from, from, units = "hours") +
+					difftime(to, low_to, units = "hours"),
+				units = units
+			)
+		}
+
 	}
 
 	return(res)

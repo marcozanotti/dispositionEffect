@@ -82,14 +82,12 @@ Compute the disposition effect with different methods.
 ``` r
 de <- disposition_compute(portfolio_results)
 de
-#> # A tibble: 5 x 6
-#>   investor asset DE_count DE_total DD_value DD_duration
-#>   <chr>    <chr>    <dbl>    <dbl>    <dbl>       <dbl>
-#> 1 ID123    ACO      0.143   0.0409  0.00870       440. 
-#> 2 ID123    LSUG     0.333   0.355   0.0106       1412. 
-#> 3 ID123    IT3S    -1      -1      -0.0310        -56.9
-#> 4 ID123    AST     -1      -1      -0.0750       -165. 
-#> 5 ID123    TFI      0       0       0               0
+#>   investor asset   DE_count    DE_total     DD_value DD_duration
+#> 1    ID123   ACO  0.1428571  0.04094631  0.008701958   439.89417
+#> 2    ID123   AST -1.0000000 -1.00000000 -0.074978204  -165.11889
+#> 3    ID123  IT3S -1.0000000 -1.00000000 -0.030965392   -56.93778
+#> 4    ID123  LSUG  0.3333333  0.35483871  0.010551792  1411.59500
+#> 5    ID123   TFI  0.0000000  0.00000000  0.000000000     0.00000
 ```
 
 Summarise the behavior of the investor.
@@ -103,9 +101,9 @@ disposition_summary(portfolio_results)
 #> |asset | DE_count| DE_total| DD_value| DD_duration|
 #> |:-----|--------:|--------:|--------:|-----------:|
 #> |ACO   |    0.143|    0.041|    0.009|     439.894|
-#> |LSUG  |    0.333|    0.355|    0.011|    1411.595|
-#> |IT3S  |   -1.000|   -1.000|   -0.031|     -56.938|
 #> |AST   |   -1.000|   -1.000|   -0.075|    -165.119|
+#> |IT3S  |   -1.000|   -1.000|   -0.031|     -56.938|
+#> |LSUG  |    0.333|    0.355|    0.011|    1411.595|
 #> |TFI   |    0.000|    0.000|    0.000|       0.000|
 #> 
 #> |stat   | DE_count| DE_total| DD_value| DD_duration|
@@ -153,6 +151,11 @@ reproducible example on
 
 For questions and other discussion, mail us at
 <zanottimarco17@gmail.com>.
+
+## Acknowledgements
+
+A special thank to [Claud
+Graphics](https://www.behance.net/claudiocec3c4f) for our logo.
 
 ------------------------------------------------------------------------
 

@@ -17,7 +17,7 @@ test_that("portfolio_compute works (arg time_threshold)", {
 	expect_equal(portfolio_compute(investor, marketprices, time_threshold = "5 mins"), portfolio_results)
 })
 
-test_that("portfolio_compute works (arg )", {
-	expect_type(portfolio_compute(investor, marketprices, posneg_portfolios = TRUE), "list")
+test_that("portfolio_compute works (arg portfolio_driven)", {
+	expect_type(portfolio_compute(investor, marketprices, portfolio_driven = TRUE), "list")
 })
 

@@ -61,7 +61,7 @@ NULL
 #' @describeIn paper_compute Computation of paper gains and paper losses as
 #'   simple counts.
 #' @export
-paper_count <- function(portfolio_quantity, portfolio_price, market_price, allow_short = FALSE) {
+paper_count <- function(portfolio_quantity, portfolio_price, market_price, allow_short = TRUE) {
 
 	prz_diff <- market_price - portfolio_price # price difference
 
@@ -95,7 +95,7 @@ paper_count <- function(portfolio_quantity, portfolio_price, market_price, allow
 #' @describeIn paper_compute Computation of paper gains and paper losses as
 #'   simple quantity of assets.
 #' @export
-paper_total <- function(portfolio_quantity, portfolio_price, market_price, allow_short = FALSE) {
+paper_total <- function(portfolio_quantity, portfolio_price, market_price, allow_short = TRUE) {
 
 	prz_diff <- market_price - portfolio_price # price difference
 
@@ -129,7 +129,7 @@ paper_total <- function(portfolio_quantity, portfolio_price, market_price, allow
 #' @describeIn paper_compute Computation of paper gains and paper losses as
 #'   simple expected return of assets.
 #' @export
-paper_value <- function(portfolio_quantity,	portfolio_price, market_price, allow_short = FALSE) {
+paper_value <- function(portfolio_quantity,	portfolio_price, market_price, allow_short = TRUE) {
 
 	prz_diff <- market_price - portfolio_price # price difference
 	Er <- prz_diff / portfolio_price # asset expected return
@@ -171,7 +171,7 @@ paper_duration <- function(
 	datetime_difference = NULL,
 	previous_datetime = NULL,
 	transaction_datetime = NULL,
-	allow_short = FALSE
+	allow_short = TRUE
 ) {
 
 	prz_diff <- market_price - portfolio_price # price difference
@@ -219,7 +219,7 @@ paper_compute <- function(
 	previous_datetime,
 	transaction_datetime,
 	assets,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	method = "all"
 ) {
 

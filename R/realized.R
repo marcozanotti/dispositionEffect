@@ -64,7 +64,7 @@ realized_count <- function(
 	transaction_quantity,
 	transaction_price,
 	transaction_type,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	realized_only = FALSE
 ) {
 
@@ -335,7 +335,7 @@ realized_total <- function(
 	transaction_quantity,
 	transaction_price,
 	transaction_type,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	realized_only = FALSE
 ) {
 
@@ -608,7 +608,7 @@ realized_value <- function(
 	transaction_quantity,
 	transaction_price,
 	transaction_type,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	realized_only = FALSE
 ) {
 
@@ -884,7 +884,7 @@ realized_duration <- function(
 	previous_transaction_datetime,
 	previous_datetime,
 	transaction_datetime,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	realized_only = FALSE
 ) {
 
@@ -1163,7 +1163,7 @@ realized_compute <- function(
 	previous_datetime,
 	transaction_datetime,
 	transaction_asset,
-	allow_short = FALSE,
+	allow_short = TRUE,
 	realized_only = FALSE,
 	method = "all"
 ) {

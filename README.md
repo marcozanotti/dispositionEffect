@@ -1,15 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dispositionEffect
+# dispositionEffect <img src='man/figures/logo.png' align="right" height="200" />
 
-<!--<img src='man/figures/logo.png' align="right" height="139" /> -->
 <!-- badges: start -->
 
 [![R build
 status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/master/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
+coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
 <!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence

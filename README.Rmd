@@ -17,12 +17,11 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 ```
 
 
-# dispositionEffect
-<!--<img src='man/figures/logo.png' align="right" height="139" /> -->
+# dispositionEffect <img src='man/figures/logo.png' align="right" height="200" />
 
 <!-- badges: start -->
 [![R build status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
-[![Codecov test coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/master/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
 <!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence of 

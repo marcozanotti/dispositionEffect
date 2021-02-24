@@ -34,7 +34,7 @@
 #' @references H. Shefrin & M. Statman, 1985
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{paper_compute}},
-#'   \code{\link{gains_and_losses}}
+#'   \code{\link{gains_losses}}
 #'
 #' @export
 portfolio_compute <- function(
@@ -105,7 +105,7 @@ portfolio_compute <- function(
 		market_przs <- gainloss_df <- portfolio_value <- NULL
 
 		# if method is not "none" and the portfolio is not empty (initial condition),
-		# then calls closest_market_price, gains_and_losses and evaluate_portfolio
+		# then calls closest_market_price, gains_losses and evaluate_portfolio
 		if (method != "none" && length(ptf_assets) > 0) {
 
 			# if the portfolio contains more assets than the traded asset, then extract
@@ -119,7 +119,7 @@ portfolio_compute <- function(
 
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
-			gainloss_df <- gains_and_losses(
+			gainloss_df <- gains_losses(
 				portfolio = portfolio,
 				market_prices = market_przs,
 				transaction_type = trx_type,

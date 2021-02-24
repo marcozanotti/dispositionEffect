@@ -25,7 +25,7 @@
 #'   \code{\link{portfolio_compute}}
 #'
 #' @export
-gains_and_losses <- function(
+gains_losses <- function(
 	portfolio,
 	market_prices,
 	transaction_type,

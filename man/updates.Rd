@@ -128,7 +128,7 @@ for each asset.
 H. Shefrin & M. Statman, 1985
 }
 \seealso{
-\code{\link{portfolio_compute}}, \code{\link{gains_and_losses}}
+\code{\link{portfolio_compute}}, \code{\link{gains_losses}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

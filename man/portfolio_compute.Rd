@@ -74,7 +74,7 @@ H. Shefrin & M. Statman, 1985
 }
 \seealso{
 \code{\link{realized_compute}}, \code{\link{paper_compute}},
-\code{\link{gains_and_losses}}
+\code{\link{gains_losses}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

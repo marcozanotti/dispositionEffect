@@ -16,7 +16,7 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_and_losses}},
+#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_losses}},
 #'   \code{\link{closest_market_price}}
 #'
 #' @export

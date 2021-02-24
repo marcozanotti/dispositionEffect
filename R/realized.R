@@ -51,7 +51,7 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{paper_compute}}, \code{\link{gains_and_losses}}
+#' @seealso \code{\link{paper_compute}}, \code{\link{gains_losses}}
 NULL
 
 

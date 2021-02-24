@@ -130,7 +130,7 @@ compute paper gains and paper losses based on the chosen method.
 H. Shefrin & M. Statman, 1985
 }
 \seealso{
-\code{\link{realized_compute}}, \code{\link{gains_and_losses}}
+\code{\link{realized_compute}}, \code{\link{gains_losses}}
 }
 \author{
 L. Mazzucchelli & M. Zanotti

@@ -9,7 +9,7 @@
 #' @param portfolio_datetime POSIXct value. The date-time of the traded asset.
 #' @inheritParams realized_compute
 #' @inheritParams paper_compute
-#' @inheritParams gains_and_losses
+#' @inheritParams gains_losses
 #' @param realized_and_paper Data frame containing the realized and paper gains and
 #'   losses results to be updated.
 #' @param new_realized_and_paper Data frame containing the realized and paper gains and
@@ -47,7 +47,7 @@
 #'
 #' @references H. Shefrin & M. Statman, 1985
 #'
-#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_and_losses}}
+#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_losses}}
 NULL
 
 

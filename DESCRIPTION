@@ -1,12 +1,13 @@
 Package: dispositionEffect
 Type: Package
-Title: Analysis Of Disposition Effect On Financial Portfolios
-Version: 0.0.0.9019
+Title: Analysis of Disposition Effect on Financial Portfolios
+Version: 0.0.0.9020
 Authors@R: c(
     person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
     person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = c("aut", "cre")))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Evaluate the presence of disposition effect and others irrational
+    investor's behaviors based solely on investor's transactions and fiinancial
+    market data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -14,7 +14,7 @@
 #'   realized and paper gains and losses. If "none" nothing is computed but the
 #'   investor's portfolio update. Otherwise it has to be one of "count", "total",
 #'   "value", "duration" and "all".
-#' @param posneg_portfolios Logical. If TRUE the realized and paper gains and
+#' @param portfolio_driven Logical. If TRUE the realized and paper gains and
 #'   losses for the positive (that is when the investor's portfolio value, as
 #'   computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 #'   and the negative (that is when the investor's portfolio value, as computed
@@ -43,7 +43,7 @@ portfolio_compute <- function(
 	method = "all",
 	allow_short = TRUE,
 	time_threshold = "0 mins",
-	posneg_portfolios = FALSE,
+	portfolio_driven = FALSE,
 	portfolio_statistics = FALSE,
 	verbose = c(0, 0),
 	progress = FALSE
@@ -66,7 +66,7 @@ portfolio_compute <- function(
 	portfolio <- initializer_portfolio(investor_id, investor_assets)
 
 	# initialize the df of computation: RG, RL, PG, PL and other
-	if (!posneg_portfolios) {
+	if (!portfolio_driven) {
 		results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 	} else {
 		pos_results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
@@ -157,7 +157,7 @@ portfolio_compute <- function(
 		# update the results_df
 		if (method != "none" && !is.null(gainloss_df)) {
 			if (verb_lvl1) message("Updating realized and paper results..")
-			if (!posneg_portfolios) {
+			if (!portfolio_driven) {
 				results_df <- update_realized_and_paper(results_df, gainloss_df, method)
 			} else {
 				if (portfolio_value >= 0) {
@@ -182,20 +182,17 @@ portfolio_compute <- function(
 
 	# compute the mean expected return for RG, RL, PG, and PL value
 	if (method %in% c("value", "all")) {
-		if (!posneg_portfolios) {
+		if (!portfolio_driven) {
 			results_df <- update_expectedvalue(results_df, asset_numtrx)
 		} else {
-			if (portfolio_value >= 0) {
 				pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
-			} else {
 				neg_results_df <- update_expectedvalue(neg_results_df, asset_numtrx)
-			}
 		}
 	}
 
 	# join the dataframes and return a single result dataframe
 	if (method != "none") {
-		if (!posneg_portfolios) {
+		if (!portfolio_driven) {
 			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
 		} else {
 			pos_results_df$type <- "positive"

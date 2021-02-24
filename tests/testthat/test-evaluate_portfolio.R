@@ -1,4 +1,4 @@
-context("evaluate portfolio")
+context("evaluate_portfolio")
 
 p <- data.frame("asset" = LETTERS[1:6], "quantity" = c(0, 2, 2, 2, 2, NA), "price" = c(0, 15, 10, 15, 10, NA))
 m <- data.frame("asset" = LETTERS[1:6], "price" = c(5, 10, 15, 10, 15, 5))

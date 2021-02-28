@@ -5,6 +5,8 @@
 #' @description Functions to perform checks on arguments.
 #'
 #' @param df Data frame
+#' @param input_values Input to check against target.
+#' @param target_values Target to check for in input.
 #'
 #' @return A character string containing an error message or NULL.
 #'
@@ -41,6 +43,23 @@ check_gainloss <- function(df) {
 	res_msg <- paste(msg, collapse = "")
 	if (res_msg == "") {
 		res_msg <- NULL
+	}
+
+	return(res_msg)
+
+}
+
+
+#' @describeIn checks Check consistency of market prices "values" results.
+check_market_prices <- function(input_values, target_values) {
+
+	idx <- target_values %in% input_values
+
+	if (all(idx)) {
+		res_msg <- NULL
+	} else {
+		res_msg <- paste("No market prices available for asset(s)", paste(target_values[!idx], collapse = ", "), "\n")
+
 	}
 
 	return(res_msg)

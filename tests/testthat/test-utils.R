@@ -26,3 +26,10 @@ test_that("check_gainloss works", {
 	expect_type(check_gainloss(df[5,]), "character")
 	expect_type(check_gainloss(df[6,]), "NULL")
 })
+
+test_that("check_market_prices works", {
+	expect_type(check_market_prices(NULL, c("A", "B", "C")), "character")
+	expect_type(check_market_prices("A", c("A", "B", "C")), "character")
+	expect_type(check_market_prices(c("A", "B"), c("A", "B", "C")), "character")
+	expect_type(check_market_prices(c("A", "B", "C"), c("A", "B", "C")), "NULL")
+})

@@ -3,12 +3,19 @@
 \name{checks}
 \alias{checks}
 \alias{check_gainloss}
+\alias{check_market_prices}
 \title{Checks functions}
 \usage{
 check_gainloss(df)
+
+check_market_prices(input_values, target_values)
 }
 \arguments{
 \item{df}{Data frame}
+
+\item{input_values}{Input to check against target.}
+
+\item{target_values}{Target to check for in input.}
 }
 \value{
 A character string containing an error message or NULL.
@@ -19,6 +26,8 @@ Functions to perform checks on arguments.
 \section{Functions}{
 \itemize{
 \item \code{check_gainloss}: Check consistency of gains and losses "values" results.
+
+\item \code{check_market_prices}: Check consistency of market prices "values" results.
 }}
 
 \keyword{internal}

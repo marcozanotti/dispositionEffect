@@ -112,6 +112,10 @@ portfolio_compute <- function(
 			# the market prices at transaction_datetime of all the portfolio assets
 			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
 				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, price_only = FALSE)[, -2]
+				chk_mp <- check_market_prices(market_przs$asset, ptf_assets)
+				if (!is.null(chk_mp)) {
+					stop(paste0("Investor ", investor_id, ", transaction num. ", i, " datetime ", trx_dtt, ":\n", chk_mp), call. = FALSE)
+				}
 				market_przs <- market_przs[order(factor(market_przs$asset, levels = ptf_assets), method = "radix"), ]
 			} else {
 				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
@@ -136,7 +140,7 @@ portfolio_compute <- function(
 			if (method %in% c("value", "all")) {
 				chk_gl <- check_gainloss(gainloss_df)
 				if (!is.null(chk_gl)) {
-					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl))
+					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl), call. = FALSE)
 				}
 			}
 

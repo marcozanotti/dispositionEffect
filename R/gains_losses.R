@@ -142,7 +142,7 @@ gains_losses <- function(
 		}
 
 
-		# if the difference transaction_datetime - previous_datetime < time_threshold
+		# if the difference transaction_datetime - previous_datetime < time_threshold 
 		# --> compute only realized
 	} else {
 

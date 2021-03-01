@@ -10,8 +10,15 @@
 #' @param unit Character string specifying a time unit or a multiple of a
 #'   unit to be rounded to. Valid base units are second, minute, hour, day,
 #'   week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.
+#' @param reduce Logical. If TRUE use `reduce_transactions`, otherwise use
+#'   `aggregate_transactions` to aggregate portfolio transactions.
 #' @param aggregate_price_fun Function to use to aggregate prices within
 #'   the round unit. Default to \code{mean}.
+#' @param portfolio_assets Character vector of the transaction assets.
+#' @param portfolio_datetimes POSIXct vector of the transaction datetimes.
+#' @param investor_name Character. The name to be assigned to the investor.
+#' @param subset Logical. If TRUE, `subset_market_prices` is used to generate
+#'   investor's data.
 #'
 #' @return The data frame of aggregated market prices.
 #'
@@ -27,16 +34,17 @@ NULL
 #' @describeIn manipulate_initial_data Aggregate the data frame of investors'
 #'   transactions that happened at the same datetime.
 #' @export
-aggregate_transactions <- function(portfolio_transactions) {
+aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
+		dplyr::mutate(datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit)) %>%
 		dplyr::group_by(
 			!!rlang::sym("investor"),
 			!!rlang::sym("type"),
 			!!rlang::sym("asset"),
 			!!rlang::sym("datetime")
 		) %>%
-		dplyr::summarise( # use mean prz and total qty
+		dplyr::summarise(
 			quantity = sum(!!rlang::sym("quantity")),
 			price = mean(!!rlang::sym("price")),
 			.groups = "drop"
@@ -58,9 +66,7 @@ reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 	portfolio_transactions <- portfolio_transactions %>%
 		dplyr::mutate(
 			datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit),
-			quantity = ifelse(!!rlang::sym("type") == "B",
-												!!rlang::sym("quantity"),
-												-1 * !!rlang::sym("quantity"))
+			quantity = ifelse(!!rlang::sym("type") == "B", !!rlang::sym("quantity"), -1 * !!rlang::sym("quantity"))
 		) %>%
 		dplyr::group_by(
 			!!rlang::sym("investor"),
@@ -87,11 +93,15 @@ reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 #' @describeIn manipulate_initial_data Clean the data frame of investors'
 #'   transactions.
 #' @export
-clean_tansactions <- function(portfolio_transactions, unit = "1 mins") {
+clean_transactions <- function(portfolio_transactions, unit = "1 mins", reduce = FALSE) {
 
-	portfolio_transactions <- portfolio_transactions %>%
-		aggregate_transactions() %>%
-		reduce_transactions(unit = unit)
+	if (reduce) {
+		portfolio_transactions <- portfolio_transactions %>%
+			reduce_transactions(unit = unit)
+	} else {
+		portfolio_transactions <- portfolio_transactions %>%
+			aggregate_transactions(unit = unit)
+	}
 
 	return(portfolio_transactions)
 
@@ -101,14 +111,16 @@ clean_tansactions <- function(portfolio_transactions, unit = "1 mins") {
 #' @describeIn manipulate_initial_data Aggregate the data frame of market prices
 #'   with a specific aggregate function within a time interval.
 #' @export
-aggregate_market_prices <- function(market_prices,
-																		unit = "15 mins",
-																		aggregate_price_fun = mean) {
+aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_fun = mean) {
+
+	if (!is.null(unit)) {
+		market_prices <- market_prices %>%
+			dplyr::mutate(datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit))
+	}
 
 	market_prices <- market_prices %>%
+		dplyr::select(!!rlang::sym("asset"), !!rlang::sym("datetime"), !!rlang::sym("price")) %>%
 		dplyr::arrange(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%
-		dplyr::mutate(datetime = lubridate::floor_date(!!rlang::sym("datetime"),
-																									 unit = unit)) %>%
 		dplyr::group_by(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%
 		dplyr::summarise(price = aggregate_price_fun(!!rlang::sym("price")), .groups = "drop")
 
@@ -120,37 +132,64 @@ aggregate_market_prices <- function(market_prices,
 #' @describeIn manipulate_initial_data Subset the data frame of market prices
 #'   based on investor's traded assets and datetimes of transactions.
 #' @export
-subset_market_prices <- function(market_prices,
-																 portfolio_transactions,
-																 unit = "15 mins") {
+subset_market_prices <- function(market_prices, portfolio_assets, portfolio_datetimes, unit = NULL) {
 
-	grid <- expand.grid(unique(portfolio_transactions$asset),
-											unique(lubridate::floor_date(portfolio_transactions$datetime, unit = unit)),
-											stringsAsFactors = FALSE) %>%
-		purrr::set_names("asset", "datetime") %>%
-		dplyr::arrange(!!rlang::sym("asset"), !!rlang::sym("datetime"))
-
-	market_prices <- purrr::map2_df(grid[, 1], grid[, 2],
-																	closest_market_price,
-																	market_prices = market_prices,
-																	price_only = FALSE)
+	if (!is.null(unit)) {
+		dtt <- unique(lubridate::floor_date(portfolio_datetimes, unit = unit))
+	} else {
+		dtt <- unique(portfolio_datetimes)
+	}
+	market_prices <- purrr::map_df(dtt, ~ closest_market_price(portfolio_assets, .x, market_prices))
 
 	return(market_prices)
 
 }
 
 
-#' @describeIn manipulate_initial_data Clean the data frame of market prices.
-#' @export
-clean_market_prices <- function(market_prices,
-																portfolio_transactions,
-																unit = "15 mins",
-																aggregate_price_fun = mean) {
+#' @describeIn manipulate_initial_data Generate investors' data from transactions
+#'   and market prices.
+#' @keywords internal
+generate_data <- function(
+	portfolio_transactions,
+	market_prices,
+	investor_name = NULL,
+	unit = NULL,
+	subset = FALSE
+) {
 
-	market_prices <- market_prices %>%
-		aggregate_market_prices(unit = unit, aggregate_price_fun = aggregate_price_fun) %>%
-		subset_market_prices(portfolio_transactions, unit = unit)
+	if (!is.null(investor_name)) {
+		portfolio_transactions$investor <- investor_name
+	}
 
-	return(market_prices)
+	if (!subset) {
+
+		assets <- unique(portfolio_transactions$asset)
+
+		if (is.null(unit)) {
+			first_date <- min(portfolio_transactions$datetime)
+			last_date <- max(portfolio_transactions$datetime)
+		} else {
+			first_date <- lubridate::floor_date(min(portfolio_transactions$datetime), unit = unit)
+			last_date <- lubridate::ceiling_date(max(portfolio_transactions$datetime), unit = unit)
+		}
+
+		mrkt <- market_prices[market_prices$asset %in% assets &
+														market_prices$datetime >= first_date &
+														market_prices$datetime <= last_date, ]
+
+	} else {
+
+		assets <- unique(portfolio_transactions$asset)
+		datetimes <- unique(portfolio_transactions$datetime)
+		mrkt <- subset_market_prices(market_prices, assets, datetimes, unit) # dispositionEffect function
+
+	}
+
+	res <- list(
+		"transactions" = portfolio_transactions,
+		"marketprices" = mrkt
+	)
+
+	return(res)
 
 }

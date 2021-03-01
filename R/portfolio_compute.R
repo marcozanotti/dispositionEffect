@@ -49,6 +49,42 @@ portfolio_compute <- function(
 	progress = FALSE
 ) {
 
+	# defensive programming
+	# check portfolio_transactions column names
+	trg <- c("investor", "type", "asset", "quantity", "price", "datetime")
+	chk <- check_values(names(portfolio_transactions), trg)
+	if (!is.null(chk)) {
+		stop(paste0("portfolio_transactions must contain columns '", paste(trg, collapse = "', '"), "'.\n",
+								"Can't find column(s) '", paste(chk, collapse = "', '"), "'. Possibly misspelled column names?\n"),
+				 call. = FALSE)
+	}
+	# check market_prices column names
+	trg <- c("asset", "datetime", "price")
+	chk <- check_values(names(market_prices), trg)
+	if (!is.null(chk)) {
+		stop(paste0("market_prices must contain columns '", paste(trg, collapse = "', '"), "'.\n",
+								"Can't find column(s) '", paste(chk, collapse = "', '"), "'. Possibly misspelled column names?\n"),
+				 call. = FALSE)
+	}
+	# check portfolio_transactions column type values
+	trg <- c("B", "S")
+	chk <- check_values(unique(portfolio_transactions$type), trg, no_exception = TRUE, weak_target = TRUE)
+	if (!is.null(chk$target) | !is.null(chk$input)) {
+		stop(paste0("Column type of portfolio_transactions should contain 'B' or 'S' only.\n"), call. = FALSE)
+	}
+	# check method argument
+	trg <- c("count", "total", "value", "duration", "all", "none")
+	chk <- check_values(method, trg, weak_target = TRUE)
+	if (!is.null(chk)) {
+		stop(paste0("method should be one of '", paste(trg, collapse = "', '"), "'.\n"), call. = FALSE)
+	}
+	# check time_threshold argument
+	trg <- c("sec", "min", "hour", "day", "week")
+	chk <- grepl("(sec)|(min)|(hour)|(day)|(week)", time_threshold)
+	if (!chk) {
+		stop(paste0("time_threshold units should be one of '", paste(trg, collapse = "', '"), "'.\n"), call. = FALSE)
+	}
+
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
 	verb_lvl2 <- as.logical(verbose[2])
@@ -59,6 +95,7 @@ portfolio_compute <- function(
 	asset_numtrx <- portfolio_transactions %>%
 		dplyr::group_by(!!rlang::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
+
 
 	# investor's initial portfolio (portfolio at time 0):
 	# an empty df with all the assets traded by the investor
@@ -112,9 +149,10 @@ portfolio_compute <- function(
 			# the market prices at transaction_datetime of all the portfolio assets
 			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
 				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, price_only = FALSE)[, -2]
-				chk_mp <- check_market_prices(market_przs$asset, ptf_assets)
+				chk_mp <- check_values(market_przs$asset, ptf_assets)
 				if (!is.null(chk_mp)) {
-					stop(paste0("Investor ", investor_id, ", transaction num. ", i, " datetime ", trx_dtt, ":\n", chk_mp), call. = FALSE)
+					stop(paste0("Investor ", investor_id, ", transaction num. ", i, " datetime ", trx_dtt, ":\n",
+										  "No market prices available for asset(s)", paste(chk_mp, collapse = ", "), "\n"), call. = FALSE)
 				}
 				market_przs <- market_przs[order(factor(market_przs$asset, levels = ptf_assets), method = "radix"), ]
 			} else {

@@ -8,6 +8,8 @@
 #'   price.
 #' @param market_prices Data frame containing the market prices.
 #' @param price_only Logical. If TRUE then only the price is returned.
+#' @param exact Logical. If TRUE then it looks for market prices at the same
+#'   datetime only, otherwise it looks for the nearest.
 #'
 #' @return The value of the asset's price.
 #'
@@ -23,11 +25,16 @@ closest_market_price <- function(
 	asset,
 	datetime,
 	market_prices,
-	price_only = FALSE
+	price_only = FALSE,
+	exact = FALSE
 ) {
 
 	# filter historical prices for asset and datetime
-	res <- market_prices[market_prices$asset %in% asset & market_prices$datetime <= datetime, ]
+	if (exact) {
+		res <- market_prices[market_prices$asset %in% asset & market_prices$datetime == datetime, ]
+	} else {
+		res <- market_prices[market_prices$asset %in% asset & market_prices$datetime <= datetime, ]
+	}
 
 	# extract the closest date which is before the datetime
 	res <-

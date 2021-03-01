@@ -27,9 +27,19 @@ test_that("check_gainloss works", {
 	expect_type(check_gainloss(df[6,]), "NULL")
 })
 
-test_that("check_market_prices works", {
-	expect_type(check_market_prices(NULL, c("A", "B", "C")), "character")
-	expect_type(check_market_prices("A", c("A", "B", "C")), "character")
-	expect_type(check_market_prices(c("A", "B"), c("A", "B", "C")), "character")
-	expect_type(check_market_prices(c("A", "B", "C"), c("A", "B", "C")), "NULL")
+test_that("check_values works", {
+	expect_equal(check_values(NULL, c("A", "B", "C")), c("A", "B", "C"))
+	expect_equal(check_values("A", c("A", "B", "C")), c("B", "C"))
+	expect_equal(check_values(c("A", "B"), c("A", "B", "C")), "C")
+	expect_equal(check_values(c("A", "B", "C"), c("A", "B", "C")), NULL)
+
+	expect_equal(check_values(c("B", "S"), c("B", "S"), no_exception = TRUE), list("target" = NULL, "input" = NULL))
+	expect_equal(check_values(c("B", "S", "Buy"), c("B", "S"), no_exception = TRUE), list("target" = NULL, "input" = "Buy"))
+	expect_equal(check_values("B", c("B", "S"), no_exception = TRUE), list("target" = "S", "input" = NULL))
+	expect_equal(check_values(c("B", "Buy"), c("B", "S"), no_exception = TRUE), list("target" = "S", "input" = "Buy"))
+
+	expect_equal(check_values("B", c("B", "S"), weak_target = TRUE), NULL)
+	expect_equal(check_values("B", c("B", "S"), no_exception = TRUE, weak_target = TRUE), list("target" = NULL, "input" = NULL))
+	expect_equal(check_values(c("B", "S", "Buy"), c("B", "S"), no_exception = TRUE, weak_target = TRUE), list("target" = NULL, "input" = "Buy"))
+	expect_equal(check_values(c("B", "Buy"), c("B", "S"), no_exception = TRUE, weak_target = TRUE), list("target" = NULL, "input" = "Buy"))
 })

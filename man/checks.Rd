@@ -2,32 +2,43 @@
 % Please edit documentation in R/utils-checks.R
 \name{checks}
 \alias{checks}
+\alias{check_values}
 \alias{check_gainloss}
-\alias{check_market_prices}
 \title{Checks functions}
 \usage{
-check_gainloss(df)
+check_values(
+  input_values,
+  target_values,
+  no_exception = FALSE,
+  weak_target = FALSE
+)
 
-check_market_prices(input_values, target_values)
+check_gainloss(df)
 }
 \arguments{
-\item{df}{Data frame}
-
 \item{input_values}{Input to check against target.}
 
 \item{target_values}{Target to check for in input.}
+
+\item{no_exception}{Logical. If TRUE different values of inputs from targets
+are not allowed to exist.}
+
+\item{weak_target}{Logical. If TRUE inputs do not need to contain all the
+targets.}
+
+\item{df}{Data frame}
 }
 \value{
-A character string containing an error message or NULL.
+A vector or list containing the wrong values.
 }
 \description{
 Functions to perform checks on arguments.
 }
 \section{Functions}{
 \itemize{
-\item \code{check_gainloss}: Check consistency of gains and losses "values" results.
+\item \code{check_values}: Check consistency of values against targets and vice versa.
 
-\item \code{check_market_prices}: Check consistency of market prices "values" results.
+\item \code{check_gainloss}: Check consistency of gains and losses "values" results.
 }}
 
 \keyword{internal}

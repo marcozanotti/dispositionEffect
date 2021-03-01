@@ -13,7 +13,7 @@ disposition_difference(gains, losses)
 
 disposition_compute(portfolio, aggregate_fun = NULL)
 
-disposition_summary(portfolio, plot = FALSE)
+disposition_summary(portfolio)
 }
 \arguments{
 \item{realized_gains}{Numeric vector (or scalar) containing realized gains
@@ -39,9 +39,6 @@ realized and paper gains and losses results (as those obtained via
 \item{aggregate_fun}{Function to use to aggregate results.
 Default to \code{NULL}, that is no aggregation is performed and the
 results of each asset are shown.}
-
-\item{plot}{Logical. If TRUE some useful graphs of the disposition effect
-results are plotted.}
 }
 \value{
 Numeric vector (or scalar) with the value(s) of disposition

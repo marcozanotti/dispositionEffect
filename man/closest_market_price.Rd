@@ -4,7 +4,13 @@
 \alias{closest_market_price}
 \title{Closest market price}
 \usage{
-closest_market_price(asset, datetime, market_prices, price_only = FALSE)
+closest_market_price(
+  asset,
+  datetime,
+  market_prices,
+  price_only = FALSE,
+  exact = FALSE
+)
 }
 \arguments{
 \item{asset}{Character vector of assets' names to look for.}
@@ -15,6 +21,9 @@ price.}
 \item{market_prices}{Data frame containing the market prices.}
 
 \item{price_only}{Logical. If TRUE then only the price is returned.}
+
+\item{exact}{Logical. If TRUE then it looks for market prices at the same
+datetime only, otherwise it looks for the nearest.}
 }
 \value{
 The value of the asset's price.

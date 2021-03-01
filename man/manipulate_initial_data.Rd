@@ -4,31 +4,33 @@
 \alias{manipulate_initial_data}
 \alias{aggregate_transactions}
 \alias{reduce_transactions}
-\alias{clean_tansactions}
+\alias{clean_transactions}
 \alias{aggregate_market_prices}
 \alias{subset_market_prices}
-\alias{clean_market_prices}
+\alias{generate_data}
 \title{Manipulate market prices}
 \usage{
-aggregate_transactions(portfolio_transactions)
+aggregate_transactions(portfolio_transactions, unit = "1 mins")
 
 reduce_transactions(portfolio_transactions, unit = "1 mins")
 
-clean_tansactions(portfolio_transactions, unit = "1 mins")
+clean_transactions(portfolio_transactions, unit = "1 mins", reduce = FALSE)
 
-aggregate_market_prices(
+aggregate_market_prices(market_prices, unit = NULL, aggregate_price_fun = mean)
+
+subset_market_prices(
   market_prices,
-  unit = "15 mins",
-  aggregate_price_fun = mean
+  portfolio_assets,
+  portfolio_datetimes,
+  unit = NULL
 )
 
-subset_market_prices(market_prices, portfolio_transactions, unit = "15 mins")
-
-clean_market_prices(
-  market_prices,
+generate_data(
   portfolio_transactions,
-  unit = "15 mins",
-  aggregate_price_fun = mean
+  market_prices,
+  investor_name = NULL,
+  unit = NULL,
+  subset = FALSE
 )
 }
 \arguments{
@@ -38,10 +40,22 @@ clean_market_prices(
 unit to be rounded to. Valid base units are second, minute, hour, day,
 week, etc. See \code{lubridate::\link[lubridate:round_date]{round_date}}.}
 
+\item{reduce}{Logical. If TRUE use \code{reduce_transactions}, otherwise use
+\code{aggregate_transactions} to aggregate portfolio transactions.}
+
 \item{market_prices}{Data frame containing the market prices.}
 
 \item{aggregate_price_fun}{Function to use to aggregate prices within
 the round unit. Default to \code{mean}.}
+
+\item{portfolio_assets}{Character vector of the transaction assets.}
+
+\item{portfolio_datetimes}{POSIXct vector of the transaction datetimes.}
+
+\item{investor_name}{Character. The name to be assigned to the investor.}
+
+\item{subset}{Logical. If TRUE, \code{subset_market_prices} is used to generate
+investor's data.}
 }
 \value{
 The data frame of aggregated market prices.
@@ -59,7 +73,7 @@ transactions that happened at the same datetime.
 transactions by aggregating those transactions that happened within
 a time interval.
 
-\item \code{clean_tansactions}: Clean the data frame of investors'
+\item \code{clean_transactions}: Clean the data frame of investors'
 transactions.
 
 \item \code{aggregate_market_prices}: Aggregate the data frame of market prices
@@ -68,7 +82,8 @@ with a specific aggregate function within a time interval.
 \item \code{subset_market_prices}: Subset the data frame of market prices
 based on investor's traded assets and datetimes of transactions.
 
-\item \code{clean_market_prices}: Clean the data frame of market prices.
+\item \code{generate_data}: Generate investors' data from transactions
+and market prices.
 }}
 
 \references{
@@ -81,3 +96,4 @@ H. Shefrin & M. Statman, 1985
 \author{
 L. Mazzucchelli & M. Zanotti
 }
+\keyword{internal}

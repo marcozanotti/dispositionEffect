@@ -10,6 +10,8 @@
 #' @param price_only Logical. If TRUE then only the price is returned.
 #' @param exact Logical. If TRUE then it looks for market prices at the same
 #'   datetime only, otherwise it looks for the nearest.
+#' @param substitute_datetime Logical. If TRUE the datetime is substituted
+#'   with the passed argument.
 #'
 #' @return The value of the asset's price.
 #'
@@ -26,7 +28,8 @@ closest_market_price <- function(
 	datetime,
 	market_prices,
 	price_only = FALSE,
-	exact = FALSE
+	exact = FALSE,
+	substitute_datetime = FALSE
 ) {
 
 	# filter historical prices for asset and datetime
@@ -46,6 +49,11 @@ closest_market_price <- function(
 				)
 			)
 		)
+
+	# change datetime
+	if (substitute_datetime) {
+		res$datetime <- datetime
+	}
 
 	# extract the price
 	if (price_only) {

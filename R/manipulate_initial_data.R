@@ -139,7 +139,7 @@ subset_market_prices <- function(market_prices, portfolio_assets, portfolio_date
 	} else {
 		dtt <- unique(portfolio_datetimes)
 	}
-	market_prices <- purrr::map_df(dtt, ~ closest_market_price(portfolio_assets, .x, market_prices))
+	market_prices <- purrr::map_df(dtt, ~ closest_market_price(portfolio_assets, .x, market_prices, substitute_datetime = TRUE))
 
 	return(market_prices)
 
@@ -161,9 +161,11 @@ generate_data <- function(
 		portfolio_transactions$investor <- investor_name
 	}
 
-	if (!subset) {
+	assets <- unique(portfolio_transactions$asset)
+	mrkt <- market_prices[market_prices$asset %in% assets, ]
 
-		assets <- unique(portfolio_transactions$asset)
+
+	if (!subset) {
 
 		if (is.null(unit)) {
 			first_date <- min(portfolio_transactions$datetime)
@@ -173,15 +175,12 @@ generate_data <- function(
 			last_date <- lubridate::ceiling_date(max(portfolio_transactions$datetime), unit = unit)
 		}
 
-		mrkt <- market_prices[market_prices$asset %in% assets &
-														market_prices$datetime >= first_date &
-														market_prices$datetime <= last_date, ]
+		mrkt <- market_prices[market_prices$datetime >= first_date & market_prices$datetime <= last_date, ]
 
 	} else {
 
-		assets <- unique(portfolio_transactions$asset)
 		datetimes <- unique(portfolio_transactions$datetime)
-		mrkt <- subset_market_prices(market_prices, assets, datetimes, unit) # dispositionEffect function
+		mrkt <- subset_market_prices(mrkt, assets, datetimes, unit) # dispositionEffect function
 
 	}
 

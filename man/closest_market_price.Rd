@@ -9,7 +9,8 @@ closest_market_price(
   datetime,
   market_prices,
   price_only = FALSE,
-  exact = FALSE
+  exact = FALSE,
+  substitute_datetime = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ price.}
 
 \item{exact}{Logical. If TRUE then it looks for market prices at the same
 datetime only, otherwise it looks for the nearest.}
+
+\item{substitute_datetime}{Logical. If TRUE the datetime is substituted
+with the passed argument.}
 }
 \value{
 The value of the asset's price.

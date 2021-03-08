@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dispositionEffect <img src='man/figures/logo.png' align="right" height="200" />
+# dispositionEffect <img src='logo.png' align="right" height="200" />
 
 <!-- badges: start -->
 

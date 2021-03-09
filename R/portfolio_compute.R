@@ -14,6 +14,11 @@
 #'   realized and paper gains and losses. If "none" nothing is computed but the
 #'   investor's portfolio update. Otherwise it has to be one of "count", "total",
 #'   "value", "duration" and "all".
+#' @param exact_market_prices Logical. If TRUE then \code{\link{closest_market_price}}
+#'   uses exact datetime match to look for the closest price of each asset.
+#'   It usually speeds up computation by a small degree, but it requires the
+#'   `market_prices` to have the prices for each transaction asset along each
+#'   transaction datatimes.
 #' @param portfolio_driven Logical. If TRUE the realized and paper gains and
 #'   losses for the positive (that is when the investor's portfolio value, as
 #'   computed through \code{\link{evaluate_portfolio}}, is greater than zero)

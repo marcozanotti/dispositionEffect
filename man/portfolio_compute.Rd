@@ -11,6 +11,7 @@ portfolio_compute(
   method = "all",
   allow_short = TRUE,
   time_threshold = "0 mins",
+  exact_market_prices = TRUE,
   portfolio_driven = FALSE,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
@@ -37,6 +38,12 @@ time threshold at which the computed financial difftime has to be evaluated
 (for instance "05 mins" or "20 hours").
 The allowed units are "secs", "mins", "hours", "days" and "weeks"
 (See \code{base::\link[base:difftime]{difftime}}).}
+
+\item{exact_market_prices}{Logical. If TRUE then \code{\link{closest_market_price}}
+uses exact datetime match to look for the closest price of each asset.
+It usually speeds up computation by a small degree, but it requires the
+\code{market_prices} to have the prices for each transaction asset along each
+transaction datatimes.}
 
 \item{portfolio_driven}{Logical. If TRUE the realized and paper gains and
 losses for the positive (that is when the investor's portfolio value, as

@@ -43,6 +43,7 @@ portfolio_compute <- function(
 	method = "all",
 	allow_short = TRUE,
 	time_threshold = "0 mins",
+	exact_market_prices = TRUE,
 	portfolio_driven = FALSE,
 	portfolio_statistics = FALSE,
 	verbose = c(0, 0),
@@ -139,6 +140,7 @@ portfolio_compute <- function(
 		# extract assets already into portfolio
 		ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
 
+		portfolio_adjusted <- portfolio
 		market_przs <- gainloss_df <- portfolio_value <- NULL
 
 		# if method is not "none" and the portfolio is not empty (initial condition),
@@ -147,22 +149,39 @@ portfolio_compute <- function(
 
 			# if the portfolio contains more assets than the traded asset, then extract
 			# the market prices at transaction_datetime of all the portfolio assets
-			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
-				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, price_only = FALSE)[, -2]
+			ptf_assets <- ptf_assets[ptf_assets %!in% trx_asset]
+			if (length(ptf_assets) > 0) {
+
+				# if the market_prices contain the exact datetimes of portfolio transactions
+				# then exact computation can be performed and the market_prices data frame
+				# can be sliced rolling forward to speed up computations
+				if (exact_market_prices) {
+					market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, exact = TRUE)[, -2]
+					# market_prices <- market_prices[market_prices$datetime >= trx_dtt, ]
+				} else {
+					market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices)[, -2]
+				}
+
 				chk_mp <- check_values(market_przs$asset, ptf_assets)
 				if (!is.null(chk_mp)) {
-					stop(paste0("Investor ", investor_id, ", transaction num. ", i, " datetime ", trx_dtt, ":\n",
-										  "No market prices available for asset(s)", paste(chk_mp, collapse = ", "), "\n"), call. = FALSE)
+					warning(paste0("Investor ", investor_id, ", transaction ", i, ", datetime ", trx_dtt, ":\n",
+												 "No market prices available for asset(s) ", paste(chk_mp, collapse = ", "), "\n"),
+									call. = FALSE)
+					portfolio_adjusted <- portfolio_adjusted[portfolio_adjusted$asset %!in% chk_mp, ]
 				}
+
 				market_przs <- market_przs[order(factor(market_przs$asset, levels = ptf_assets), method = "radix"), ]
+
 			} else {
+
 				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
+
 			}
 
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
 			gainloss_df <- gains_losses(
-				portfolio = portfolio,
+				portfolio = portfolio_adjusted,
 				market_prices = market_przs,
 				transaction_type = trx_type,
 				transaction_asset = trx_asset,
@@ -178,7 +197,7 @@ portfolio_compute <- function(
 			if (method %in% c("value", "all")) {
 				chk_gl <- check_gainloss(gainloss_df)
 				if (!is.null(chk_gl)) {
-					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl), call. = FALSE)
+					warning(paste0("Investor ", investor_id, ", transaction ", i, ":\n", chk_gl), call. = FALSE)
 				}
 			}
 
@@ -186,7 +205,7 @@ portfolio_compute <- function(
 			if (verb_lvl1) message("Evaluating global portfolio position..")
 			portfolio_value <- evaluate_portfolio(
 				portfolio = portfolio,
-				market_prices = market_przs,
+				market_prices = rbind(market_przs, data.frame("asset" = trx_asset, "price" = trx_prz)),
 				portfolio_statistics
 			)
 
@@ -216,7 +235,10 @@ portfolio_compute <- function(
 			pb$tick()
 		} # update progress bar
 
-		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt, ptf_assets, market_przs, gainloss_df, portfolio_value)
+		rm(
+			trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt,
+			ptf_assets, market_przs, gainloss_df, portfolio_value, portfolio_adjusted
+		)
 
 
 	} # close loop

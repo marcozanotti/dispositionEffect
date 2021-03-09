@@ -164,7 +164,6 @@ generate_data <- function(
 	assets <- unique(portfolio_transactions$asset)
 	mrkt <- market_prices[market_prices$asset %in% assets, ]
 
-
 	if (!subset) {
 
 		if (is.null(unit)) {

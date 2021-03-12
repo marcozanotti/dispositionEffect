@@ -24,12 +24,13 @@
 #'   values.
 #' @param gains Numeric vector (or scalar) containing gains.
 #' @param losses Numeric vector (or scalar) containing losses.
-#' @param portfolio Data frame, the portfolio of the investor containing the
+#' @param gainslosses Data frame, the portfolio of the investor containing the
 #'   realized and paper gains and losses results (as those obtained via
 #'   \code{\link{portfolio_compute}}).
 #' @param aggregate_fun Function to use to aggregate results.
 #'   Default to \code{NULL}, that is no aggregation is performed and the
 #'   results of each asset are shown.
+#' @param ... Further arguments to be passed to the aggregate function.
 #'
 #' @return Numeric vector (or scalar) with the value(s) of disposition
 #'   effect(s) or disposition difference(s).
@@ -94,14 +95,14 @@ disposition_difference <- function(gains, losses) {
 #'   the investor's portfolio containing realized and paper gains and losses
 #'   results.
 #' @export
-disposition_compute <- function(portfolio, aggregate_fun = NULL) {
+disposition_compute <- function(gainslosses, aggregate_fun = NULL, ...) {
 
-	res <- dplyr::select(portfolio, "investor", "asset")
+	res <- NULL
 
-	count <- any(grepl("count", names(portfolio)))
-	total <- any(grepl("total", names(portfolio)))
-	value <- any(grepl("value", names(portfolio)))
-	duration <- any(grepl("duration", names(portfolio)))
+	count <- any(grepl("count", names(gainslosses)))
+	total <- any(grepl("total", names(gainslosses)))
+	value <- any(grepl("value", names(gainslosses)))
+	duration <- any(grepl("duration", names(gainslosses)))
 
 	if (!count | !total | !value | !duration) {
 		# if no columns contain count | total | value | duration
@@ -111,43 +112,97 @@ disposition_compute <- function(portfolio, aggregate_fun = NULL) {
 
 		if (count) {
 			de_count <- disposition_effect(
-				portfolio$RG_count,
-				portfolio$PG_count,
-				portfolio$RL_count,
-			  portfolio$PL_count
+				gainslosses$RG_count,
+				gainslosses$PG_count,
+				gainslosses$RL_count,
+			  gainslosses$PL_count
 			)
-			res <- dplyr::mutate(res, DE_count = de_count)
+			res$DE_count <- de_count
 		}
 		if (total) {
 			de_total <- disposition_effect(
-				portfolio$RG_total,
-				portfolio$PG_total,
-				portfolio$RL_total,
-				portfolio$PL_total
+				gainslosses$RG_total,
+				gainslosses$PG_total,
+				gainslosses$RL_total,
+				gainslosses$PL_total
 			)
-			res <- dplyr::mutate(res, DE_total = de_total)
+			res$DE_total <- de_total
 		}
 		if (value) {
 			dd_value <- disposition_difference(
-				portfolio$RG_value,
-				portfolio$RL_value
+				gainslosses$RG_value,
+				gainslosses$RL_value
 			)
-			res <- dplyr::mutate(res, DD_value = dd_value)
+			res$DD_value <- dd_value
 		}
 		if (duration) {
 			dd_duration <- disposition_difference(
-				portfolio$RG_duration,
-				portfolio$RL_duration
+				gainslosses$RG_duration,
+				gainslosses$RL_duration
 			)
-			res <- dplyr::mutate(res, DD_duration = dd_duration)
+			res$DD_duration <- dd_duration
 		}
 
 	}
 
 	if (!is.null(aggregate_fun)) {
-		res <- res %>%
-			dplyr::group_by(!!rlang::sym("investor")) %>%
-			dplyr::summarise(dplyr::across(dplyr::contains("_"), .fns = aggregate_fun), .groups = "drop")
+		res <- purrr::map_df(res, aggregate_fun, ...)
+		final_res <- cbind(dplyr::select(gainslosses[1, ], !!rlang::sym("investor")), res)
+	} else  {
+		final_res <- cbind(gainslosses[, c("investor", "asset")], res)
+	}
+
+	return(final_res)
+
+}
+
+
+#' @describeIn disposition_effect Compute the time series disposition effect
+#'   on the gains and losses results.
+#' @export
+disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
+
+	count <- any(grepl("count", names(gainslosses)))
+	value <- any(grepl("value", names(gainslosses)))
+
+	if (!count | !value) {
+		# if no columns contain count | total | value | duration
+		stop("No columns containing 'count' or 'value'.")
+
+	} else {
+
+		if (count & value) {
+			de_count <- disposition_effect(
+				gainslosses$RG_count,
+				gainslosses$PG_count,
+				gainslosses$RL_count,
+				gainslosses$PL_count
+			)
+			dd_value <- disposition_difference(
+				gainslosses$RG_value,
+				gainslosses$RL_value
+			)
+			res <- data.frame("DE_count" = de_count, "DD_value" = dd_value)
+		} else	if (count) {
+			de_count <- disposition_effect(
+				gainslosses$RG_count,
+				gainslosses$PG_count,
+				gainslosses$RL_count,
+				gainslosses$PL_count
+			)
+			res <- data.frame("DE_count" = de_count)
+		} else {
+			dd_value <- disposition_difference(
+				gainslosses$RG_value,
+				gainslosses$RL_value
+			)
+			res <- data.frame("DD_value" = dd_value)
+		}
+
+	}
+
+	if (!is.null(aggregate_fun)) {
+		res <- as.data.frame(purrr::map(res, aggregate_fun, ...))
 	}
 
 	return(res)
@@ -158,21 +213,19 @@ disposition_compute <- function(portfolio, aggregate_fun = NULL) {
 #' @describeIn disposition_effect Wrapper that returns the most important
 #'   summary statistics related to the disposition effect.
 #' @export
-disposition_summary <- function(portfolio) {
+disposition_summary <- function(gainslosses) {
 
-	de <- disposition_compute(portfolio)
+	de <- disposition_compute(gainslosses)
 	de_aggr <- dplyr::bind_rows(
-		disposition_compute(portfolio, function(x) mean(x, na.rm = TRUE)),
-		disposition_compute(portfolio, function(x) stats::median(x, na.rm = TRUE)),
-		disposition_compute(portfolio, function(x) min(x, na.rm = TRUE)),
-		disposition_compute(portfolio, function(x) max(x, na.rm = TRUE))
+		disposition_compute(gainslosses, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
+		disposition_compute(gainslosses, stats::median, na.rm = TRUE),
+		disposition_compute(gainslosses, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
+		disposition_compute(gainslosses, mean, na.rm = TRUE),
+		disposition_compute(gainslosses, stats::sd, na.rm = TRUE),
+		disposition_compute(gainslosses, min, na.rm = TRUE),
+		disposition_compute(gainslosses, max, na.rm = TRUE)
 	) %>%
-		dplyr::mutate(stat = c("Mean", "Median", "Min", "Max"), .after = "investor")
-
-	de_summary <- list(
-		"Disposition Effects by Assets" = de[, -1],
-		"Summary Stastistics"           = de_aggr[, -1]
-	)
+		dplyr::mutate(stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"), .after = "investor")
 
 	res <- list("de" = de, "stat" = de_aggr)
 	return(res)

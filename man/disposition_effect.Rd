@@ -4,6 +4,7 @@
 \alias{disposition_effect}
 \alias{disposition_difference}
 \alias{disposition_compute}
+\alias{disposition_compute_ts}
 \alias{disposition_summary}
 \title{Disposition Effect}
 \usage{
@@ -11,9 +12,11 @@ disposition_effect(realized_gains, paper_gains, realized_losses, paper_losses)
 
 disposition_difference(gains, losses)
 
-disposition_compute(portfolio, aggregate_fun = NULL)
+disposition_compute(gainslosses, aggregate_fun = NULL, ...)
 
-disposition_summary(portfolio)
+disposition_compute_ts(gainslosses, aggregate_fun = NULL, ...)
+
+disposition_summary(gainslosses)
 }
 \arguments{
 \item{realized_gains}{Numeric vector (or scalar) containing realized gains
@@ -32,13 +35,15 @@ values.}
 
 \item{losses}{Numeric vector (or scalar) containing losses.}
 
-\item{portfolio}{Data frame, the portfolio of the investor containing the
+\item{gainslosses}{Data frame, the portfolio of the investor containing the
 realized and paper gains and losses results (as those obtained via
 \code{\link{portfolio_compute}}).}
 
 \item{aggregate_fun}{Function to use to aggregate results.
 Default to \code{NULL}, that is no aggregation is performed and the
 results of each asset are shown.}
+
+\item{...}{Further arguments to be passed to the aggregate function.}
 }
 \value{
 Numeric vector (or scalar) with the value(s) of disposition
@@ -69,6 +74,9 @@ by L. Mazzucchelli et al.
 \item \code{disposition_compute}: Compute the disposition effect directly on
 the investor's portfolio containing realized and paper gains and losses
 results.
+
+\item \code{disposition_compute_ts}: Compute the time series disposition effect
+on the gains and losses results.
 
 \item \code{disposition_summary}: Wrapper that returns the most important
 summary statistics related to the disposition effect.

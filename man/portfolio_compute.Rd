@@ -12,7 +12,8 @@ portfolio_compute(
   allow_short = TRUE,
   time_threshold = "0 mins",
   exact_market_prices = TRUE,
-  portfolio_driven = FALSE,
+  portfolio_driven_DE = FALSE,
+  time_series_DE = FALSE,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
   progress = FALSE
@@ -45,12 +46,15 @@ It usually speeds up computation by a small degree, but it requires the
 \code{market_prices} to have the prices for each transaction asset along each
 transaction datatimes.}
 
-\item{portfolio_driven}{Logical. If TRUE the realized and paper gains and
+\item{portfolio_driven_DE}{Logical. If TRUE the realized and paper gains and
 losses for the positive (that is when the investor's portfolio value, as
 computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 and the negative (that is when the investor's portfolio value, as computed
 through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 are returned.}
+
+\item{time_series_DE}{Logical. If TRUE the time series of disposition effect
+is computed on 'count' and 'value' methods only.}
 
 \item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}

@@ -465,7 +465,6 @@ update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper
 #'   results averaging the total value by the number of transactions
 #'   for each asset.
 #' @export
-#  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 
 	weights <- num_transaction_assets[["numtrx"]]

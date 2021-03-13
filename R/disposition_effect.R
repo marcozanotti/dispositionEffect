@@ -31,6 +31,7 @@
 #'   Default to \code{NULL}, that is no aggregation is performed and the
 #'   results of each asset are shown.
 #' @param ... Further arguments to be passed to the aggregate function.
+#' @param de_timeseries Data frame, the time series of disposition effects.
 #'
 #' @return Numeric vector (or scalar) with the value(s) of disposition
 #'   effect(s) or disposition difference(s).
@@ -228,6 +229,33 @@ disposition_summary <- function(gainslosses) {
 		dplyr::mutate(stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"), .after = "investor")
 
 	res <- list("de" = de, "stat" = de_aggr)
+	return(res)
+
+}
+
+#' @describeIn disposition_effect Wrapper that returns the most important
+#'   summary statistics related to the time series disposition effect.
+#' @export
+disposition_summary_ts <- function(de_timeseries) {
+
+	df_tmp <- dplyr::select(de_timeseries, dplyr::matches("D(E|D)"))
+	de_aggr_ts <- dplyr::bind_rows(
+		purrr::map(df_tmp, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
+		purrr::map(df_tmp, stats::median, na.rm = TRUE),
+		purrr::map(df_tmp, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
+		purrr::map(df_tmp, mean, na.rm = TRUE),
+		purrr::map(df_tmp, stats::sd, na.rm = TRUE),
+		purrr::map(df_tmp, min, na.rm = TRUE),
+		purrr::map(df_tmp, max, na.rm = TRUE)
+	) %>%
+		dplyr::mutate(
+			investor = de_timeseries$investor[1],
+			stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"),
+			.before = dplyr::everything()
+		) %>%
+		as.data.frame()
+
+	res <- list("stat" = de_aggr_ts)
 	return(res)
 
 }

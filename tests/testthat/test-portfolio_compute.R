@@ -15,13 +15,25 @@ test_that("portfolio_compute works (arg allow_short)", {
 	expect_type(portfolio_compute(investor, marketprices, allow_short = FALSE), "list")
 })
 
+test_that("portfolio_compute works (arg exact_market_prices)", {
+	# skip_on_cran()
+	expect_equal(
+		portfolio_compute(investor, marketprices, exact_market_prices = TRUE),
+		portfolio_compute(investor, marketprices, exact_market_prices = FALSE)
+	)
+})
+
 test_that("portfolio_compute works (arg time_threshold)", {
 	# skip_on_cran()
 	expect_equal(portfolio_compute(investor, marketprices, time_threshold = "5 mins"), portfolio_results, tolerance = 0.001)
 })
 
-test_that("portfolio_compute works (arg portfolio_driven)", {
-	skip_on_cran()
-	expect_type(portfolio_compute(investor, marketprices, portfolio_driven = TRUE), "list")
+test_that("portfolio_compute works (arg portfolio_driven_DE)", {
+	# skip_on_cran()
+	expect_type(portfolio_compute(investor, marketprices, portfolio_driven_DE = TRUE), "list")
 })
 
+test_that("portfolio_compute works (arg time_series_DE)", {
+	# skip_on_cran()
+	expect_type(portfolio_compute(investor, marketprices, time_series_DE = TRUE), "list")
+})

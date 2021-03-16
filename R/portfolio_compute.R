@@ -19,14 +19,17 @@
 #'   It usually speeds up computation by a small degree, but it requires the
 #'   `market_prices` to have the prices for each transaction asset along each
 #'   transaction datatimes.
-#' @param time_series_DE Logical. If TRUE the time series of disposition effect
-#'   is computed on 'count' and 'value' methods only.
 #' @param portfolio_driven_DE Logical. If TRUE the realized and paper gains and
 #'   losses for the positive (that is when the investor's portfolio value, as
 #'   computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 #'   and the negative (that is when the investor's portfolio value, as computed
 #'   through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 #'   are returned.
+#' @param time_series_DE Logical. If TRUE the time series of disposition effect
+#'   is computed on 'count' and 'value' methods only.
+#' @param assets_time_series_DE Character vector of assets' names as contained
+#'   into `portfolio_transactions` on which to compute the time series disposition
+#'   effect.
 #' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
@@ -53,6 +56,7 @@ portfolio_compute <- function(
 	exact_market_prices = TRUE,
 	portfolio_driven_DE = FALSE,
 	time_series_DE = FALSE,
+	assets_time_series_DE = NULL,
 	portfolio_statistics = FALSE,
 	verbose = c(0, 0),
 	progress = FALSE
@@ -93,18 +97,33 @@ portfolio_compute <- function(
 	if (!chk) {
 		stop(paste0("time_threshold units should be one of '", paste(trg, collapse = "', '"), "'.\n"), call. = FALSE)
 	}
-	# check method & timeseries_DE
-	if (method %in% c("total", "duration") & time_series_DE) {
-		warning("time_series_DE computation does not exist for method 'total' and 'duration'. Forced time_series_DE to FALSE",
+	# check method & time_series_DE
+	if (method %in% c("total", "duration", "none") & time_series_DE) {
+		warning("time_series_DE computation does not exist for method 'total', 'duration' and 'none'. Forced time_series_DE to FALSE",
 						call. = FALSE)
 		time_series_DE <- FALSE
 	}
-	# check portfolio_driven_DE & timeseries_DE
+	# check portfolio_driven_DE & time_series_DE
 	if (portfolio_driven_DE & time_series_DE) {
 		warning("time_series_DE computation is not allowed with portfolio_driven_DE. Forced time_series_DE to FALSE",
 						call. = FALSE)
 		time_series_DE <- FALSE
 	}
+	# check time_series_DE & assets_time_series_DE
+	if (!time_series_DE & !is.null(assets_time_series_DE)) {
+		warning("assets_time_series_DE can only be used with time_series_DE set to TRUE. Forced asset_time_series_DE to NULL",
+						call. = FALSE)
+		assets_time_series_DE <- NULL
+	}
+	# check assets_time_series_DE values
+	if (!is.null(assets_time_series_DE)) {
+		trg <- unique(portfolio_transactions$asset)
+		chk <- check_values(assets_time_series_DE, trg, no_exception = TRUE, weak_target = TRUE)
+		if (!is.null(chk$target) | !is.null(chk$input)) {
+			stop(paste0("assets_time_series_DE must contain valid assets' names (present into portfolio_transactions).\n"), call. = FALSE)
+		}
+	}
+
 
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
@@ -117,6 +136,9 @@ portfolio_compute <- function(
 	asset_numtrx <- portfolio_transactions %>%
 		dplyr::group_by(!!rlang::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
+	if (!is.null(assets_time_series_DE)) {
+		assets_time_series_DE <- sort(assets_time_series_DE, method = "radix")
+	}
 
 
 	# investor's initial portfolio (portfolio at time 0):
@@ -134,7 +156,7 @@ portfolio_compute <- function(
 
 	# initialize the df of time series DE
 	if (time_series_DE) {
-		ts_de <- initializer_timeseries_DE(investor_id, investor_datetimes, method)
+		DE_results_df <- initializer_timeseries_DE(investor_id, assets_time_series_DE, investor_datetimes, method)
 	}
 
 
@@ -257,21 +279,16 @@ portfolio_compute <- function(
 		}
 
 		# time series disposition effect
-		if (verb_lvl1) message("Computing time series DE..")
 		if (time_series_DE & i != 1) {
-			# compute aggregate time series disposition effect
-			DETs_df <- disposition_compute_ts(results_df, aggregate_fun = mean, na.rm = TRUE)
-			if (!is.null(gainloss_df)) {
-				# compute instant time series DE
-				DEts_df <- disposition_compute_ts(gainloss_df, aggregate_fun = mean, na.rm = TRUE)
-			} else {
-				DEts_df <- data.frame("DE_count" = 0, "DD_value" = 0)
-			}
-			# update time series DE results
-			ts_de$DEts_count[i] <- DEts_df$DE_count
-			ts_de$DETs_count[i] <- DETs_df$DE_count
-			ts_de$DDts_value[i] <- DEts_df$DD_value
-			ts_de$DDTs_value[i] <- DETs_df$DD_value
+			if (verb_lvl1) message("Computing time series DE..")
+			DE_results_df <- update_timeseries_DE(
+				timeseries_DE = DE_results_df,
+				realized_and_paper = results_df,
+				gainslosses = gainloss_df,
+				transaction_id = i,
+				assets_time_series_DE,
+				method
+			)
 		}
 
 		if (verb_lvl1) message("Done!")
@@ -315,7 +332,7 @@ portfolio_compute <- function(
 	}
 
 	if (time_series_DE) {
-		final_res <- list("portfolio" = final_res, "timeseries" = ts_de)
+		final_res <- list("portfolio" = final_res, "timeseries" = DE_results_df)
 	}
 
 	return(final_res) # return the updated portfolio

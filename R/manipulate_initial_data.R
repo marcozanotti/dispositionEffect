@@ -28,12 +28,14 @@
 #'
 #' @seealso \code{\link{closest_market_price}},
 #'   \code{lubridate::\link[lubridate:round_date]{round_date}}
+#'
+#' @keywords internal
 NULL
 
 
 #' @describeIn manipulate_initial_data Aggregate the data frame of investors'
 #'   transactions that happened at the same datetime.
-#' @export
+#' @keywords internal
 aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
@@ -60,7 +62,7 @@ aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 #' @describeIn manipulate_initial_data Reduce the data frame of investors'
 #'   transactions by aggregating those transactions that happened within
 #'   a time interval.
-#' @export
+#' @keywords internal
 reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
@@ -92,7 +94,7 @@ reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 #' @describeIn manipulate_initial_data Clean the data frame of investors'
 #'   transactions.
-#' @export
+#' @keywords internal
 clean_transactions <- function(portfolio_transactions, unit = "1 mins", reduce = FALSE) {
 
 	if (reduce) {
@@ -110,7 +112,7 @@ clean_transactions <- function(portfolio_transactions, unit = "1 mins", reduce =
 
 #' @describeIn manipulate_initial_data Aggregate the data frame of market prices
 #'   with a specific aggregate function within a time interval.
-#' @export
+#' @keywords internal
 aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_fun = mean) {
 
 	if (!is.null(unit)) {
@@ -131,7 +133,7 @@ aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_
 
 #' @describeIn manipulate_initial_data Subset the data frame of market prices
 #'   based on investor's traded assets and datetimes of transactions.
-#' @export
+#' @keywords internal
 subset_market_prices <- function(market_prices, portfolio_assets, portfolio_datetimes, unit = NULL) {
 
 	if (!is.null(unit)) {

@@ -166,7 +166,7 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 	count <- any(grepl("count", names(gainslosses)))
 	value <- any(grepl("value", names(gainslosses)))
 
-	if (!count | !value) {
+	if (!count & !value) {
 		# if no columns contain count | total | value | duration
 		stop("No columns containing 'count' or 'value'.")
 
@@ -203,10 +203,13 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 	}
 
 	if (!is.null(aggregate_fun)) {
-		res <- as.data.frame(purrr::map(res, aggregate_fun, ...))
+		final_res <- as.data.frame(purrr::map(res, aggregate_fun, ...))
+	} else  {
+		final_res <- cbind(gainslosses[, "asset"], res)
+		names(final_res)[1] <- "asset"
 	}
 
-	return(res)
+	return(final_res)
 
 }
 

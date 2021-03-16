@@ -14,6 +14,7 @@ portfolio_compute(
   exact_market_prices = TRUE,
   portfolio_driven_DE = FALSE,
   time_series_DE = FALSE,
+  assets_time_series_DE = NULL,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
   progress = FALSE
@@ -55,6 +56,10 @@ are returned.}
 
 \item{time_series_DE}{Logical. If TRUE the time series of disposition effect
 is computed on 'count' and 'value' methods only.}
+
+\item{assets_time_series_DE}{Character vector of assets' names as contained
+into \code{portfolio_transactions} on which to compute the time series disposition
+effect.}
 
 \item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}

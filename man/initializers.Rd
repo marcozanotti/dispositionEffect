@@ -11,7 +11,7 @@ initializer_portfolio(investor, assets)
 
 initializer_realized_and_paper(investor, assets, method = "all")
 
-initializer_timeseries_DE(investor, datetimes, method = "all")
+initializer_timeseries_DE(investor, assets, datetimes, method)
 }
 \arguments{
 \item{investor}{Character string. The name of the investor.}

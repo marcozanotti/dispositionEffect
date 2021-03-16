@@ -7,6 +7,7 @@
 \alias{update_quantity}
 \alias{update_portfolio}
 \alias{update_realized_and_paper}
+\alias{update_timeseries_DE}
 \alias{update_expectedvalue}
 \title{Update investor's portfolio or realized and paper results}
 \usage{
@@ -37,10 +38,15 @@ update_portfolio(
   transaction_type
 )
 
-update_realized_and_paper(
+update_realized_and_paper(realized_and_paper, new_realized_and_paper, method)
+
+update_timeseries_DE(
+  timeseries_DE,
   realized_and_paper,
-  new_realized_and_paper,
-  method = "all"
+  gainslosses,
+  transaction_id,
+  assets_time_series_DE = NULL,
+  method
 )
 
 update_expectedvalue(realized_and_paper, num_transaction_assets)
@@ -73,6 +79,14 @@ losses results related to the new transaction.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}
+
+\item{timeseries_DE}{Data frame of time series disposition effect results.}
+
+\item{transaction_id}{Numeric, the id of transaction.}
+
+\item{assets_time_series_DE}{Character vector of assets' names as contained
+into \code{portfolio_transactions} on which to compute the time series disposition
+effect.}
 
 \item{num_transaction_assets}{Data frame containing the number of transactions for
 each asset traded by the investor.}
@@ -119,6 +133,10 @@ and datetime of the traded asset.
 \item \code{update_realized_and_paper}: Update the realized and paper gains and losses
 results with the results obtained on the last occurred transaction.
 
+\item \code{update_timeseries_DE}: Update the realized and paper gains and losses
+results averaging the total value by the number of transactions
+for each asset.
+
 \item \code{update_expectedvalue}: Update the realized and paper gains and losses
 results averaging the total value by the number of transactions
 for each asset.
@@ -133,3 +151,4 @@ H. Shefrin & M. Statman, 1985
 \author{
 L. Mazzucchelli & M. Zanotti
 }
+\keyword{internal}

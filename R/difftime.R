@@ -31,24 +31,6 @@
 #'       smaller than the chosen threshold.}
 #'   }
 #'
-#' @examples
-#'   from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
-#'   to <- as.POSIXct("2020-01-01 18:00:00", tz = "UTC")
-#'   difftime(to, from)
-#'   as.numeric(difftime(to, from))
-#'   difftime_financial(from, to)
-#'
-#'   from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
-#'   to <- as.POSIXct("2020-01-02 18:00:00", tz = "UTC")
-#'   difftime(to, from)
-#'   as.numeric(difftime(to, from), units = "hours")
-#'   difftime_financial(from, to)
-#'   difftime_financial(from, to, after_market = 19) # Italian market
-#'
-#'   difftime_compare(from, to, "5 mins")
-#'   difftime_compare(from, to, "5 hours")
-#'   difftime_compare(from, to, "5 days")
-#'
 #' @author L. Mazzucchelli & M. Zanotti
 #'
 #' @references H. Shefrin & M. Statman, 1985
@@ -113,7 +95,7 @@ difftime_financial <- function(from, to, pre_market = 08,	after_market = 22, uni
 
 #' @describeIn difference_in_time Comparison of the \code{difftime_financial}
 #'   with respect to a given time threshold.
-#' @export
+#' @keywords internal
 difftime_compare <- function(from, to, time_threshold = "0 mins") {
 	# units = c("secs", "mins", "hours", "days", "weeks")
 

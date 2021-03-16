@@ -14,12 +14,22 @@
 #'   realized and paper gains and losses. If "none" nothing is computed but the
 #'   investor's portfolio update. Otherwise it has to be one of "count", "total",
 #'   "value", "duration" and "all".
-#' @param portfolio_driven Logical. If TRUE the realized and paper gains and
+#' @param exact_market_prices Logical. If TRUE then \code{\link{closest_market_price}}
+#'   uses exact datetime match to look for the closest price of each asset.
+#'   It usually speeds up computation by a small degree, but it requires the
+#'   `market_prices` to have the prices for each transaction asset along each
+#'   transaction datatimes.
+#' @param portfolio_driven_DE Logical. If TRUE the realized and paper gains and
 #'   losses for the positive (that is when the investor's portfolio value, as
 #'   computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 #'   and the negative (that is when the investor's portfolio value, as computed
 #'   through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 #'   are returned.
+#' @param time_series_DE Logical. If TRUE the time series of disposition effect
+#'   is computed on 'count' and 'value' methods only.
+#' @param assets_time_series_DE Character vector of assets' names as contained
+#'   into `portfolio_transactions` on which to compute the time series disposition
+#'   effect.
 #' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
@@ -43,7 +53,10 @@ portfolio_compute <- function(
 	method = "all",
 	allow_short = TRUE,
 	time_threshold = "0 mins",
-	portfolio_driven = FALSE,
+	exact_market_prices = TRUE,
+	portfolio_driven_DE = FALSE,
+	time_series_DE = FALSE,
+	assets_time_series_DE = NULL,
 	portfolio_statistics = FALSE,
 	verbose = c(0, 0),
 	progress = FALSE
@@ -84,6 +97,33 @@ portfolio_compute <- function(
 	if (!chk) {
 		stop(paste0("time_threshold units should be one of '", paste(trg, collapse = "', '"), "'.\n"), call. = FALSE)
 	}
+	# check method & time_series_DE
+	if (method %in% c("total", "duration", "none") & time_series_DE) {
+		warning("time_series_DE computation does not exist for method 'total', 'duration' and 'none'. Forced time_series_DE to FALSE",
+						call. = FALSE)
+		time_series_DE <- FALSE
+	}
+	# check portfolio_driven_DE & time_series_DE
+	if (portfolio_driven_DE & time_series_DE) {
+		warning("time_series_DE computation is not allowed with portfolio_driven_DE. Forced time_series_DE to FALSE",
+						call. = FALSE)
+		time_series_DE <- FALSE
+	}
+	# check time_series_DE & assets_time_series_DE
+	if (!time_series_DE & !is.null(assets_time_series_DE)) {
+		warning("assets_time_series_DE can only be used with time_series_DE set to TRUE. Forced asset_time_series_DE to NULL",
+						call. = FALSE)
+		assets_time_series_DE <- NULL
+	}
+	# check assets_time_series_DE values
+	if (!is.null(assets_time_series_DE)) {
+		trg <- unique(portfolio_transactions$asset)
+		chk <- check_values(assets_time_series_DE, trg, no_exception = TRUE, weak_target = TRUE)
+		if (!is.null(chk$target) | !is.null(chk$input)) {
+			stop(paste0("assets_time_series_DE must contain valid assets' names (present into portfolio_transactions).\n"), call. = FALSE)
+		}
+	}
+
 
 	# verbosity
 	verb_lvl1 <- as.logical(verbose[1])
@@ -92,9 +132,13 @@ portfolio_compute <- function(
 	# global parameters
 	investor_id <- portfolio_transactions$investor[1]
 	investor_assets <- sort(unique(portfolio_transactions$asset), method = "radix")
+	investor_datetimes <- portfolio_transactions$datetime
 	asset_numtrx <- portfolio_transactions %>%
 		dplyr::group_by(!!rlang::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
+	if (!is.null(assets_time_series_DE)) {
+		assets_time_series_DE <- sort(assets_time_series_DE, method = "radix")
+	}
 
 
 	# investor's initial portfolio (portfolio at time 0):
@@ -102,13 +146,19 @@ portfolio_compute <- function(
 	# with qty = NA and prz = NA for all the assets (initial condition)
 	portfolio <- initializer_portfolio(investor_id, investor_assets)
 
-	# initialize the df of computation: RG, RL, PG, PL and other
-	if (!portfolio_driven) {
+	# initialize the df of computations: RG, RL, PG, PL and other
+	if (!portfolio_driven_DE) {
 		results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 	} else {
 		pos_results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 		neg_results_df <- initializer_realized_and_paper(investor_id, investor_assets, method)
 	}
+
+	# initialize the df of time series DE
+	if (time_series_DE) {
+		DE_results_df <- initializer_timeseries_DE(investor_id, assets_time_series_DE, investor_datetimes, method)
+	}
+
 
 	# progress bar
 	if (progress) {
@@ -120,6 +170,7 @@ portfolio_compute <- function(
 		)
 		pb$tick(0)
 	}
+
 
 	for (i in seq_len(nrow(portfolio_transactions))) {
 
@@ -139,30 +190,46 @@ portfolio_compute <- function(
 		# extract assets already into portfolio
 		ptf_assets <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]$asset
 
+		portfolio_adjusted <- portfolio
 		market_przs <- gainloss_df <- portfolio_value <- NULL
 
 		# if method is not "none" and the portfolio is not empty (initial condition),
 		# then calls closest_market_price, gains_losses and evaluate_portfolio
-		if (method != "none" && length(ptf_assets) > 0) {
+		if (method != "none" & length(ptf_assets) > 0) {
 
 			# if the portfolio contains more assets than the traded asset, then extract
 			# the market prices at transaction_datetime of all the portfolio assets
-			if (length(ptf_assets[!(ptf_assets %in% trx_asset)]) > 0) {
-				market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, price_only = FALSE)[, -2]
+			ptf_assets <- ptf_assets[ptf_assets %!in% trx_asset]
+			if (length(ptf_assets) > 0) {
+				# if the market_prices contain the exact datetimes of portfolio transactions
+				# then exact computation can be performed and the market_prices data frame
+				# can be sliced rolling forward to speed up computations
+				if (exact_market_prices) {
+					market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices, exact = TRUE)[, -2]
+					# market_prices <- market_prices[market_prices$datetime >= trx_dtt, ]
+				} else {
+					market_przs <- closest_market_price(ptf_assets, trx_dtt, market_prices)[, -2]
+				}
+
 				chk_mp <- check_values(market_przs$asset, ptf_assets)
 				if (!is.null(chk_mp)) {
-					stop(paste0("Investor ", investor_id, ", transaction num. ", i, " datetime ", trx_dtt, ":\n",
-										  "No market prices available for asset(s)", paste(chk_mp, collapse = ", "), "\n"), call. = FALSE)
+					warning(paste0("Investor ", investor_id, ", transaction ", i, ", datetime ", trx_dtt, ":\n",
+												 "No market prices available for asset(s) ", paste(chk_mp, collapse = ", "), "\n"),
+									call. = FALSE)
+					portfolio_adjusted <- portfolio_adjusted[portfolio_adjusted$asset %!in% chk_mp, ]
 				}
+
 				market_przs <- market_przs[order(factor(market_przs$asset, levels = ptf_assets), method = "radix"), ]
+
 			} else {
 				market_przs <- data.frame("asset" = trx_asset, "price" = trx_prz)
 			}
 
+
 			# compute RG/RL/PG/PL
 			if (verb_lvl1) message("Start computing RG/RL/PG/PL..")
 			gainloss_df <- gains_losses(
-				portfolio = portfolio,
+				portfolio = portfolio_adjusted,
 				market_prices = market_przs,
 				transaction_type = trx_type,
 				transaction_asset = trx_asset,
@@ -178,7 +245,7 @@ portfolio_compute <- function(
 			if (method %in% c("value", "all")) {
 				chk_gl <- check_gainloss(gainloss_df)
 				if (!is.null(chk_gl)) {
-					warning(paste0("Investor ", investor_id, ", transaction num. ", i, ":\n", chk_gl), call. = FALSE)
+					warning(paste0("Investor ", investor_id, ", transaction ", i, ":\n", chk_gl), call. = FALSE)
 				}
 			}
 
@@ -186,9 +253,10 @@ portfolio_compute <- function(
 			if (verb_lvl1) message("Evaluating global portfolio position..")
 			portfolio_value <- evaluate_portfolio(
 				portfolio = portfolio,
-				market_prices = market_przs,
+				market_prices = rbind(market_przs, data.frame("asset" = trx_asset, "price" = trx_prz)),
 				portfolio_statistics
 			)
+
 
 		}
 
@@ -197,9 +265,9 @@ portfolio_compute <- function(
 		portfolio <- update_portfolio(portfolio, trx_asset, trx_qty, trx_prz, trx_dtt, trx_type)
 
 		# update the results_df
-		if (method != "none" && !is.null(gainloss_df)) {
+		if (method != "none" & !is.null(gainloss_df)) {
 			if (verb_lvl1) message("Updating realized and paper results..")
-			if (!portfolio_driven) {
+			if (!portfolio_driven_DE) {
 				results_df <- update_realized_and_paper(results_df, gainloss_df, method)
 			} else {
 				if (portfolio_value >= 0) {
@@ -208,7 +276,19 @@ portfolio_compute <- function(
 					neg_results_df <- update_realized_and_paper(neg_results_df, gainloss_df, method)
 				}
 			}
+		}
 
+		# time series disposition effect
+		if (time_series_DE & i != 1) {
+			if (verb_lvl1) message("Computing time series DE..")
+			DE_results_df <- update_timeseries_DE(
+				timeseries_DE = DE_results_df,
+				realized_and_paper = results_df,
+				gainslosses = gainloss_df,
+				transaction_id = i,
+				assets_time_series_DE,
+				method
+			)
 		}
 
 		if (verb_lvl1) message("Done!")
@@ -216,7 +296,10 @@ portfolio_compute <- function(
 			pb$tick()
 		} # update progress bar
 
-		rm(trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt, ptf_assets, market_przs, gainloss_df, portfolio_value)
+		rm(
+			trx_type, trx_asset, trx_qty, trx_prz, trx_dtt, previous_dtt,
+			ptf_assets, market_przs, gainloss_df, portfolio_value, portfolio_adjusted
+		)
 
 
 	} # close loop
@@ -224,7 +307,7 @@ portfolio_compute <- function(
 
 	# compute the mean expected return for RG, RL, PG, and PL value
 	if (method %in% c("value", "all")) {
-		if (!portfolio_driven) {
+		if (!portfolio_driven_DE) {
 			results_df <- update_expectedvalue(results_df, asset_numtrx)
 		} else {
 				pos_results_df <- update_expectedvalue(pos_results_df, asset_numtrx)
@@ -234,7 +317,7 @@ portfolio_compute <- function(
 
 	# join the dataframes and return a single result dataframe
 	if (method != "none") {
-		if (!portfolio_driven) {
+		if (!portfolio_driven_DE) {
 			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
 		} else {
 			pos_results_df$type <- "positive"
@@ -246,6 +329,10 @@ portfolio_compute <- function(
 
 	} else {
 		final_res <- portfolio
+	}
+
+	if (time_series_DE) {
+		final_res <- list("portfolio" = final_res, "timeseries" = DE_results_df)
 	}
 
 	return(final_res) # return the updated portfolio

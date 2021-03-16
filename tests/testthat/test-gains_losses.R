@@ -18,12 +18,7 @@ res <- data.frame(
 )
 
 test_that("gains_losses works", {
-	expect_type(
-		gains_losses(p, m, "S", "A", 5, 15, as.POSIXct("2021-03-01 10:00:00"), as.POSIXct("2021-02-26 10:00:00")),
-		"list"
-	)
-	expect_equal(
-		gains_losses(p, m, "S", "A", 5, 15, as.POSIXct("2021-03-01 10:00:00"), as.POSIXct("2021-02-26 10:00:00"), method = "count"),
-		res
-	)
+	expect_type(gains_losses(p, m, "S", "A", 5, 15, as.POSIXct("2021-03-01 10:00:00"), as.POSIXct("2021-02-26 10:00:00")), "list")
+	expect_type(gains_losses(p, m, "S", "A", 5, 15, as.POSIXct("2021-03-01 10:00:00"), as.POSIXct("2021-02-26 10:00:00"), time_threshold = "30 days"), "list")
+	expect_equal(gains_losses(p, m, "S", "A", 5, 15, as.POSIXct("2021-03-01 10:00:00"), as.POSIXct("2021-02-26 10:00:00"), method = "count"), res)
 })

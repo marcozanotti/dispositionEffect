@@ -10,12 +10,15 @@
 #' @inheritParams realized_compute
 #' @inheritParams paper_compute
 #' @inheritParams gains_losses
+#' @inheritParams portfolio_compute
 #' @param realized_and_paper Data frame containing the realized and paper gains and
 #'   losses results to be updated.
 #' @param new_realized_and_paper Data frame containing the realized and paper gains and
 #'   losses results related to the new transaction.
 #' @param num_transaction_assets Data frame containing the number of transactions for
 #'   each asset traded by the investor.
+#' @param timeseries_DE Data frame of time series disposition effect results.
+#' @param transaction_id Numeric, the id of transaction.
 #'
 #'
 #' @return
@@ -48,11 +51,13 @@
 #' @references H. Shefrin & M. Statman, 1985
 #'
 #' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_losses}}
+#'
+#' @keywords internal
 NULL
 
 
 #' @describeIn updates Update the portfolio price of the traded asset.
-#' @export
+#' @keywords internal
 update_price <- function(portfolio_quantity, portfolio_price, transaction_quantity, transaction_price, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
@@ -113,7 +118,7 @@ update_price <- function(portfolio_quantity, portfolio_price, transaction_quanti
 
 
 #' @describeIn updates Update the portfolio datetime of the traded asset.
-#' @export
+#' @keywords internal
 update_datetime <- function(portfolio_quantity, portfolio_datetime, transaction_quantity, transaction_datetime, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
@@ -175,7 +180,7 @@ update_datetime <- function(portfolio_quantity, portfolio_datetime, transaction_
 
 
 #' @describeIn updates Update the portfolio quantity of the traded asset.
-#' @export
+#' @keywords internal
 update_quantity <- function(portfolio_quantity, transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
@@ -190,7 +195,7 @@ update_quantity <- function(portfolio_quantity, transaction_quantity) {
 
 #' @describeIn updates Update the portfolio with the new quantity, price
 #'   and datetime of the traded asset.
-#' @export
+#' @keywords internal
 update_portfolio <- function(portfolio, transaction_asset, transaction_quantity, transaction_price, transaction_datetime, transaction_type) {
 
 	# qty, prz and dtt of transaction asset already into portfolio
@@ -222,8 +227,8 @@ update_portfolio <- function(portfolio, transaction_asset, transaction_quantity,
 
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results with the results obtained on the last occurred transaction.
-#' @export
-update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper, method = "all") {
+#' @keywords internal
+update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper, method) {
 
 	assets <- new_realized_and_paper$asset
 	realized_and_paper_filtered <- realized_and_paper[realized_and_paper$asset %in% assets,]
@@ -464,8 +469,98 @@ update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results averaging the total value by the number of transactions
 #'   for each asset.
-#' @export
-#  new name => update_expectedvalue +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#' @keywords internal
+update_timeseries_DE <- function(
+	timeseries_DE,
+	realized_and_paper,
+	gainslosses,
+	transaction_id,
+	assets_time_series_DE = NULL,
+	method
+) {
+
+	# compute aggregate time series disposition effect
+	TsDE_df <- disposition_compute_ts(realized_and_paper, aggregate_fun = mean, na.rm = TRUE)
+	if (!is.null(gainslosses)) {
+		# compute instant time series DE
+		tsDE_df <- disposition_compute_ts(gainslosses, aggregate_fun = mean, na.rm = TRUE)
+	} else {
+		tsDE_df <- data.frame("DE_count" = NA_real_, "DD_value" = NA_real_)
+	}
+
+	if (!is.null(assets_time_series_DE)) {
+		rnp <- realized_and_paper[realized_and_paper$asset %in% assets_time_series_DE, ]
+		assets_TsDE_df <- disposition_compute_ts(rnp)
+		if (!is.null(gainslosses)) {
+			gnl <- gainslosses[gainslosses$asset %in% assets_time_series_DE, ]
+			assets_tsDE_df <- disposition_compute_ts(gnl)
+		} else {
+			assets_tsDE_df <- data.frame("asset" = assets_time_series_DE, "DE_count" = NA_real_, "DD_value" = NA_real_)
+		}
+	}
+
+
+	if (method == "count") {
+		# update investor DE
+		timeseries_DE$DETs_count[transaction_id] <- TsDE_df$DE_count
+		timeseries_DE$DEts_count[transaction_id] <- tsDE_df$DE_count
+		# update asset DE
+		if (!is.null(assets_time_series_DE)) {
+			for (a in assets_time_series_DE) {
+				deT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_count
+				det <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_count
+				if (length(det) == 0) det <- NA_real_ # if there is no such asset into gainslosses
+				cols_idx <- grep(paste0(a, "_"), names(timeseries_DE))
+				timeseries_DE[transaction_id, cols_idx] <- c(deT, det)
+			}
+		}
+
+	} else if (method == "value") {
+		# update investor DE
+		timeseries_DE$DDTs_value[transaction_id] <- TsDE_df$DD_value
+		timeseries_DE$DDts_value[transaction_id] <- tsDE_df$DD_value
+		# update asset DE
+		if (!is.null(assets_time_series_DE)) {
+			for (a in assets_time_series_DE) {
+				ddT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DD_value
+				ddt <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DD_value
+				if (length(ddt) == 0) ddt <- NA_real_ # if there is no such asset into gainslosses
+				cols_idx <- grep(paste0(a, "_"), names(timeseries_DE))
+				timeseries_DE[transaction_id, cols_idx] <- c(ddT, ddt)
+			}
+		}
+
+	} else {
+		# update investor DE
+		timeseries_DE$DETs_count[transaction_id] <- TsDE_df$DE_count
+		timeseries_DE$DEts_count[transaction_id] <- tsDE_df$DE_count
+		timeseries_DE$DDTs_value[transaction_id] <- TsDE_df$DD_value
+		timeseries_DE$DDts_value[transaction_id] <- tsDE_df$DD_value
+		# update asset DE
+		if (!is.null(assets_time_series_DE)) {
+			for (a in assets_time_series_DE) {
+				deT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_count
+				det <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_count
+				ddT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DD_value
+				ddt <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DD_value
+				if (length(det) == 0) det <- NA_real_
+				if (length(ddt) == 0) ddt <- NA_real_
+				cols_idx <- grep(paste0(a, "_"), names(timeseries_DE))
+				timeseries_DE[transaction_id, cols_idx] <- c(deT, det, ddT, ddt)
+			}
+		}
+
+	}
+
+	return(timeseries_DE)
+
+}
+
+
+#' @describeIn updates Update the realized and paper gains and losses
+#'   results averaging the total value by the number of transactions
+#'   for each asset.
+#' @keywords internal
 update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 
 	weights <- num_transaction_assets[["numtrx"]]

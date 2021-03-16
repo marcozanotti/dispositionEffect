@@ -4,11 +4,14 @@
 \alias{initializers}
 \alias{initializer_portfolio}
 \alias{initializer_realized_and_paper}
+\alias{initializer_timeseries_DE}
 \title{Initializers functions}
 \usage{
 initializer_portfolio(investor, assets)
 
 initializer_realized_and_paper(investor, assets, method = "all")
+
+initializer_timeseries_DE(investor, assets, datetimes, method)
 }
 \arguments{
 \item{investor}{Character string. The name of the investor.}
@@ -18,22 +21,29 @@ the investor.}
 
 \item{method}{Character string. The method used to compute papers.
 Allowed values are "count", "total", "value", "duration" and "all".}
+
+\item{datetimes}{POSIXct vector. The datetimes of the investors'
+transactions.}
 }
 \value{
-Empty \link[tibble:tibble-package]{tibble} of either investor's
-portfolio or investor's realized and paper gains and losses results
-based on the chosen method.
+Empty \code{data.frame} of either investor's
+portfolio, investor's realized and paper gains and losses results,
+or time series Disposition Effect based on the chosen method.
 }
 \description{
 Initializers functions
 }
 \section{Functions}{
 \itemize{
-\item \code{initializer_portfolio}: Empty \link[tibble:tibble-package]{tibble}
+\item \code{initializer_portfolio}: Empty \code{data.frame}
 of investor's portfolio.
 
-\item \code{initializer_realized_and_paper}: Empty \link[tibble:tibble-package]{tibble}
+\item \code{initializer_realized_and_paper}: Empty \code{data.frame}
 of investor's realized and paper gains and losses results based on
+the chosen method.
+
+\item \code{initializer_timeseries_DE}: Empty \code{data.frame}
+of investor's time series Disposition Effect based on
 the chosen method.
 }}
 

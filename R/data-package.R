@@ -64,3 +64,22 @@
 #'
 #' @source \url{https://www.directa.it/index-ita.html}
 "portfolio_results"
+
+
+#' @title Realized and paper results
+#'
+#' @description Results obtained by means of \code{portfolio_compute} on the
+#'   data sets \code{investor} and \code{marketprices} with \code{time_series_DE = TRUE}.
+#'
+#' @format A data frame with 19 rows and 6 variables:
+#' \describe{
+#'   \item{investor}{id of the investor}
+#'   \item{datetime}{timestamp of the last operation}
+#'   \item{DEts_count}{Partial disposition effect computed at time t}
+#'   \item{DETs_count}{Complete disposition effect computed after updating at time t}
+#'   \item{DDts_value}{Partial disposition difference computed at time t}
+#'   \item{DDTs_value}{Complete disposition difference computed after updating at time t}
+#' }
+#'
+#' @source \url{https://www.directa.it/index-ita.html}
+"portfolio_results_ts"

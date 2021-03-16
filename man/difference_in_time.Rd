@@ -63,25 +63,6 @@ moments and financial markets closing days.
 with respect to a given time threshold.
 }}
 
-\examples{
-  from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
-  to <- as.POSIXct("2020-01-01 18:00:00", tz = "UTC")
-  difftime(to, from)
-  as.numeric(difftime(to, from))
-  difftime_financial(from, to)
-
-  from <- as.POSIXct("2020-01-01 09:00:00", tz = "UTC")
-  to <- as.POSIXct("2020-01-02 18:00:00", tz = "UTC")
-  difftime(to, from)
-  as.numeric(difftime(to, from), units = "hours")
-  difftime_financial(from, to)
-  difftime_financial(from, to, after_market = 19) # Italian market
-
-  difftime_compare(from, to, "5 mins")
-  difftime_compare(from, to, "5 hours")
-  difftime_compare(from, to, "5 days")
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }
@@ -91,3 +72,4 @@ H. Shefrin & M. Statman, 1985
 \author{
 L. Mazzucchelli & M. Zanotti
 }
+\keyword{internal}

@@ -11,7 +11,10 @@ portfolio_compute(
   method = "all",
   allow_short = TRUE,
   time_threshold = "0 mins",
-  portfolio_driven = FALSE,
+  exact_market_prices = TRUE,
+  portfolio_driven_DE = FALSE,
+  time_series_DE = FALSE,
+  assets_time_series_DE = NULL,
   portfolio_statistics = FALSE,
   verbose = c(0, 0),
   progress = FALSE
@@ -38,12 +41,25 @@ time threshold at which the computed financial difftime has to be evaluated
 The allowed units are "secs", "mins", "hours", "days" and "weeks"
 (See \code{base::\link[base:difftime]{difftime}}).}
 
-\item{portfolio_driven}{Logical. If TRUE the realized and paper gains and
+\item{exact_market_prices}{Logical. If TRUE then \code{\link{closest_market_price}}
+uses exact datetime match to look for the closest price of each asset.
+It usually speeds up computation by a small degree, but it requires the
+\code{market_prices} to have the prices for each transaction asset along each
+transaction datatimes.}
+
+\item{portfolio_driven_DE}{Logical. If TRUE the realized and paper gains and
 losses for the positive (that is when the investor's portfolio value, as
 computed through \code{\link{evaluate_portfolio}}, is greater than zero)
 and the negative (that is when the investor's portfolio value, as computed
 through \code{\link{evaluate_portfolio}}, is smaller than zero) portfolios
 are returned.}
+
+\item{time_series_DE}{Logical. If TRUE the time series of disposition effect
+is computed on 'count' and 'value' methods only.}
+
+\item{assets_time_series_DE}{Character vector of assets' names as contained
+into \code{portfolio_transactions} on which to compute the time series disposition
+effect.}
 
 \item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
 on the portfolio and returned.}

@@ -25,6 +25,7 @@ evaluate_portfolio <- function(portfolio, market_prices, portfolio_statistics = 
 	# remove asset with missing qty
 	portfolio <- portfolio[!is.na(portfolio$quantity) & portfolio$quantity != 0, ]
 	# extract prices of assets still into portfolio
+	market_prices <- market_prices[order(factor(market_prices$asset, levels = portfolio$asset), method = "radix"), ]
 	market_prices <- market_prices[market_prices$asset %in% portfolio$asset, ]$price
 
 	value <- sum(portfolio$quantity * (market_prices - portfolio$price))

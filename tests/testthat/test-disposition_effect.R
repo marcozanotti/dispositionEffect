@@ -29,7 +29,7 @@ test_that("disposition_compute works", {
 })
 
 test_that("disposition_compute_ts works", {
-	expect_equal(disposition_compute_ts(portfolio_results)[1:2, ], res[, c(3, 5)], tolerance = 0.00001)
+	expect_equal(disposition_compute_ts(portfolio_results)[1:2, ], res[, c(2, 3, 5)], tolerance = 0.00001)
 	expect_equal(
 		disposition_compute_ts(portfolio_results[1:2, ], aggregate_fun = mean, na.rm = TRUE),
 		as.data.frame(t(colMeans(res[c(3, 5)], na.rm = TRUE))),

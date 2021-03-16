@@ -1,0 +1,12 @@
+context("manipulate_initial_data")
+
+test_that("manipulate_initial_data works", {
+	# skip_on_cran()
+	expect_type(aggregate_transactions(investor, unit = "1 month"), "list")
+	expect_type(reduce_transactions(investor, unit = "1 month"), "list")
+	expect_type(clean_transactions(investor, unit = "1 month"), "list")
+	expect_type(aggregate_market_prices(marketprices, unit = "1 month"), "list")
+	expect_type(subset_market_prices(marketprices, investor$asset[1], investor$datetime), "list")
+	expect_type(generate_data(investor, marketprices, investor_name = "ABC"), "list")
+	expect_type(generate_data(investor, marketprices, investor_name = "ABC", subset = TRUE), "list")
+})

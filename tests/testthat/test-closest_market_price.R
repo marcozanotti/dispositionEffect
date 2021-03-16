@@ -1,4 +1,4 @@
-context("evaluate portfolio")
+context("closest_market_price")
 
 m <- data.frame(
 	"asset" = c("A", "A", "A", "B", "B", "B"),

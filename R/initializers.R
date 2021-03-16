@@ -112,33 +112,78 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 #' @describeIn initializers Empty \code{data.frame}
 #'   of investor's time series Disposition Effect based on
 #'   the chosen method.
-initializer_timeseries_DE <- function(investor, datetimes, method = "all") {
+initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 
-	if (method == "count") {
-		ts_df <- data.frame(
-			investor = investor,
-			datetime = datetimes,
-			DEts_count = rep(NA_real_, length(datetimes)),
-			DETs_count = rep(NA_real_, length(datetimes))
-		)
-	} else if (method == "value") {
-		ts_df <- data.frame(
-			investor = investor,
-			datetime = datetimes,
-			DDts_value = rep(NA_real_, length(datetimes)),
-			DDTs_value = rep(NA_real_, length(datetimes))
-		)
-	} else if (method == "all") {
-		ts_df <- data.frame(
-			investor = investor,
-			datetime = datetimes,
-			DEts_count = rep(NA_real_, length(datetimes)),
-			DETs_count = rep(NA_real_, length(datetimes)),
-			DDts_value = rep(NA_real_, length(datetimes)),
-			DDTs_value = rep(NA_real_, length(datetimes))
-		)
-	} else {# method == "none"
-		ts_df <- NULL
+	if (is.null(assets)) {
+
+		if (method == "count") {
+			ts_df <- data.frame(
+				investor = investor,
+				datetime = datetimes,
+				DETs_count = rep(NA_real_, length(datetimes)),
+				DEts_count = rep(NA_real_, length(datetimes))
+			)
+		} else if (method == "value") {
+			ts_df <- data.frame(
+				investor = investor,
+				datetime = datetimes,
+				DDTs_value = rep(NA_real_, length(datetimes)),
+				DDts_value = rep(NA_real_, length(datetimes))
+			)
+		} else {# method all
+			ts_df <- data.frame(
+				investor = investor,
+				datetime = datetimes,
+				DETs_count = rep(NA_real_, length(datetimes)),
+				DEts_count = rep(NA_real_, length(datetimes)),
+				DDTs_value = rep(NA_real_, length(datetimes)),
+				DDts_value = rep(NA_real_, length(datetimes))
+			)
+		}
+
+	} else {# if assets is not NULL
+
+		if (method == "count") {
+
+			assets_nms <- sort(
+				paste(assets,	c(rep("DETs_count", length(assets)), rep("DEts_count", length(assets))), sep = "_"),
+				method = "radix"
+			)
+			ts_df <- as.data.frame(matrix(NA_real_, length(datetimes), 2 + 2 + length(assets_nms)))
+			names(ts_df) <- c("investor", "datetime", "DETs_count", "DEts_count", assets_nms)
+			ts_df$investor <- investor
+			ts_df$datetime <- datetimes
+
+		} else if (method == "value") {
+
+			assets_nms <- sort(
+				paste(assets,	c(rep("DDTs_value", length(assets)), rep("DDts_value", length(assets))), sep = "_"),
+				method = "radix"
+			)
+			ts_df <- as.data.frame(matrix(NA_real_, length(datetimes), 2 + 2 + length(assets_nms)))
+			names(ts_df) <- c("investor", "datetime", "DDTs_value", "DDts_value", assets_nms)
+			ts_df$investor <- investor
+			ts_df$datetime <- datetimes
+
+		} else {# method all
+
+			assets_nms <- c(
+				sort(
+					paste(assets,	c(rep("DETs_count", length(assets)), rep("DEts_count", length(assets))), sep = "_"),
+					method = "radix"
+				),
+				sort(
+					paste(assets,	c(rep("DDTs_value", length(assets)), rep("DDts_value", length(assets))), sep = "_"),
+					method = "radix"
+				)
+			)
+			ts_df <- as.data.frame(matrix(NA_real_, length(datetimes), 2 + 4 + length(assets_nms)))
+			names(ts_df) <- c("investor", "datetime", "DETs_count", "DEts_count", "DDTs_value", "DDts_value", assets_nms)
+			ts_df$investor <- investor
+			ts_df$datetime <- datetimes
+
+		}
+
 	}
 
 	return(ts_df)

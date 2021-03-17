@@ -33,7 +33,6 @@
 #' @param verbose Numeric or logical vector of length 2 that allows to control
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
-#' @param ... Further arguments to be passed to \code{portfolio_compute}.
 #'
 #' @return A [tibble][tibble::tibble-package] containing the investor's
 #'   portfolio and the values of realized and paper gains and losses
@@ -336,39 +335,5 @@ portfolio_compute <- function(
 	}
 
 	return(final_res) # return the updated portfolio
-
-}
-
-
-#' @describeIn portfolio_compute Temporary parallel version of portfolio_compute
-#' @export
-portfolio_compute_parallel <- function(portfolio_transactions, market_prices, ...) {
-
-	investors_id <- purrr::map_chr(portfolio_transactions, ~purrr::pluck(., "investor")[1])
-	portfolio_compute_safe <- purrr::safely(portfolio_compute)
-
-	ncores <- future::availableCores()
-	# if there are more than 2 cores than use parallel computing
-	# otherwise use sequential computing
-	# RULE: always leave at least 1 free core
-	if ((ncores - 1) > 1) {
-		new_plan <- "multiprocess"
-	} else {
-		new_plan <- "sequential"
-	}
-	old_plan <- future::plan(strategy = new_plan)
-
-	res <- furrr::future_map(
-		portfolio_transactions,
-		portfolio_compute_safe,
-		market_prices,
-		...)
-
-	res <- purrr::transpose(res)$result
-	names(res) <- investors_id
-
-	future::plan(old_plan) # set back the old plan
-
-	return(res)
 
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/portfolio_compute.R
 \name{portfolio_compute}
 \alias{portfolio_compute}
-\alias{portfolio_compute_parallel}
 \title{Portfolio Compute}
 \usage{
 portfolio_compute(
@@ -19,8 +18,6 @@ portfolio_compute(
   verbose = c(0, 0),
   progress = FALSE
 )
-
-portfolio_compute_parallel(portfolio_transactions, market_prices, ...)
 }
 \arguments{
 \item{portfolio_transactions}{Data frame. The investor's transactions data frame.}
@@ -68,8 +65,6 @@ on the portfolio and returned.}
 for the function verbosity.}
 
 \item{progress}{Logical. If TRUE a progress bar is displayed.}
-
-\item{...}{Further arguments to be passed to \code{portfolio_compute}.}
 }
 \value{
 A \link[tibble:tibble-package]{tibble} containing the investor's
@@ -80,11 +75,6 @@ computed by means of the chosen method on each portfolio assets.
 Computation of all the transaction updates and the
 realized and paper gains and losses for each assets.
 }
-\section{Functions}{
-\itemize{
-\item \code{portfolio_compute_parallel}: Temporary parallel version of portfolio_compute
-}}
-
 \references{
 H. Shefrin & M. Statman, 1985
 }

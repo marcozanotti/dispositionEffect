@@ -11,12 +11,12 @@ test_that("disposition_difference works", {
 })
 
 res <- data.frame(
-	"investor" = "ID123",
+	"investor" = "4273N",
 	"asset" = c("ACO", "AST"),
 	"DE_count" = c(0.1428571, -1),
 	"DE_total" = c(0.04094631, -1),
 	"DD_value" = c(0.008701958, -0.074978204),
-	"DD_duration" = c(439.8942, -165.1189)
+	"DD_duration" = c(439.9000, -165.1167)
 )
 
 test_that("disposition_compute works", {
@@ -26,6 +26,7 @@ test_that("disposition_compute works", {
 		cbind(data.frame("investor" = res$investor[1]), t(colMeans(res[3:6], na.rm = TRUE))),
 		tolerance = 0.00001
 	)
+	expect_error(disposition_compute(portfolio_results[, 1:5]))
 })
 
 test_that("disposition_compute_ts works", {
@@ -35,6 +36,7 @@ test_that("disposition_compute_ts works", {
 		as.data.frame(t(colMeans(res[c(3, 5)], na.rm = TRUE))),
 		tolerance = 0.00001
 	)
+	expect_error(disposition_compute_ts(portfolio_results[, 1:5]))
 })
 
 test_that("disposition_summary works", {

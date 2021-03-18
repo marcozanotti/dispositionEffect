@@ -2,7 +2,7 @@
 title: "The Analysis of Disposition Effect"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with dispositionEffect}
+  %\VignetteIndexEntry{The Analysis of Disposition Effect}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

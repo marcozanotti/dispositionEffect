@@ -2,7 +2,7 @@
 title: "Time Series Disposition Effect"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with dispositionEffect}
+  %\VignetteIndexEntry{Time Series Disposition Effect}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

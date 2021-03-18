@@ -2,7 +2,7 @@
 title: "Disposition Effect in Parallel"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with dispositionEffect}
+  %\VignetteIndexEntry{Disposition Effect in Parallel}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

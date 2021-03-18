@@ -31,7 +31,7 @@ Suggests:
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
-URL: https://github.com/marcozanotti/dispositionEffect
+URL: https://marcozanotti.github.io/dispositionEffect, https://github.com/marcozanotti/dispositionEffect
 BugReports: https://github.com/marcozanotti/dispositionEffect/issues
 Depends: 
     R (>= 3.5.0)

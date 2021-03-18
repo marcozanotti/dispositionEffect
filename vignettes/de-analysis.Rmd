@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with dispositionEffect"
+title: "The Analysis of Disposition Effect"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with dispositionEffect}

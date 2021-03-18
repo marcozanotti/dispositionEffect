@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with dispositionEffect"
+title: "Time Series Disposition Effect"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with dispositionEffect}

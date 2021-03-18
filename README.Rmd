@@ -70,18 +70,8 @@ the necessary calculations and can be used for real-time processing
 
 * `disposition_difference` computes the disposition difference  
 
-* `disposition_compute` interfaces that allows to easily apply the two 
-previous functions to results obtained from `portfolio_compute`  
-
-* `disposition_summary` interfaces that allows to easily compute summary
-statistics of disposition effect from the results obtained with 
-`portfolio_compute`  
-
-* `disposition_compute_ts` time series version of `disposition_compute` to
-obtain the time series of disposition effect  
-
-* `disposition_summary_ts` time series version of `disposition_summary_ts` 
-to compute summary statistics on time series disposition effect  
+* `disposition_compute`and `disposition_summary`interfaces that allow 
+to easily compute disposition effect and summary statistics.
   
   
 ## Tutorials
@@ -94,77 +84,7 @@ to compute summary statistics on time series disposition effect
 
 * Time Series Disposition Effect  
   
-  
-## Getting started
 
-The following simple example shows how to perform disposition effect 
-calculations on real financial market data.  
-
-```{r, eval = TRUE}
-library(dispositionEffect)
-```
-
-Portfolio of transactions of a real investor.
-
-```{r, eval = TRUE}
-head(investor)
-```
-
-Dataset of market prices of the traded assets.
-
-```{r, eval = TRUE}
-head(marketprices)
-```
-
-Compute realized gains, realized losses, paper gains and paper losses.
-
-```{r, eval = TRUE}
-portfolio_results <- portfolio_compute(
-	portfolio_transactions = investor, 
-	market_prices = marketprices
-)
-```
-
-Compute the disposition effect with different methods.
-
-```{r, eval = TRUE}
-de <- disposition_compute(portfolio_results)
-de
-```
-
-Summarise the behaviour of the investor.
-
-```{r, eval = TRUE}
-disposition_summary(portfolio_results)
-```
-
-Plot the results to spot the presence of the disposition effect.
-
-```{r, eval = TRUE}
-library(ggplot2)
-ggplot(de, aes(x = asset, y = DE_count, fill = asset)) +
-	geom_col() +
-	scale_fill_viridis_d() +
-	labs(
-		title = "Disposition Effect results for the traded assets.",
-		subtitle = "Method Count",
-		x = "", y = ""
-		)
-```
-
-Since financial data may be potentially huge in size, efficiency
-concerns are solved through the parallel versions of the main
-functions.
-
-```{r, eval = FALSE}
-portfolio_results_parallel <- portfolio_compute_parallel(
-	portfolio_transactions = investors, 
-	market_prices = marketprices, 
-	allow_short = TRUE
-)
-```
-  
-  
 ## Getting help
 
 If you encounter a clear bug, please file an issue with a minimal
@@ -180,8 +100,3 @@ For questions and other discussion, mail us at
 A special thank to [Claud
 Graphics](https://www.behance.net/claudiocec3c4f) for our logo.
   
-  
-------------------------------------------------------------------------
-
-Please note that this package is free and open source software, licensed
-under MIT.

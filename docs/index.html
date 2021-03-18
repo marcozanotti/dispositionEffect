@@ -72,7 +72,7 @@
       <a href="articles/de-timeseries.html">Time Series Disposition Effect</a>
     </li>
     <li>
-      <a href="articles/getting-started.html">Getting Started with dispositionEffect</a>
+      <a href="articles/getting-started.html">Getting Started</a>
     </li>
   </ul>
 </li>
@@ -123,10 +123,7 @@
 <li><p><code>gains_losses</code> is the core function of the package. It performs all the necessary calculations and can be used for real-time processing (it is intended for advanced users only)</p></li>
 <li><p><code>disposition_effect</code> computes the disposition effect</p></li>
 <li><p><code>disposition_difference</code> computes the disposition difference</p></li>
-<li><p><code>disposition_compute</code> interfaces that allows to easily apply the two previous functions to results obtained from <code>portfolio_compute</code></p></li>
-<li><p><code>disposition_summary</code> interfaces that allows to easily compute summary statistics of disposition effect from the results obtained with <code>portfolio_compute</code></p></li>
-<li><p><code>disposition_compute_ts</code> time series version of <code>disposition_compute</code> to obtain the time series of disposition effect</p></li>
-<li><p><code>disposition_summary_ts</code> time series version of <code>disposition_summary_ts</code> to compute summary statistics on time series disposition effect</p></li>
+<li><p><code>disposition_compute</code>and <code>disposition_summary</code>interfaces that allow to easily compute disposition effect and summary statistics.</p></li>
 </ul>
 </div>
 <div id="tutorials" class="section level2">
@@ -139,88 +136,6 @@
 <li><p>Time Series Disposition Effect</p></li>
 </ul>
 </div>
-<div id="getting-started" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting started</h2>
-<p>The following simple example shows how to perform disposition effect calculations on real financial market data.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/marcozanotti/dispositionEffect">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
-<p>Portfolio of transactions of a real investor.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span>
-<span class="co">#&gt;   investor type asset quantity price            datetime</span>
-<span class="co">#&gt; 1    ID123    B   ACO       45   3.9 2018-04-09 11:17:30</span>
-<span class="co">#&gt; 2    ID123    B  LSUG      450   2.1 2018-05-17 15:06:53</span>
-<span class="co">#&gt; 3    ID123    S   ACO       45   4.2 2018-05-22 17:11:09</span>
-<span class="co">#&gt; 4    ID123    B  IT3S      230   1.1 2018-05-28 14:30:46</span>
-<span class="co">#&gt; 5    ID123    S  IT3S      230   1.0 2018-06-01 15:27:02</span>
-<span class="co">#&gt; 6    ID123    B  LSUG       90   2.5 2018-06-01 15:43:51</span></code></pre></div>
-<p>Dataset of market prices of the traded assets.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">marketprices</span><span class="op">)</span>
-<span class="co">#&gt;   asset            datetime price</span>
-<span class="co">#&gt; 1   ACO 2018-04-09 11:17:30  3.94</span>
-<span class="co">#&gt; 2   AST 2018-04-09 11:17:30  2.20</span>
-<span class="co">#&gt; 3  IT3S 2018-04-09 11:17:30  1.02</span>
-<span class="co">#&gt; 4  LSUG 2018-04-09 11:17:30  2.25</span>
-<span class="co">#&gt; 5   TFI 2018-04-09 11:17:30  0.41</span>
-<span class="co">#&gt; 6   ACO 2018-05-17 15:06:53  4.56</span></code></pre></div>
-<p>Compute realized gains, realized losses, paper gains and paper losses.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">portfolio_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
-    portfolio_transactions <span class="op">=</span> <span class="va">investor</span>, 
-    market_prices <span class="op">=</span> <span class="va">marketprices</span>
-<span class="op">)</span></code></pre></div>
-<p>Compute the disposition effect with different methods.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">de</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span><span class="va">portfolio_results</span><span class="op">)</span>
-<span class="va">de</span>
-<span class="co">#&gt;   investor asset DE_count DE_total DD_value DD_duration</span>
-<span class="co">#&gt; 1    ID123   ACO     0.14    0.041   0.0087         440</span>
-<span class="co">#&gt; 2    ID123   AST    -1.00   -1.000  -0.0750        -165</span>
-<span class="co">#&gt; 3    ID123  IT3S    -1.00   -1.000  -0.0310         -57</span>
-<span class="co">#&gt; 4    ID123  LSUG     0.33    0.355   0.0106        1412</span>
-<span class="co">#&gt; 5    ID123   TFI     0.00    0.000   0.0000           0</span></code></pre></div>
-<p>Summarise the behaviour of the investor.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span><span class="va">portfolio_results</span><span class="op">)</span>
-<span class="co">#&gt; $de</span>
-<span class="co">#&gt;   investor asset DE_count DE_total DD_value DD_duration</span>
-<span class="co">#&gt; 1    ID123   ACO     0.14    0.041   0.0087         440</span>
-<span class="co">#&gt; 2    ID123   AST    -1.00   -1.000  -0.0750        -165</span>
-<span class="co">#&gt; 3    ID123  IT3S    -1.00   -1.000  -0.0310         -57</span>
-<span class="co">#&gt; 4    ID123  LSUG     0.33    0.355   0.0106        1412</span>
-<span class="co">#&gt; 5    ID123   TFI     0.00    0.000   0.0000           0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $stat</span>
-<span class="co">#&gt;   investor   stat DE_count DE_total DD_value DD_duration</span>
-<span class="co">#&gt; 1    ID123     Q1    -1.00   -1.000  -0.0310         -57</span>
-<span class="co">#&gt; 2    ID123 Median     0.00    0.000   0.0000           0</span>
-<span class="co">#&gt; 3    ID123     Q3     0.14    0.041   0.0087         440</span>
-<span class="co">#&gt; 4    ID123   Mean    -0.30   -0.321  -0.0173         326</span>
-<span class="co">#&gt; 5    ID123  StDev     0.65    0.635   0.0363         649</span>
-<span class="co">#&gt; 6    ID123    Min    -1.00   -1.000  -0.0750        -165</span>
-<span class="co">#&gt; 7    ID123    Max     0.33    0.355   0.0106        1412</span></code></pre></div>
-<p>Plot the results to spot the presence of the disposition effect.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">de</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
-        title <span class="op">=</span> <span class="st">"Disposition Effect results for the traded assets."</span>,
-        subtitle <span class="op">=</span> <span class="st">"Method Count"</span>,
-        x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>
-        <span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
-<p>Since financial data may be potentially huge in size, efficiency concerns are solved through the parallel versions of the main functions.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">portfolio_results_parallel</span> <span class="op">&lt;-</span> <span class="fu">portfolio_compute_parallel</span><span class="op">(</span>
-    portfolio_transactions <span class="op">=</span> <span class="va">investors</span>, 
-    market_prices <span class="op">=</span> <span class="va">marketprices</span>, 
-    allow_short <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
-</div>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-help" class="anchor"></a>Getting help</h2>
@@ -231,8 +146,6 @@
 <h2 class="hasAnchor">
 <a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
 <p>A special thank to <a href="https://www.behance.net/claudiocec3c4f">Claud Graphics</a> for our logo.</p>
-<hr>
-<p>Please note that this package is free and open source software, licensed under MIT.</p>
 </div>
 </div>
   </div>

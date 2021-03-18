@@ -18,86 +18,8 @@ knitr::opts_chunk$set(
 ```
 
 
-# Installation
-
-By the moment, you can only install the development version from
-[GitHub](https://github.com/) with:
-
-```{r, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("marcozanotti/dispositionEffect")
-```
-
-You will be able to install the released version of `dispositionEffect`
-from [CRAN](https://CRAN.R-project.org) with:
-
-```{r, eval = FALSE}
-install.packages("dispositionEffect")
-```
-  
-  
 # Package loading
-
-The following simple example shows how to perform disposition effect 
-calculations on real financial market data.  
 
 ```{r, eval = TRUE}
 library(dispositionEffect)
-```
-  
-  
-# Data exploration
-
-Portfolio of transactions of a real investor.
-
-```{r, eval = TRUE}
-head(investor)
-```
-
-Dataset of market prices of the traded assets.
-
-```{r, eval = TRUE}
-head(marketprices)
-```
-
-
-# Gains and Losses
-
-Compute realized gains, realized losses, paper gains and paper losses.
-
-```{r, eval = TRUE}
-portfolio_results <- portfolio_compute(
-	portfolio_transactions = investor, 
-	market_prices = marketprices
-)
-```
-
-
-# Disposition Effect
-
-Compute the disposition effect with different methods.
-
-```{r, eval = TRUE}
-de <- disposition_compute(portfolio_results)
-de
-```
-
-Summarise the behaviour of the investor.
-
-```{r, eval = TRUE}
-disposition_summary(portfolio_results)
-```
-
-Plot the results to spot the presence of the disposition effect.
-
-```{r, eval = TRUE}
-library(ggplot2)
-ggplot(de, aes(x = asset, y = DE_count, fill = asset)) +
-	geom_col() +
-	scale_fill_viridis_d() +
-	labs(
-		title = "Disposition Effect results for the traded assets.",
-		subtitle = "Method Count",
-		x = "", y = ""
-	)
 ```

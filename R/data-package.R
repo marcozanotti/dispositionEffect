@@ -83,3 +83,22 @@
 #'
 #' @source \url{https://www.directa.it/index-ita.html}
 "portfolio_results_ts"
+
+
+#' @title Real sample data for Disposition Effect analysis
+#'
+#' @description A sample dataset containing 10 investors, their market
+#'   transactions and the market prices of the traded assets.
+#'
+#' @format A list containing two data frames: transactions and marketprices.
+#' \describe{
+#'   \item{investor}{id of the investor}
+#'   \item{type}{binary variable indicating the type of operation, B = buy and S = sell}
+#'   \item{asset}{id of the traded asset}
+#'   \item{quantity}{quantity of the traded asset}
+#'   \item{price}{market price of the traded asset}
+#'   \item{datetime}{timestamp of the operation}
+#' }
+#'
+#' @source \url{https://www.directa.it/index-ita.html}
+"DEanalysis"

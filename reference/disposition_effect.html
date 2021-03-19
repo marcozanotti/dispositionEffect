@@ -250,26 +250,6 @@ summary statistics related to the time series disposition effect.</p></li>
 
     <p>L. Mazzucchelli &amp; M. Zanotti</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>portfolio_results</span><span class='op'>)</span>
-
-  <span class='co'># Disposition effect on count for each traded asset</span>
-  <span class='va'>de</span> <span class='op'>&lt;-</span> <span class='fu'>disposition_effect</span><span class='op'>(</span><span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>RG_count</span>,
-                           <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>PG_count</span>,
-                           <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>RL_count</span>,
-                           <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>PL_count</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>de</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>asset</span>
-
-  <span class='co'># Average disposition effect of the investor</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>de</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -0.3047619</div><div class='input'>
-  <span class='co'># Realized difference on value for each asset</span>
-  <span class='fu'>disposition_difference</span><span class='op'>(</span><span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>RG_value</span>, <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>RL_value</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  0.008701958 -0.074978204 -0.030965392  0.010551792  0.000000000</div><div class='input'>
-  <span class='co'># Paper difference on value for each asset</span>
-  <span class='fu'>disposition_difference</span><span class='op'>(</span><span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>PG_value</span>, <span class='va'>portfolio_results</span><span class='op'>$</span><span class='va'>PL_value</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.03002533 0.00000000 0.00000000 0.13492566 0.00000000</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

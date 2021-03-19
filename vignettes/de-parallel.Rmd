@@ -152,7 +152,7 @@ res$expression <- c("sequential", "parallel")
 res[, 1:8]
 ```
 
-<img src="figures/de-parallel-bench.PNG" align="center">
+<img src="figures/de-parallel-bench1.PNG" align="center">
 
 As you can see, the benefits of parallel code are clear even on this
 small sample dataset.  

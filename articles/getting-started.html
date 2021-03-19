@@ -105,9 +105,18 @@
 
     
     
-<div id="installation" class="section level1">
+<p> </p>
+<div id="the-disposition-effect" class="section level1">
 <h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<a href="#the-disposition-effect" class="anchor"></a>The Disposition Effect</h1>
+<p>In recent years, an irrational phenomenon in financial markets is grabbing the attention of behavioral economists: the disposition effect. Firstly discovered by H. Shefrin and M. Statman (1985), the disposition effect consists in the realization that investors are more likely to sell an asset when it is gaining value compared to when it is losing value. A phenomenon which is closely related to sunk costs’ bias, diminishing sensitivity, and loss aversion.</p>
+<p>From 1985 until now, the disposition effect has been documented in US retail stock investors as well as in foreign retail investors and even among professionals and institutions. By the time, it is a well-established fact that the disposition effect is a real behavioral anomaly that strongly influences the final profits (or losses) of investors. Furthermore, being able to correctly capture these irrational behaviors timely is even more important in periods of high financial volatility as nowadays.</p>
+<p>The <code>dispositionEffect</code> package allows to quickly evaluate the presence of disposition effect’s behaviors of an investor based solely on his transactions and the market prices of the traded assets.</p>
+<p> </p>
+</div>
+<div id="installation-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation-loading" class="anchor"></a>Installation &amp; Loading</h1>
 <p>By the moment, you can only install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
@@ -115,18 +124,18 @@
 <p>You will be able to install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="package-loading" class="section level1">
-<h1 class="hasAnchor">
-<a href="#package-loading" class="anchor"></a>Package loading</h1>
-<p>The following simple example shows how to perform disposition effect calculations on real financial market data.</p>
+<p>To load the package simply use the usual <code>library</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
+<p> </p>
 </div>
-<div id="data-exploration" class="section level1">
+<div id="data" class="section level1">
 <h1 class="hasAnchor">
-<a href="#data-exploration" class="anchor"></a>Data exploration</h1>
-<p>Portfolio of transactions of a real investor.</p>
+<a href="#data" class="anchor"></a>Data</h1>
+<p>The disposition effect analysis is performed on two fundamental types of data frames:</p>
+<ul>
+<li>portfolio transactions, that is all the financial transactions an investor did during a specific period of time. A single transaction is made up of 6 features: the investor id, the asset id, the type of the transaction (it can be a buy or a sell), the traded quantity, the traded price, and the datetime.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span>
 <span class="co">#&gt;   investor type asset quantity  price            datetime</span>
@@ -136,7 +145,9 @@
 <span class="co">#&gt; 4    4273N    B  IT3S      230 1.0980 2018-05-28 14:30:00</span>
 <span class="co">#&gt; 5    4273N    S  IT3S      230 1.0300 2018-06-01 15:27:00</span>
 <span class="co">#&gt; 6    4273N    B  LSUG       90 2.5300 2018-06-01 15:43:00</span></code></pre></div>
-<p>Dataset of market prices of the traded assets.</p>
+<ul>
+<li>market prices, that is the prices found on the stock markets for each traded asset and each transaction datetimes.</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">marketprices</span><span class="op">)</span>
 <span class="co">#&gt;   asset            datetime   price</span>
@@ -146,53 +157,110 @@
 <span class="co">#&gt; 4  LSUG 2018-04-09 11:17:00 2.24950</span>
 <span class="co">#&gt; 5   TFI 2018-04-09 11:17:00 0.40575</span>
 <span class="co">#&gt; 6   ACO 2018-05-17 15:06:00 4.56000</span></code></pre></div>
+<p> </p>
 </div>
 <div id="gains-and-losses" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gains-and-losses" class="anchor"></a>Gains and Losses</h1>
-<p>Compute realized gains, realized losses, paper gains and paper losses.</p>
+<p>Based solely on this two data frames it is possible to compute the so-called realized gains (RG), realized losses (RL), paper gains (PG), and paper losses (PL), as defined by L. Mazzucchelli et al. (2021).</p>
+<p>To sum up the main concepts are the followings:</p>
+<ul>
+<li><p>Realized Gain / Loss =&gt; whenever an investor closes a position in its portfolio in gain / loss</p></li>
+<li><p>Paper Gain / Loss =&gt; all the open positions at the moment of the transaction, and all the partially closed positions.</p></li>
+</ul>
+<p>The <code>portfolio_compute</code> is the core interface of the package and it is used to perform all the gains and losses computations.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">portfolio_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
     portfolio_transactions <span class="op">=</span> <span class="va">investor</span>, 
-    market_prices <span class="op">=</span> <span class="va">marketprices</span>
-<span class="op">)</span></code></pre></div>
+    market_prices <span class="op">=</span> <span class="va">marketprices</span>,
+    method <span class="op">=</span> <span class="st">"count"</span>
+<span class="op">)</span>
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">portfolio_results</span>, <span class="op">-</span><span class="va">datetime</span><span class="op">)</span>
+<span class="co">#&gt;   investor asset quantity price RG_count RL_count PG_count PL_count</span>
+<span class="co">#&gt; 1    4273N   ACO      222 2.840        1        0        6        0</span>
+<span class="co">#&gt; 2    4273N   AST        0 0.000        0        1        0        0</span>
+<span class="co">#&gt; 3    4273N  IT3S        0 0.000        0        1        0        0</span>
+<span class="co">#&gt; 4    4273N  LSUG        0 0.000        2        0        4        0</span>
+<span class="co">#&gt; 5    4273N   TFI     1400 0.284        0        0        0        0</span></code></pre></div>
+<p>The result is a new data frame containing RG, PG, RL, and PL for each traded asset and the updated investor’s portfolio.</p>
+<p> </p>
 </div>
 <div id="disposition-effect" class="section level1">
 <h1 class="hasAnchor">
 <a href="#disposition-effect" class="anchor"></a>Disposition Effect</h1>
-<p>Compute the disposition effect with different methods.</p>
+<p>Once that gains and losses have been computed, it is finally possible to evaluate both the disposition effect of the investor and each traded assets, where the disposition effect is defined as:</p>
+<p><span class="math display">\[DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)\]</span></p>
+<p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviours, while negative values show the presence of opposite disposition effect behaviours. A value of zero show that no disposition effect exists.</p>
+<p>The function <code>disposition_effect</code> allow us to compute it.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">de</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span><span class="va">portfolio_results</span><span class="op">)</span>
-<span class="va">de</span>
-<span class="co">#&gt;   investor asset   DE_count    DE_total     DD_value DD_duration</span>
-<span class="co">#&gt; 1    4273N   ACO  0.1428571  0.04094631  0.008701958    439.9000</span>
-<span class="co">#&gt; 2    4273N   AST -1.0000000 -1.00000000 -0.074978204   -165.1167</span>
-<span class="co">#&gt; 3    4273N  IT3S -1.0000000 -1.00000000 -0.030965392    -56.9500</span>
-<span class="co">#&gt; 4    4273N  LSUG  0.3333333  0.35483871  0.010551792   1412.6167</span>
-<span class="co">#&gt; 5    4273N   TFI  0.0000000  0.00000000  0.000000000      0.0000</span></code></pre></div>
-<p>Summarise the behaviour of the investor.</p>
+<code class="sourceCode R"><span class="co"># assets' disposition effects</span>
+<span class="fu"><a href="../reference/disposition_effect.html">disposition_effect</a></span><span class="op">(</span>
+    realized_gains <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">RG_count</span>, 
+    paper_gains <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PG_count</span>, 
+  realized_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">RL_count</span>, 
+    paper_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PL_count</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1]  0.1428571 -1.0000000 -1.0000000  0.3333333  0.0000000</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span><span class="va">portfolio_results</span><span class="op">)</span>
-<span class="co">#&gt;   investor   stat   DE_count    DE_total     DD_value DD_duration</span>
-<span class="co">#&gt; 1    4273N     Q1 -1.0000000 -1.00000000 -0.030965392    -56.9500</span>
-<span class="co">#&gt; 2    4273N Median  0.0000000  0.00000000  0.000000000      0.0000</span>
-<span class="co">#&gt; 3    4273N     Q3  0.1428571  0.04094631  0.008701958    439.9000</span>
-<span class="co">#&gt; 4    4273N   Mean -0.3047619 -0.32084300 -0.017337969    326.0900</span>
-<span class="co">#&gt; 5    4273N  StDev  0.6455850  0.63499724  0.036278868    649.5828</span>
-<span class="co">#&gt; 6    4273N    Min -1.0000000 -1.00000000 -0.074978204   -165.1167</span>
-<span class="co">#&gt; 7    4273N    Max  0.3333333  0.35483871  0.010551792   1412.6167</span></code></pre></div>
-<p>Plot the results to spot the presence of the disposition effect.</p>
+<code class="sourceCode R"><span class="co"># investor's disposition effect</span>
+<span class="fu"><a href="../reference/disposition_effect.html">disposition_effect</a></span><span class="op">(</span>
+    realized_gains <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">RG_count</span>, 
+    paper_gains <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PG_count</span>, 
+  realized_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">RL_count</span>, 
+    paper_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PL_count</span>
+<span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] -0.3047619</span></code></pre></div>
+<p>However, one may prefer to use the <code>disposition_compute</code> function directly on the results obtained from <code>portfolio_compute</code> for quick and clean computations.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># assets' disposition effects</span>
+<span class="va">asset_de</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">)</span>
+<span class="va">asset_de</span>
+<span class="co">#&gt;   investor asset   DE_count</span>
+<span class="co">#&gt; 1    4273N   ACO  0.1428571</span>
+<span class="co">#&gt; 2    4273N   AST -1.0000000</span>
+<span class="co">#&gt; 3    4273N  IT3S -1.0000000</span>
+<span class="co">#&gt; 4    4273N  LSUG  0.3333333</span>
+<span class="co">#&gt; 5    4273N   TFI  0.0000000</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># investor's disposition effect</span>
+<span class="va">investor_de</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">portfolio_results</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">investor_de</span>
+<span class="co">#&gt;   investor   DE_count</span>
+<span class="co">#&gt; 1    4273N -0.3047619</span></code></pre></div>
+<p>Moreover, by means of the <code>disposition_summary</code> function it is also easy to summarise the disposition effect behaviour of the investor.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># investor's disposition effect summary statistics</span>
+<span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">)</span>
+<span class="co">#&gt;   investor   stat   DE_count</span>
+<span class="co">#&gt; 1    4273N     Q1 -1.0000000</span>
+<span class="co">#&gt; 2    4273N Median  0.0000000</span>
+<span class="co">#&gt; 3    4273N     Q3  0.1428571</span>
+<span class="co">#&gt; 4    4273N   Mean -0.3047619</span>
+<span class="co">#&gt; 5    4273N  StDev  0.6455850</span>
+<span class="co">#&gt; 6    4273N    Min -1.0000000</span>
+<span class="co">#&gt; 7    4273N    Max  0.3333333</span></code></pre></div>
+<p> </p>
+</div>
+<div id="plotting" class="section level1">
+<h1 class="hasAnchor">
+<a href="#plotting" class="anchor"></a>Plotting</h1>
+<p>Finally, by means of <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>, stunning charts can be produced to easily spot the presence of the disposition effect.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">de</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
-        title <span class="op">=</span> <span class="st">"Disposition Effect results for the traded assets."</span>,
+
+<span class="va">asset_de</span> <span class="op">%&gt;%</span> 
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+        title <span class="op">=</span> <span class="st">"Disposition Effect results of the traded assets."</span>,
         subtitle <span class="op">=</span> <span class="st">"Method Count"</span>,
         x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>
     <span class="op">)</span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;"></p>
+<hr>
+<p>For more detailed tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
 </div>
   </div>
 

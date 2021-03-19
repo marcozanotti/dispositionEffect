@@ -16,9 +16,34 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+  
+&nbsp;  
 
+# The Disposition Effect
 
-# Installation
+In recent years, an irrational phenomenon in financial markets is grabbing
+the attention of behavioral economists: the disposition effect. 
+Firstly discovered by H. Shefrin and M. Statman (1985), the disposition effect
+consists in the realization that investors are more likely to sell an asset 
+when it is gaining value compared to when it is losing value. A phenomenon 
+which is closely related to sunk costs’ bias, diminishing sensitivity, and 
+loss aversion.   
+  
+From 1985 until now, the disposition effect has been documented in US retail
+stock investors as well as in foreign retail investors and even among 
+professionals and institutions. By the time, it is a well-established fact that
+the disposition effect is a real behavioral anomaly that strongly influences the
+final profits (or losses) of investors. Furthermore, being able to correctly 
+capture these irrational behaviors timely is even more important in periods of 
+high financial volatility as nowadays.   
+  
+The `dispositionEffect` package allows to quickly evaluate the presence of 
+disposition effect’s behaviors of an investor based solely on his transactions 
+and the market prices of the traded assets.  
+  
+&nbsp;     
+  
+# Installation & Loading
 
 By the moment, you can only install the development version from
 [GitHub](https://github.com/) with:
@@ -34,70 +59,156 @@ from [CRAN](https://CRAN.R-project.org) with:
 ```{r, eval = FALSE}
 install.packages("dispositionEffect")
 ```
-  
-  
-# Package loading
 
-The following simple example shows how to perform disposition effect 
-calculations on real financial market data.  
+To load the  package simply use the usual `library` function.  
 
 ```{r, eval = TRUE}
 library(dispositionEffect)
 ```
   
+&nbsp;     
   
-# Data exploration
+# Data
 
-Portfolio of transactions of a real investor.
+The disposition effect analysis is performed on two fundamental types
+of data frames:
+
+* portfolio transactions, that is all the financial transactions an
+investor did during a specific period of time. 
+A single transaction is made up of 6 features: the investor id, 
+the asset id, the type of the transaction (it can be a buy or a sell), 
+the traded quantity, the traded price, and the datetime.
 
 ```{r, eval = TRUE}
 head(investor)
 ```
 
-Dataset of market prices of the traded assets.
+* market prices, that is the prices found on the stock markets for 
+each traded asset and each transaction datetimes.
 
 ```{r, eval = TRUE}
 head(marketprices)
 ```
-
-
+  
+&nbsp;     
+  
 # Gains and Losses
 
-Compute realized gains, realized losses, paper gains and paper losses.
+Based solely on this two data frames it is possible to compute
+the so-called realized gains (RG), realized losses (RL), 
+paper gains (PG), and paper losses (PL), as defined by 
+L. Mazzucchelli et al. (2021).
+
+To sum up the main concepts are the followings:
+
+* Realized Gain / Loss => whenever an investor closes a position 
+in its portfolio in gain / loss  
+
+* Paper Gain / Loss => all the open positions at the moment of
+the transaction, and all the partially closed positions.
+
+The `portfolio_compute` is the core interface of the package and 
+it is used to perform all the gains and losses computations.
 
 ```{r, eval = TRUE}
 portfolio_results <- portfolio_compute(
 	portfolio_transactions = investor, 
-	market_prices = marketprices
+	market_prices = marketprices,
+	method = "count"
 )
+dplyr::select(portfolio_results, -datetime)
 ```
 
+The result is a new data frame containing RG, PG, RL, and PL for 
+each traded asset and the updated investor's portfolio.  
+  
+&nbsp;     
 
 # Disposition Effect
 
-Compute the disposition effect with different methods.
+Once that gains and losses have been computed, it is finally 
+possible to evaluate both the disposition effect of the investor
+and each traded assets, where the disposition effect is defined as:
+
+$$DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)$$
+
+The DE varies between -1 and 1. Positive DE values show the 
+presence of disposition effect irrational behaviours, while
+negative values show the presence of opposite disposition
+effect behaviours. A value of zero show that no disposition
+effect exists.
+
+The function `disposition_effect` allow us to compute it.
 
 ```{r, eval = TRUE}
-de <- disposition_compute(portfolio_results)
-de
+# assets' disposition effects
+disposition_effect(
+	realized_gains = portfolio_results$RG_count, 
+	paper_gains = portfolio_results$PG_count, 
+  realized_losses = portfolio_results$RL_count, 
+	paper_losses = portfolio_results$PL_count
+)
 ```
 
-Summarise the behaviour of the investor.
+```{r, eval = TRUE}
+# investor's disposition effect
+disposition_effect(
+	realized_gains = portfolio_results$RG_count, 
+	paper_gains = portfolio_results$PG_count, 
+  realized_losses = portfolio_results$RL_count, 
+	paper_losses = portfolio_results$PL_count
+) %>% 
+	mean(na.rm = TRUE)
+```
+  
+However, one may prefer to use the `disposition_compute` function
+directly on the results obtained from `portfolio_compute` for 
+quick and clean computations.
 
 ```{r, eval = TRUE}
-disposition_summary(portfolio_results)
+# assets' disposition effects
+asset_de <- disposition_compute(gainslosses = portfolio_results)
+asset_de
 ```
 
-Plot the results to spot the presence of the disposition effect.
+```{r}
+# investor's disposition effect
+investor_de <- disposition_compute(gainslosses = portfolio_results, aggregate_fun = mean, na.rm = TRUE)
+investor_de
+```
+
+Moreover, by means of the `disposition_summary` function
+it is also easy to summarise the disposition effect behaviour 
+of the investor.
 
 ```{r, eval = TRUE}
+# investor's disposition effect summary statistics
+disposition_summary(gainslosses = portfolio_results)
+```
+
+&nbsp;     
+  
+# Plotting
+
+Finally, by means of [`ggplot2`](https://ggplot2.tidyverse.org/), 
+stunning charts can be produced to easily spot the presence of 
+the disposition effect.  
+
+```{r, eval = TRUE, fig.width=8, fig.height=5, fig.align='center'}
 library(ggplot2)
-ggplot(de, aes(x = asset, y = DE_count, fill = asset)) +
-	geom_col() +
-	scale_fill_viridis_d() +
-	labs(
-		title = "Disposition Effect results for the traded assets.",
+
+asset_de %>% 
+	ggplot2::ggplot(ggplot2::aes(x = asset, y = DE_count, fill = asset)) +
+	ggplot2::geom_col() +
+	ggplot2::scale_fill_viridis_d() +
+	ggplot2::labs(
+		title = "Disposition Effect results of the traded assets.",
 		subtitle = "Method Count",
 		x = "", y = ""
 	)
 ```
+
+---------------------------------------------------------------------------
+
+For more detailed tutorials on disposition effect visit 
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).

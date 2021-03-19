@@ -20,6 +20,7 @@ Imports:
     rlang,
 Suggests: 
     ggplot2,
+    tidyr,
     devtools,
     knitr,
     rmarkdown,
@@ -27,7 +28,11 @@ Suggests:
     testthat,
     covr,
     furrr,
-    future
+    future,
+    foreach,
+    doParallel,
+    parallel,
+    bench
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

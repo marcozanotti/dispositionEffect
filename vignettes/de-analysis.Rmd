@@ -22,4 +22,167 @@ knitr::opts_chunk$set(
 
 ```{r, eval = TRUE}
 library(dispositionEffect)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(ggplot2)
 ```
+
+```{r, eval = FALSE}
+help("DEanalysis")
+str(DEanalysis)
+
+# Transactions
+trx <- DEanalysis$transactions
+
+str(trx)
+head(trx)
+
+trx %>% 
+  dplyr::count(investor)
+
+trx %>% 
+  dplyr::mutate(year = lubridate::year(datetime)) %>% 
+  dplyr::count(investor, year) %>% 
+  dplyr::arrange(year) %>% 
+  tidyr::pivot_wider(names_from = year, values_from = n)
+
+trx$asset %>% unique() %>% length()
+
+trx$type %>% unique()
+
+
+# Market prices
+mkt <- DEanalysis$marketprices
+
+str(mkt)
+head(mkt)
+
+mkt$asset %>% unique() %>% length()
+  
+mkt %>% 
+  dplyr::mutate(year = lubridate::year(datetime)) %>% 
+  dplyr::count(asset, year) %>% 
+  dplyr::arrange(year) %>% 
+  tidyr::pivot_wider(names_from = year, values_from = n)
+
+
+# Investor QZ621
+trx_QZ621 <- trx %>% 
+  dplyr::filter(investor == "QZ621")
+trx_QZ621$asset %>% unique() %>% length()
+mkt_QZ621 <- mkt %>% 
+  dplyr::filter(asset %in% unique(trx_QZ621$asset))
+
+head(trx_QZ621)
+head(mkt_QZ621)
+
+
+p_res <- portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "count")
+str(p_res)
+head(p_res)
+
+disposition_effect(realized_gains = p_res$RG_count, paper_gains = p_res$PG_count, 
+                   realized_losses = p_res$RL_count, paper_losses = p_res$PL_count)
+
+disposition_effect(realized_gains = p_res$RG_count, paper_gains = p_res$PG_count, 
+                   realized_losses = p_res$RL_count, paper_losses = p_res$PL_count) %>% 
+  mean(na.rm = TRUE)
+
+disposition_compute(gainslosses = p_res) %>% 
+  head()
+
+disposition_compute(gainslosses = p_res, aggregate_fun = mean, na.rm = TRUE)
+
+disposition_summary(gainslosses = p_res)
+
+# Graphics
+
+
+# Let go back to our full db
+
+trx_list <- trx %>% 
+  dplyr::group_by(investor) %>% 
+  dplyr::group_split()
+
+p_res_full <- purrr::map(trx_list, portfolio_compute, market_prices = mkt, method = "count")
+length(p_res_full)
+head(p_res_full[[1]])
+
+purrr::map(p_res_full, disposition_compute)
+purrr::map(p_res_full, disposition_compute, aggregate_fun = mean, na.rm = TRUE) %>% 
+  dplyr::bind_rows() %>% 
+  dplyr::arrange(dplyr::desc(DE_count))
+
+purrr::map(p_res_full, disposition_compute, aggregate_fun = mean, na.rm = TRUE) %>% 
+  dplyr::bind_rows() %>% 
+  dplyr::arrange(dplyr::desc(DE_count)) %>% 
+  dplyr::pull("DE_count") %>% 
+  summary()
+
+purrr::map(p_res_full, disposition_summary) %>% 
+  dplyr::bind_rows()
+
+# Graphics
+
+
+
+# Appendix
+# method arg
+
+portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "none") %>% 
+  head()
+portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "count") %>% 
+  head()
+portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "total") %>% 
+  head()
+portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "value") %>% 
+  head()
+portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "duration") %>% 
+  head()
+p_res_all <- portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "all")
+str(p_res_all)
+
+disposition_compute(gainslosses = p_res_all) %>% 
+  head()
+
+disposition_compute(gainslosses = p_res_all, aggregate_fun = mean, na.rm = TRUE)
+
+disposition_summary(gainslosses = p_res_all)
+
+
+# time_threshold
+portfolio_compute(
+  portfolio_transactions = trx_QZ621, 
+  market_prices = mkt_QZ621, 
+  method = "count", 
+  time_threshold = "60 mins"
+)
+
+
+# allow_short
+portfolio_compute(
+  portfolio_transactions = trx_QZ621, 
+  market_prices = mkt_QZ621, 
+  method = "count", 
+  allow_short = FALSE
+)
+
+# exact_market_prices
+portfolio_compute(
+  portfolio_transactions = trx_QZ621, 
+  market_prices = mkt_QZ621, 
+  method = "count", 
+  exact_market_prices = TRUE
+)
+
+# interactive use
+portfolio_compute(
+  portfolio_transactions = trx_QZ621, 
+  market_prices = mkt_QZ621, 
+  method = "count", 
+  verbose = c(1, 1),
+  progress = TRUE
+)
+```
+

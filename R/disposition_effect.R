@@ -40,26 +40,6 @@
 #' @author L. Mazzucchelli & M. Zanotti
 #'
 #' @references H. Shefrin & M. Statman, 1985
-#'
-#' @examples
-#'   data(portfolio_results)
-#'
-#'   # Disposition effect on count for each traded asset
-#'   de <- disposition_effect(portfolio_results$RG_count,
-#'                            portfolio_results$PG_count,
-#'                            portfolio_results$RL_count,
-#'                            portfolio_results$PL_count)
-#'   names(de) <- portfolio_results$asset
-#'
-#'   # Average disposition effect of the investor
-#'   mean(de)
-#'
-#'   # Realized difference on value for each asset
-#'   disposition_difference(portfolio_results$RG_value, portfolio_results$RL_value)
-#'
-#'   # Paper difference on value for each asset
-#'   disposition_difference(portfolio_results$PG_value, portfolio_results$PL_value)
-#'
 NULL
 
 
@@ -105,7 +85,7 @@ disposition_compute <- function(gainslosses, aggregate_fun = NULL, ...) {
 	value <- any(grepl("value", names(gainslosses)))
 	duration <- any(grepl("duration", names(gainslosses)))
 
-	if (!count | !total | !value | !duration) {
+	if (!count & !total & !value & !duration) {
 		# if no columns contain count | total | value | duration
 		stop("No columns containing 'count', 'total', 'value' or 'duration'.")
 
@@ -219,8 +199,7 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 #' @export
 disposition_summary <- function(gainslosses) {
 
-	de <- disposition_compute(gainslosses)
-	de_aggr <- dplyr::bind_rows(
+	res <- dplyr::bind_rows(
 		disposition_compute(gainslosses, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
 		disposition_compute(gainslosses, stats::median, na.rm = TRUE),
 		disposition_compute(gainslosses, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
@@ -231,7 +210,6 @@ disposition_summary <- function(gainslosses) {
 	) %>%
 		dplyr::mutate(stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"), .after = "investor")
 
-	res <- list("de" = de, "stat" = de_aggr)
 	return(res)
 
 }
@@ -242,7 +220,7 @@ disposition_summary <- function(gainslosses) {
 disposition_summary_ts <- function(de_timeseries) {
 
 	df_tmp <- dplyr::select(de_timeseries, dplyr::matches("D(E|D)"))
-	de_aggr_ts <- dplyr::bind_rows(
+	res <- dplyr::bind_rows(
 		purrr::map(df_tmp, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
 		purrr::map(df_tmp, stats::median, na.rm = TRUE),
 		purrr::map(df_tmp, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
@@ -258,7 +236,6 @@ disposition_summary_ts <- function(de_timeseries) {
 		) %>%
 		as.data.frame()
 
-	res <- list("stat" = de_aggr_ts)
 	return(res)
 
 }

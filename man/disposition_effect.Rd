@@ -90,26 +90,6 @@ summary statistics related to the disposition effect.
 summary statistics related to the time series disposition effect.
 }}
 
-\examples{
-  data(portfolio_results)
-
-  # Disposition effect on count for each traded asset
-  de <- disposition_effect(portfolio_results$RG_count,
-                           portfolio_results$PG_count,
-                           portfolio_results$RL_count,
-                           portfolio_results$PL_count)
-  names(de) <- portfolio_results$asset
-
-  # Average disposition effect of the investor
-  mean(de)
-
-  # Realized difference on value for each asset
-  disposition_difference(portfolio_results$RG_value, portfolio_results$RL_value)
-
-  # Paper difference on value for each asset
-  disposition_difference(portfolio_results$PG_value, portfolio_results$PL_value)
-
-}
 \references{
 H. Shefrin & M. Statman, 1985
 }

@@ -208,6 +208,8 @@ asset_de %>%
 	)
 ```
 
+&nbsp;  
+
 ---------------------------------------------------------------------------
 
 For more detailed tutorials on disposition effect visit 

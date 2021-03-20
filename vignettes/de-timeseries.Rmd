@@ -260,3 +260,10 @@ timeseries_10_investors %>%
 	) +
   ggplot2::theme(legend.position = "bottom")
 ```
+
+&nbsp;  
+
+---------------------------------------------------------------------------
+
+For more detailed tutorials on disposition effect visit 
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).

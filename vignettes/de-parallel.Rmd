@@ -152,7 +152,9 @@ res$expression <- c("sequential", "parallel")
 res[, 1:8]
 ```
 
-<img src="figures/de-parallel-bench1.PNG" align="center">
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics("figures/de-parallel-bench1.PNG")
+```
 
 As you can see, the benefits of parallel code are clear even on this
 small sample dataset.  
@@ -259,7 +261,9 @@ res$expression <- c("sequential", "parallel")
 res[, 1:8]
 ```
 
-<img src="figures/de-parallel-bench2.PNG" align="center">
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics("figures/de-parallel-bench2.PNG")
+```
 
 &nbsp;     
 
@@ -287,5 +291,9 @@ all the prices for each asset at each single transaction datetime.
 version
 ```
 
+&nbsp;  
+
+For more detailed tutorials on disposition effect visit 
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).
 
 

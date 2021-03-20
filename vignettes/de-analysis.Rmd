@@ -186,3 +186,9 @@ portfolio_compute(
 )
 ```
 
+&nbsp;  
+
+---------------------------------------------------------------------------
+
+For more detailed tutorials on disposition effect visit 
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).

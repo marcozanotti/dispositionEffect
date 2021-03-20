@@ -202,7 +202,7 @@ asset_de %>%
 	ggplot2::geom_col() +
 	ggplot2::scale_fill_viridis_d() +
 	ggplot2::labs(
-		title = "Disposition Effect results of the traded assets.",
+		title = "Disposition Effect results of the traded assets",
 		subtitle = "Method Count",
 		x = "", y = ""
 	)

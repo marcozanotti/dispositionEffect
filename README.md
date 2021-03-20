@@ -58,13 +58,17 @@ The package contains few user-friendly purpose specific interfaces:
 
 ## Tutorials
 
--   Getting started
+-   [Getting
+    started](https://marcozanotti.github.io/dispositionEffect/articles/getting-started.html)
 
--   The Analysis of Disposition Effect
+-   [The Analysis of Disposition
+    Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-analysis.html)
 
--   Disposition Effect in Parallel
+-   [Disposition Effect in
+    Parallel](https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html)
 
--   Time Series Disposition Effect
+-   [Time Series Disposition
+    Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html)
 
 ## Getting help
 

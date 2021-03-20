@@ -132,7 +132,7 @@ This way you simply need to store all the different investor's
 portfolios of transactions in a list and pass it to 
 `portfolio_compute_parallel` as first argument.  
 
-Now let's try it on the `DEanalysis` data set to see if there is
+Now let's try it on the `DEanalysis` dataset to see if there is
 any computational improvement.
 
 ```{r, eval=TRUE}

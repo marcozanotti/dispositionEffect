@@ -16,10 +16,242 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+  
+&nbsp;  
 
+# The importance of time
 
+The disposition effect consists in the realization that investors
+are more likely to sell an asset when it is gaining value compared 
+to when it is losing value. A phenomenon which is closely related 
+to sunk costs’ bias, diminishing sensitivity, and loss aversion.  
+
+This irrational phenomenon has strong implications on financial 
+markets. In particular, it is a violation of the well-known 
+"efficient market hypothesis" that bases its foundations on the
+theory of rational agents.  
+  
+Hence, timely capturing and understanding irrational behaviours 
+on the financial markets is of primary interest both of 
+researchers and investors. For this reason, the `dispositionEffect`
+package allows to quickly collect both aggregate and time series
+results of the disposition effect, allowing to deeply study
+the evolution in time of irrationalities.  
+  
+&nbsp;  
+  
 # Package loading
+
+To load the  package simply use the usual `library` function.  
 
 ```{r, eval = TRUE}
 library(dispositionEffect)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+  
+&nbsp;  
+  
+# Data
+
+The disposition effect analysis is performed on two fundamental types
+of data frames:
+
+* portfolio transactions, that is all the financial transactions an
+investor did during a specific period of time. 
+A single transaction is made up of 6 features: the investor id, 
+the asset id, the type of the transaction (it can be a buy or a sell), 
+the traded quantity, the traded price, and the datetime.
+
+* market prices, that is the prices found on the stock markets for 
+each traded asset and each transaction datetimes.  
+  
+&nbsp;     
+
+# Time series computations
+
+The `portfolio_compute` function is the core interface of the package 
+and it is used to perform all the gains and losses computations.  
+In particular, the argument `time_series_DE` is used to enable time 
+series disposition effect computations. 
+
+```{r, eval = TRUE}
+portfolio_results_ts <- portfolio_compute(
+	portfolio_transactions = investor, 
+	market_prices = marketprices,
+	method = "count",
+	time_series_DE = TRUE
+)
+```
+
+Setting it to `TRUE` makes the function return two different results:  
+
+* the usual aggregate portfolio with gains and losses results  
+
+```{r, eval=TRUE}
+portfolio <- portfolio_results_ts$portfolio
+dplyr::select(portfolio, -datetime)
+```
+
+* the new time series disposition effect based on the chosen `method`
+
+```{r, eval=TRUE}
+timeseries <- portfolio_results_ts$timeseries
+head(timeseries)
+```
+
+For every transaction datetime two different disposition effect
+are computed:  
+
+* DEts, disposition effect on gains and losses at time t  
+* DETs, disposition effect on gains and losses at time t taking
+into account all the previous results  
+
+Note that, by the moment, the time series computations of disposition
+effect are allowed for `"count"` and `"value"` methods only (with 
+the latter the disposition difference is implemented instead of 
+disposition effect).  
+  
+&nbsp;     
+
+# Investor's time series disposition effect
+
+The `disposition_summary_ts` function can be used to summarise
+the evolution of disposition effect over time.  
+
+```{r, eval=TRUE}
+disposition_summary_ts(timeseries)
+```
+
+A visual time series analysis can be performed as usual
+with [`ggplot2`](https://ggplot2.tidyverse.org/).  
+
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+timeseries %>% 
+  tidyr::pivot_longer(cols = dplyr::starts_with("DE")) %>% 
+  ggplot2::ggplot(ggplot2::aes(x = datetime, y = value, col = name)) +
+  ggplot2::geom_line(size = 1.5) +
+  ggplot2::scale_colour_viridis_d(alpha = 1) +
+	ggplot2::labs(
+		title = "Time Series Disposition Effect results",
+		subtitle = "Method Count",
+		x = "", y = ""
+	) +
+  ggplot2::theme(legend.position = "bottom")
+```
+  
+&nbsp;   
+
+# Assets' time series disposition effect
+
+The time series analysis of disposition effect can be
+greatly improved also by computing the disposition effect
+over time on specif assets traded by the investor.  
+Indeed, the argument `assets_time_series_DE` allows to specify
+a character vector of assets' id (that must be traded by the
+investor) on which to compute the disposition effect over time.  
+
+```{r, eval=TRUE}
+portfolio_results_ts_assets <- portfolio_compute(
+	portfolio_transactions = investor, 
+	market_prices = marketprices,
+	method = "count",
+	time_series_DE = TRUE,
+	assets_time_series_DE = c("ACO", "LSUG")
+)
+```
+
+```{r, eval=TRUE}
+timeseries_assets <- portfolio_results_ts_assets$timeseries
+head(timeseries_assets)[, 2:6]
+head(timeseries_assets)[, c(2:4, 7:8)]
+```
+ 
+```{r, eval=TRUE}
+disposition_summary_ts(timeseries_assets)[, 2:6]
+disposition_summary_ts(timeseries_assets)[, c(2:4, 7:8)]
+``` 
+ 
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+timeseries_assets %>% 
+  tidyr::pivot_longer(cols = dplyr::contains("DE")) %>% 
+  ggplot2::ggplot(ggplot2::aes(x = datetime, y = value, col = name)) +
+  ggplot2::geom_line(size = 1.5) +
+  ggplot2::scale_colour_viridis_d(alpha = 1) +
+  ggplot2::facet_wrap(~ name, ncol = 2) +
+	ggplot2::labs(
+		title = "Assets Time Series Disposition Effect results",
+		subtitle = "Method Count",
+		x = "", y = ""
+	) +
+  ggplot2::theme(legend.position = "bottom")
+``` 
+ 
+This way it is possible to better understand the behaviour
+of an investor on his traded assets. It may be possible, 
+in practice that, disposition effect behaviours are only
+present on some specific assets, and understanding what assets
+are more subject to irrationality can be critical.  
+  
+&nbsp;   
+
+# Compare investors' behaviours
+
+In order to better understand the relevance of the time 
+series analysis of disposition effect, we can test the
+results on the `DEanalysis` real sample dataset.  
+
+See ["Disposition Effect in Parallel"](https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html) 
+to speed up computations with parallel computing in R.  
+
+```{r, eval=TRUE}
+trx <- DEanalysis$transactions
+mkt <- DEanalysis$marketprices
+investor_id <- unique(trx$investor)
+
+res_list <- vector(mode = "list", length = length(investor_id))
+for (i in seq_along(investor_id)) {
+  tmp_trx <- trx %>%
+    dplyr::filter(investor == investor_id[i])
+  tmp_res <- tryCatch(
+    dispositionEffect::portfolio_compute(
+      portfolio_transactions = tmp_trx,
+      market_prices = mkt,
+      method = "count",
+      exact_market_prices = TRUE,
+      time_series_DE = TRUE
+    ),
+    error = function(e) "Error"
+  )
+  res_list[[i]] <- tmp_res # save results
+  rm(tmp_trx, tmp_res)
+}
+
+# extract time series results for each investor
+timeseries_10_investors <- res_list %>% 
+  purrr::map("timeseries")
+```
+
+```{r, eval=TRUE}
+purrr::map(timeseries_10_investors, disposition_summary_ts) %>% 
+  dplyr::bind_rows() %>% 
+  dplyr::filter(stat == "Mean") %>% 
+  dplyr::arrange(desc(DETs_count))
+```
+
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+timeseries_10_investors %>% 
+  dplyr::bind_rows() %>%
+  tidyr::pivot_longer(cols = dplyr::contains("DE")) %>% 
+  ggplot2::ggplot(ggplot2::aes(x = datetime, y = value, col = investor)) +
+  ggplot2::geom_line(size = 0.75) +
+  ggplot2::scale_colour_viridis_d(alpha = 0.9) +
+  ggplot2::facet_wrap(~ name, nrow = 2, ncol = 1) +
+	ggplot2::labs(
+		title = "10 Investors Time Series Disposition Effect results",
+		subtitle = "Method Count",
+		x = "", y = ""
+	) +
+  ggplot2::theme(legend.position = "bottom")
 ```

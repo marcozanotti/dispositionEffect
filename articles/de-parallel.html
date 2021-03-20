@@ -187,7 +187,7 @@ This tutorial requires also some well-known packages that allows for parallel co
 
 <span class="op">}</span></code></pre></div>
 <p>This way you simply need to store all the different investor’s portfolios of transactions in a list and pass it to <code>portfolio_compute_parallel</code> as first argument.</p>
-<p>Now let’s try it on the <code>DEanalysis</code> data set to see if there is any computational improvement.</p>
+<p>Now let’s try it on the <code>DEanalysis</code> dataset to see if there is any computational improvement.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trx</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">transactions</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -201,7 +201,7 @@ This tutorial requires also some well-known packages that allows for parallel co
 
 <span class="va">res</span><span class="op">$</span><span class="va">expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sequential"</span>, <span class="st">"parallel"</span><span class="op">)</span>
 <span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></code></pre></div>
-<p><img src="figures/de-parallel-bench.PNG" align="center"></p>
+<p><img src="figures/de-parallel-bench1.PNG" align="center"></p>
 <p>As you can see, the benefits of parallel code are clear even on this small sample dataset.</p>
 <p> </p>
 </div>

@@ -48,6 +48,7 @@ To load the  package simply use the usual `library` function.
 library(dispositionEffect)
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(ggplot2)
 ```
   
@@ -205,7 +206,7 @@ results on the `DEanalysis` real sample dataset.
 See ["Disposition Effect in Parallel"](https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html) 
 to speed up computations with parallel computing in R.  
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 trx <- DEanalysis$transactions
 mkt <- DEanalysis$marketprices
 investor_id <- unique(trx$investor)
@@ -231,6 +232,10 @@ for (i in seq_along(investor_id)) {
 # extract time series results for each investor
 timeseries_10_investors <- res_list %>% 
   purrr::map("timeseries")
+```
+
+```{r, eval=TRUE, include=FALSE}
+load("figures/ts_res.RData")
 ```
 
 ```{r, eval=TRUE}

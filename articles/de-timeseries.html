@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9024</span>
       </span>
     </div>
 
@@ -145,7 +145,6 @@ In particular, the argument <code>time_series_DE</code> is used to enable time s
 <code class="sourceCode R"><span class="va">portfolio_results_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
     portfolio_transactions <span class="op">=</span> <span class="va">investor</span>, 
     market_prices <span class="op">=</span> <span class="va">marketprices</span>,
-    method <span class="op">=</span> <span class="st">"count"</span>,
     time_series_DE <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 <p>Setting it to <code>TRUE</code> makes the function return two different results:</p>
@@ -223,7 +222,6 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
 <code class="sourceCode R"><span class="va">portfolio_results_ts_assets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
     portfolio_transactions <span class="op">=</span> <span class="va">investor</span>, 
     market_prices <span class="op">=</span> <span class="va">marketprices</span>,
-    method <span class="op">=</span> <span class="st">"count"</span>,
     time_series_DE <span class="op">=</span> <span class="cn">TRUE</span>,
     assets_time_series_DE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ACO"</span>, <span class="st">"LSUG"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
@@ -299,8 +297,6 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
     <span class="fu">dispositionEffect</span><span class="fu">::</span><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
       portfolio_transactions <span class="op">=</span> <span class="va">tmp_trx</span>,
       market_prices <span class="op">=</span> <span class="va">mkt</span>,
-      method <span class="op">=</span> <span class="st">"count"</span>,
-      exact_market_prices <span class="op">=</span> <span class="cn">TRUE</span>,
       time_series_DE <span class="op">=</span> <span class="cn">TRUE</span>
     <span class="op">)</span>,
     error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="st">"Error"</span>
@@ -345,7 +341,7 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
 <p><img src="de-timeseries_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <hr>
-<p>For more detailed tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
+<p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
 </div>
   </div>
 

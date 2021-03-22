@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9024</span>
       </span>
     </div>
 
@@ -105,6 +105,15 @@
 
     
     
+<p> </p>
+<div id="the-disposition-effect" class="section level1">
+<h1 class="hasAnchor">
+<a href="#the-disposition-effect" class="anchor"></a>The Disposition Effect</h1>
+<p>In recent years, an irrational phenomenon in financial markets is grabbing the attention of behavioral economists: the disposition effect. Firstly discovered by H. Shefrin and M. Statman (1985), the disposition effect consists in the realization that investors are more likely to sell an asset when it is gaining value compared to when it is losing value. A phenomenon which is closely related to sunk costs’ bias, diminishing sensitivity, and loss aversion.</p>
+<p>From 1985 until now, the disposition effect has been documented in US retail stock investors as well as in foreign retail investors and even among professionals and institutions. By the time, it is a well-established fact that the disposition effect is a real behavioral anomaly that strongly influences the final profits (or losses) of investors. Furthermore, being able to correctly capture these irrational behaviors timely is even more important in periods of high financial volatility as nowadays.</p>
+<p>The <code>dispositionEffect</code> package allows to quickly evaluate the presence of disposition effect’s behaviors of an investor based solely on his transactions and the market prices of the traded assets.</p>
+<p> </p>
+</div>
 <div id="package-loading" class="section level1">
 <h1 class="hasAnchor">
 <a href="#package-loading" class="anchor"></a>Package loading</h1>
@@ -113,166 +122,1393 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/skimr/">skimr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/ggridges/">ggridges</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erocoar/gghalves">gghalves</a></span><span class="op">)</span></code></pre></div>
+<p> </p>
+</div>
+<div id="data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data" class="anchor"></a>Data</h1>
+<p>The dataset <code>DEanalysis</code> is provided within the package allowing to reproduce a full analysis on the disposition effect.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span><span class="st">"DEanalysis"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">DEanalysis</span><span class="op">)</span>
-
-<span class="co"># Transactions</span>
-<span class="va">trx</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">transactions</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">trx</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span><span class="st">"DEanalysis"</span><span class="op">)</span></code></pre></div>
+<p>The disposition effect analysis is performed on two fundamental types of data frames:</p>
+<ul>
+<li><p>portfolio transactions, that is all the financial transactions an investor did during a specific period of time. A single transaction is made up of 6 features: the investor id, the asset id, the type of the transaction (it can be a buy or a sell), the traded quantity, the traded price, and the datetime.</p></li>
+<li><p>market prices, that is the prices found on the stock markets for each traded asset and each transaction datetimes.</p></li>
+</ul>
+<div id="portfolio-transactions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#portfolio-transactions" class="anchor"></a>Portfolio Transactions</h2>
+<p>First of all, we need to extract and understand the structure of the transaction dataset.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">trx</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">transactions</span> <span class="co"># transactions</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trx</span><span class="op">)</span>
-
-<span class="va">trx</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span>
-
+<span class="co">#&gt;   investor type asset quantity   price            datetime</span>
+<span class="co">#&gt; 1    44382    B  3NGL    15000  0.2540 2017-10-25 14:16:00</span>
+<span class="co">#&gt; 2    44382    B  3NGL     5000  0.2485 2017-10-26 17:35:00</span>
+<span class="co">#&gt; 3    44382    B  3NGL     4000  0.2400 2017-10-27 10:20:00</span>
+<span class="co">#&gt; 4    44382    B GAS3L    23000  0.1880 2017-10-27 17:06:00</span>
+<span class="co">#&gt; 5    44382    B  3NGL     5000  0.2214 2017-10-27 17:35:00</span>
+<span class="co">#&gt; 6    44382    B  3NGS      130 32.7650 2017-10-30 17:35:00</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">trx</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">trx</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">4917</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">POSIXct</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">investor</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">asset</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">337</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">quantity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3081.49</td>
+<td align="right">15580.36</td>
+<td align="right">0</td>
+<td align="right">123.00</td>
+<td align="right">485.00</td>
+<td align="right">1850.00</td>
+<td align="right">652920</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">price</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">878.15</td>
+<td align="right">3697.85</td>
+<td align="right">0</td>
+<td align="right">1.76</td>
+<td align="right">7.47</td>
+<td align="right">25.26</td>
+<td align="right">22130</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">datetime</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2010-01-05 11:38:00</td>
+<td align="left">2018-12-18 13:24:00</td>
+<td align="left">2013-07-30 16:25:00</td>
+<td align="right">4766</td>
+</tr></tbody>
+</table>
+<p>The portfolio transaction dataset is made up of the six fundamental variables described above.<br>
+This real sample dataset contains transactions on 10 investors on 337 traded assets, from January 2010 until December 2018.</p>
+<p>One important feature is the <code>type</code> variable. It states if a transaction is a “Buy” (B) or a “Sell” (S), and only this two values are allowed.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">trx</span><span class="op">$</span><span class="va">type</span><span class="op">)</span>
+<span class="co">#&gt; [1] "B" "S"</span></code></pre></div>
+<p>Moreover, as expected, not all the investors are active on the whole period of analysis.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># number of transactions of each investor over years</span>
 <span class="va">trx</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/year.html">year</a></span><span class="op">(</span><span class="va">datetime</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">investor</span>, <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">year</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span>
-
-<span class="va">trx</span><span class="op">$</span><span class="va">asset</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">trx</span><span class="op">$</span><span class="va">type</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
-
-
-<span class="co"># Market prices</span>
-<span class="va">mkt</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">marketprices</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">mkt</span><span class="op">)</span>
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">year</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">trx</span>, <span class="va">investor</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"investor"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 10 x 11</span>
+<span class="co">#&gt;    investor `2010` `2011` `2012` `2013` `2014` `2015` `2016` `2017` `2018`     n</span>
+<span class="co">#&gt;    &lt;chr&gt;     &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;</span>
+<span class="co">#&gt;  1 62NQ8        59     35     66     91    245     NA     NA     NA     NA   496</span>
+<span class="co">#&gt;  2 743Q1        64    190    239     NA     NA     NA     NA     NA     NA   493</span>
+<span class="co">#&gt;  3 784ZZ       164     26      9    119     45     70     27     29     11   500</span>
+<span class="co">#&gt;  4 8ZQ32       196     79     35     41     56     24     46     18      4   499</span>
+<span class="co">#&gt;  5 QZ31Q        37    389     56     NA     NA     NA     NA     NA     NA   482</span>
+<span class="co">#&gt;  6 QZ621        43    232     77    114     24     NA     NA     NA     NA   490</span>
+<span class="co">#&gt;  7 QZNZN        14    107     90     70     33     63    106     NA      7   490</span>
+<span class="co">#&gt;  8 46Z68        NA     NA     NA     NA     NA     NA    170    288     24   482</span>
+<span class="co">#&gt;  9 44382        NA     NA     NA     NA     NA     NA     NA     75    415   490</span>
+<span class="co">#&gt; 10 4Q17Z        NA     NA     NA     NA     NA     NA     NA    202    293   495</span></code></pre></div>
+<p>Clearly, they have similar number of transactions as a whole, but they traded on different years.</p>
+</div>
+<div id="market-prices" class="section level2">
+<h2 class="hasAnchor">
+<a href="#market-prices" class="anchor"></a>Market Prices</h2>
+<p>The market prices dataset needs only to have three variables: asset, datetime and price.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mkt</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">marketprices</span> <span class="co"># market prices</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mkt</span><span class="op">)</span>
-
-<span class="va">mkt</span><span class="op">$</span><span class="va">asset</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>
-  
-<span class="va">mkt</span> <span class="op">%&gt;%</span> 
+<span class="co">#&gt;   asset            datetime  price</span>
+<span class="co">#&gt; 1  3BAL 2017-10-25 14:16:00 42.750</span>
+<span class="co">#&gt; 2  3BAS 2017-10-25 14:16:00 15.750</span>
+<span class="co">#&gt; 3  3BRL 2017-10-25 14:16:00 28.080</span>
+<span class="co">#&gt; 4  3BRS 2017-10-25 14:16:00 19.980</span>
+<span class="co">#&gt; 5  3CFL 2017-10-25 14:16:00 17.055</span>
+<span class="co">#&gt; 6  3CFS 2017-10-25 14:16:00 24.505</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">mkt</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">mkt</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">258137</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">POSIXct</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">asset</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">337</td>
+<td align="right">0</td>
+</tr></tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">price</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">162.7</td>
+<td align="right">1524.68</td>
+<td align="right">0</td>
+<td align="right">1.87</td>
+<td align="right">7</td>
+<td align="right">19.5</td>
+<td align="right">22336</td>
+<td align="left">▇▁▁▁▁</td>
+</tr></tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">datetime</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2010-01-05 11:38:00</td>
+<td align="left">2018-12-18 13:24:00</td>
+<td align="left">2013-06-05 09:16:00</td>
+<td align="right">4766</td>
+</tr></tbody>
+</table>
+<p>Again, not all the assets prices are available in every year because we only need the market prices for those assets for the traded datetime (i.e. the datetime of the transactions dataset).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mkt</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/year.html">year</a></span><span class="op">(</span><span class="va">datetime</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">asset</span>, <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">year</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span>
-
-
-<span class="co"># Investor QZ621</span>
-<span class="va">trx_QZ621</span> <span class="op">&lt;-</span> <span class="va">trx</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">investor</span> <span class="op">==</span> <span class="st">"QZ621"</span><span class="op">)</span>
-<span class="va">trx_QZ621</span><span class="op">$</span><span class="va">asset</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mkt_QZ621</span> <span class="op">&lt;-</span> <span class="va">mkt</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">asset</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">trx_QZ621</span><span class="op">$</span><span class="va">asset</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trx_QZ621</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mkt_QZ621</span><span class="op">)</span>
-
-
-<span class="va">p_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">p_res</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p_res</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_effect</a></span><span class="op">(</span>realized_gains <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">RG_count</span>, paper_gains <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">PG_count</span>, 
-                   realized_losses <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">RL_count</span>, paper_losses <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">PL_count</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_effect</a></span><span class="op">(</span>realized_gains <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">RG_count</span>, paper_gains <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">PG_count</span>, 
-                   realized_losses <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">RL_count</span>, paper_losses <span class="op">=</span> <span class="va">p_res</span><span class="op">$</span><span class="va">PL_count</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">year</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 10 x 10</span>
+<span class="co">#&gt;    asset `2010` `2011` `2012` `2013` `2014` `2015` `2016` `2017` `2018`</span>
+<span class="co">#&gt;    &lt;chr&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;</span>
+<span class="co">#&gt;  1 A2A      267    552    218    271    321    131    129    227    271</span>
+<span class="co">#&gt;  2 ACE      159     25      9    115     45     70     27     29     11</span>
+<span class="co">#&gt;  3 ACP      159     25      9    115     45     70     27     29     11</span>
+<span class="co">#&gt;  4 ACS      159     25      9    115     45     70     27     29     11</span>
+<span class="co">#&gt;  5 AEF      210    519    154    181     78    131    129     29     18</span>
+<span class="co">#&gt;  6 AEG       56     33     64     91    243     NA     NA     NA     NA</span>
+<span class="co">#&gt;  7 AGL      327    407    425    199    332     85    148     18     11</span>
+<span class="co">#&gt;  8 AGRI      64    190    237     NA     NA     NA     NA     NA     NA</span>
+<span class="co">#&gt;  9 AIGO     193     79     35     41     56     24     46     18      4</span>
+<span class="co">#&gt; 10 AKM       56     33     64     91    243     NA     NA     NA     NA</span></code></pre></div>
+<p> </p>
+</div>
+</div>
+<div id="disposition-effect-single-investor-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#disposition-effect-single-investor-analysis" class="anchor"></a>Disposition Effect: Single Investor Analysis</h1>
+<p>Now, first proceed to analyse the behaviour of a single investor.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Investor QZ621</span>
+<span class="va">trx_QZ621</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">trx</span>, <span class="va">investor</span> <span class="op">==</span> <span class="st">"QZ621"</span><span class="op">)</span> <span class="co"># transactions</span>
+<span class="va">mkt_QZ621</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mkt</span>, <span class="va">asset</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">trx_QZ621</span><span class="op">$</span><span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="co"># market prices</span></code></pre></div>
+<div id="gains-losses-calculation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#gains-losses-calculation" class="anchor"></a>Gains &amp; Losses Calculation</h2>
+<p>Based solely on this two data frames it is possible to compute the so-called realized gains (RG), realized losses (RL), paper gains (PG), and paper losses (PL), as defined by L. Mazzucchelli et al. (2021).</p>
+<p>To sum up the main concepts are the followings:</p>
+<ul>
+<li><p>Realized Gain / Loss =&gt; whenever an investor closes a position in its portfolio in gain / loss</p></li>
+<li><p>Paper Gain / Loss =&gt; all the open positions at the moment of the transaction, and all the partially closed positions.</p></li>
+</ul>
+<p>The <code>portfolio_compute</code> is the core interface of the package and it is used to perform all the gains and losses computations.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p_res</span><span class="op">)</span><span class="op">[</span>, <span class="op">-</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;   investor  asset quantity    price RG_count RL_count PG_count PL_count</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000        1        0        0        0</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000        3        2        1        1</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628       32       25      223       93</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000        0        4        5        0</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000        0        1        0        0</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000       10        6        0        4</span>
+<span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">p_res</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">p_res</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">9</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td align="left">POSIXct</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">investor</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">asset</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">26</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">quantity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-751.92</td>
+<td align="right">3926.64</td>
+<td align="right">-20000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">400</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">price</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1284.76</td>
+<td align="right">4542.57</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">17780</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">RG_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.85</td>
+<td align="right">12.01</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">4.75</td>
+<td align="right">55</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">RL_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.54</td>
+<td align="right">7.02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">4.00</td>
+<td align="right">26</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">PG_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">22.08</td>
+<td align="right">59.55</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.75</td>
+<td align="right">223</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PL_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">32.46</td>
+<td align="right">95.04</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2.75</td>
+<td align="right">423</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">datetime</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2011-02-01 16:46:00</td>
+<td align="left">2014-09-17 15:56:00</td>
+<td align="left">2012-02-15 14:03:00</td>
+<td align="right">26</td>
+</tr></tbody>
+</table>
+<p>Hence, the result is a data frame containing:</p>
+<ul>
+<li>the final portfolio of the investor (first 5 variables)<br>
+</li>
+<li>gains and losses results of the chosen method (all the other variables), where RG = Realized Gains, RL = Realized Losses, PG = Paper Gains, and PL = Paper Losses.</li>
+</ul>
+</div>
+<div id="disposition-effect-computation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#disposition-effect-computation" class="anchor"></a>Disposition Effect Computation</h2>
+<p>Once that gains and losses have been computed, it is finally possible to evaluate both the disposition effect of the investor and of each traded assets, where the disposition effect is defined as:</p>
+<p><span class="math display">\[DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)\]</span></p>
+<p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviours, while negative values show the presence of opposite disposition effect behaviours. A value of zero show that no disposition effect exists.</p>
+<p>You almost never want to compute the disposition effect directly via the <code>disposition_effect</code> function, but you will mostly rely on the quicker and easier <code>disposition_compute</code> interface, since it designed to handle many situations.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">de</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">de</span><span class="op">)</span>
+<span class="co">#&gt;   investor  asset    DE_count</span>
+<span class="co">#&gt; 1    QZ621  DAX2S  1.00000000</span>
+<span class="co">#&gt; 2    QZ621      F  0.08333333</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB -0.08637421</span>
+<span class="co">#&gt; 4    QZ621 MINI1L -1.00000000</span>
+<span class="co">#&gt; 5    QZ621 MINI2C -1.00000000</span>
+<span class="co">#&gt; 6    QZ621 MINI2F  0.40000000</span></code></pre></div>
+<p>As can be seen, <code>disposition_compute</code> calculates a value of disposition effect for each asset. In order to obtain the value of disposition effect of the investor, one can simply compute an aggregate statistic, such as the mean or the median, on the assets’ values.<br>
+To do this we can simply use once again <code>disposition_compute</code> specifying the desired <code>aggregate_fun</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt;   investor   DE_count</span>
+<span class="co">#&gt; 1    QZ621 -0.2115755</span></code></pre></div>
+<p>Moreover, by means of the <code>disposition_summary</code> function it is also easy to summarise the disposition effect behaviour of the investor, obtaining common summary statistics.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">de_stat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span><span class="op">)</span>
+<span class="va">de_stat</span>
+<span class="co">#&gt;   investor   stat   DE_count</span>
+<span class="co">#&gt; 1    QZ621     Q1 -0.6250000</span>
+<span class="co">#&gt; 2    QZ621 Median  0.0000000</span>
+<span class="co">#&gt; 3    QZ621     Q3  0.1284957</span>
+<span class="co">#&gt; 4    QZ621   Mean -0.2115755</span>
+<span class="co">#&gt; 5    QZ621  StDev  0.5740599</span>
+<span class="co">#&gt; 6    QZ621    Min -1.0000000</span>
+<span class="co">#&gt; 7    QZ621    Max  1.0000000</span></code></pre></div>
+<p> </p>
+</div>
+</div>
+<div id="disposition-effect-testing-different-arguments" class="section level1">
+<h1 class="hasAnchor">
+<a href="#disposition-effect-testing-different-arguments" class="anchor"></a>Disposition Effect: Testing Different Arguments</h1>
+<p>Until now, we limited our analysis to the default parameters of <code>portfolio_compute</code>. However, this function has many different arguments that can be used both to fine tune the analysis and to perform more advanced calculations, such as the so-called <em>portfolio driven disposition effect</em> and the <em>time series disposition effect</em>.</p>
+<p>Hence, we focus here on the usage of five fundamental different arguments.</p>
+<div id="method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#method" class="anchor"></a>Method</h2>
+<p>Let’s start by the <code>method</code> argument. It is probably the most relevant parameter the user can control since it allows to perform five different types of analysis.</p>
+<p>If set to “none”, no gains and losses are computed but the investor’s portfolio is updated at every transaction, resulting in the actual portfolio of the investors at time T (the end of the period).</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span><span class="op">)</span>
-
-<span class="co"># Graphics</span>
-
-
-<span class="co"># Let go back to our full db</span>
-
-<span class="va">trx_list</span> <span class="op">&lt;-</span> <span class="va">trx</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_split.html">group_split</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">p_res_full</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">trx_list</span>, <span class="va">portfolio_compute</span>, market_prices <span class="op">=</span> <span class="va">mkt</span>, method <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">p_res_full</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p_res_full</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-
-<span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_compute</span><span class="op">)</span>
-<span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_compute</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">DE_count</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_compute</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">DE_count</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="st">"DE_count"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_summary</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># Graphics</span>
-
-
-
-<span class="co"># Appendix</span>
-<span class="co"># method arg</span>
-
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="co">#&gt;   investor  asset quantity    price            datetime</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000 2012-02-22 10:36:00</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000 2012-02-08 17:30:00</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628 2011-07-25 13:41:00</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000 2011-12-08 17:19:00</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000 2011-12-16 09:54:00</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000 2012-05-31 17:18:00</span></code></pre></div>
+<p>If set to one of “count”, “total”, “value”, or “duration”, gains and losses are computed for the corresponding method.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   investor  asset quantity    price            datetime RG_count RL_count</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000 2012-02-22 10:36:00        1        0</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000 2012-02-08 17:30:00        3        2</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628 2011-07-25 13:41:00       32       25</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000 2011-12-08 17:19:00        0        4</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000 2011-12-16 09:54:00        0        1</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000 2012-05-31 17:18:00       10        6</span>
+<span class="co">#&gt;   PG_count PL_count</span>
+<span class="co">#&gt; 1        0        0</span>
+<span class="co">#&gt; 2        1        1</span>
+<span class="co">#&gt; 3      223       93</span>
+<span class="co">#&gt; 4        5        0</span>
+<span class="co">#&gt; 5        0        0</span>
+<span class="co">#&gt; 6        0        4</span>
 <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   investor  asset quantity    price            datetime RG_total RL_total</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000 2012-02-22 10:36:00      500        0</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000 2012-02-08 17:30:00     4000     3000</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628 2011-07-25 13:41:00    46425    35450</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000 2011-12-08 17:19:00        0        4</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000 2011-12-16 09:54:00        0        1</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000 2012-05-31 17:18:00       10        6</span>
+<span class="co">#&gt;   PG_total PL_total</span>
+<span class="co">#&gt; 1        0        0</span>
+<span class="co">#&gt; 2     2000     1500</span>
+<span class="co">#&gt; 3   101640    71585</span>
+<span class="co">#&gt; 4        5        0</span>
+<span class="co">#&gt; 5        0        0</span>
+<span class="co">#&gt; 6        0        6</span>
 <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   investor  asset quantity    price            datetime    RG_value</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000 2012-02-22 10:36:00 0.006965944</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000 2012-02-08 17:30:00 0.006973225</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628 2011-07-25 13:41:00 0.008168037</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000 2011-12-08 17:19:00 0.000000000</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000 2011-12-16 09:54:00 0.000000000</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000 2012-05-31 17:18:00 0.004442795</span>
+<span class="co">#&gt;       RL_value    PG_value     PL_value</span>
+<span class="co">#&gt; 1  0.000000000 0.000000000  0.000000000</span>
+<span class="co">#&gt; 2 -0.001190992 0.000678242 -0.001028584</span>
+<span class="co">#&gt; 3 -0.008053899 0.583051555 -0.068406690</span>
+<span class="co">#&gt; 4 -0.005921272 0.031142275  0.000000000</span>
+<span class="co">#&gt; 5 -0.002220704 0.000000000  0.000000000</span>
+<span class="co">#&gt; 6 -0.002014476 0.000000000 -0.001533113</span>
 <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"duration"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">p_res_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">p_res_all</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res_all</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res_all</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res_all</span><span class="op">)</span>
-
-
-<span class="co"># time_threshold</span>
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
+<span class="co">#&gt;   investor  asset quantity    price            datetime RG_duration RL_duration</span>
+<span class="co">#&gt; 1    QZ621  DAX2S        0 0.000000 2012-02-22 10:36:00    28.51667     0.00000</span>
+<span class="co">#&gt; 2    QZ621      F        0 0.000000 2012-02-08 17:30:00     5.00000    13.96667</span>
+<span class="co">#&gt; 3    QZ621 LEVMIB      400 5.551628 2011-07-25 13:41:00   875.61667  2247.78333</span>
+<span class="co">#&gt; 4    QZ621 MINI1L        0 0.000000 2011-12-08 17:19:00     0.00000   493.71667</span>
+<span class="co">#&gt; 5    QZ621 MINI2C        0 0.000000 2011-12-16 09:54:00     0.00000     0.35000</span>
+<span class="co">#&gt; 6    QZ621 MINI2F        0 0.000000 2012-05-31 17:18:00    46.65000    41.38333</span>
+<span class="co">#&gt;    PG_duration PL_duration</span>
+<span class="co">#&gt; 1 0.000000e+00       0.000</span>
+<span class="co">#&gt; 2 2.666667e-01       6.750</span>
+<span class="co">#&gt; 3 1.004278e+04    1788.117</span>
+<span class="co">#&gt; 4 4.633000e+02       0.000</span>
+<span class="co">#&gt; 5 0.000000e+00       0.000</span>
+<span class="co">#&gt; 6 0.000000e+00       7.300</span></code></pre></div>
+<p>In particular:</p>
+<ul>
+<li>
+<code>count</code> computes gains and losses as simple counts<br>
+</li>
+<li>
+<code>total</code> calculates gains and losses as the sum of the quantity<br>
+</li>
+<li>
+<code>value</code> measures the expected percentage gains and losses based on prices<br>
+</li>
+<li>
+<code>duration</code> calculates the time in hours of held gains and losses.</li>
+</ul>
+<p>Instead, when method is set to “all”, then all the four measures are computed.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_res_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
+<span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">p_res_all</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">p_res_all</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">21</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">18</td>
+</tr>
+<tr class="even">
+<td align="left">POSIXct</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">investor</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">asset</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">26</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">quantity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-751.92</td>
+<td align="right">3926.64</td>
+<td align="right">-20000.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">400.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">price</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1284.76</td>
+<td align="right">4542.57</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">17780.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">RG_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.85</td>
+<td align="right">12.01</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="right">4.75</td>
+<td align="right">55.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">RL_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.54</td>
+<td align="right">7.02</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">4.00</td>
+<td align="right">26.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">PG_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">22.08</td>
+<td align="right">59.55</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.75</td>
+<td align="right">223.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PL_count</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">32.46</td>
+<td align="right">95.04</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.75</td>
+<td align="right">423.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">RG_total</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6460.62</td>
+<td align="right">15235.96</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">5.50</td>
+<td align="right">3300.00</td>
+<td align="right">58800.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">RL_total</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">8317.46</td>
+<td align="right">15673.01</td>
+<td align="right">0.00</td>
+<td align="right">3.00</td>
+<td align="right">12.00</td>
+<td align="right">7500.00</td>
+<td align="right">60000.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">PG_total</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">19834.27</td>
+<td align="right">76428.62</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">107.75</td>
+<td align="right">381200.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PL_total</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">333629.88</td>
+<td align="right">1665597.17</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">3225.00</td>
+<td align="right">8499500.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">RG_value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="right">0.03</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.15</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">RL_value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-0.01</td>
+<td align="right">0.02</td>
+<td align="right">-0.08</td>
+<td align="right">-0.01</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">PG_value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.15</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.58</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PL_value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-7.11</td>
+<td align="right">36.03</td>
+<td align="right">-183.78</td>
+<td align="right">-0.03</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">RG_duration</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">654.71</td>
+<td align="right">2607.51</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">15.64</td>
+<td align="right">42.60</td>
+<td align="right">13305.53</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">RL_duration</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">541.94</td>
+<td align="right">1958.09</td>
+<td align="right">0.00</td>
+<td align="right">7.64</td>
+<td align="right">21.87</td>
+<td align="right">40.02</td>
+<td align="right">9871.20</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">PG_duration</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">833.62</td>
+<td align="right">2384.51</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">24.66</td>
+<td align="right">10042.78</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PL_duration</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1120.36</td>
+<td align="right">3197.35</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">115.55</td>
+<td align="right">13298.93</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">datetime</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2011-02-01 16:46:00</td>
+<td align="left">2014-09-17 15:56:00</td>
+<td align="left">2012-02-15 14:03:00</td>
+<td align="right">26</td>
+</tr></tbody>
+</table>
+<p>It is important to notice that the disposition effect is only meaningful for methods <code>coount</code> and <code>total</code>. In all the other cases the disposition difference is used instead.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res_all</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt;   investor   DE_count   DE_total      DD_value DD_duration</span>
+<span class="co">#&gt; 1    QZ621 -0.2115755 -0.2048348 -6.650902e-06    112.7756</span></code></pre></div>
+</div>
+<div id="allow-short" class="section level2">
+<h2 class="hasAnchor">
+<a href="#allow-short" class="anchor"></a>Allow Short</h2>
+<p>The <code>allow_short</code> argument, instead, allows for short selling transactions. If set to FALSE, short selling will not be allowed and no gains or losses will be computed when this happens.</p>
+</div>
+<div id="time-threshold" class="section level2">
+<h2 class="hasAnchor">
+<a href="#time-threshold" class="anchor"></a>Time Threshold</h2>
+<p>The <code>time_threshold</code> argument is a fundamental fine tuning parameter. It essentially controls the minimum time distance necessary to compute gains and losses.<br>
+By default it is set to “0 mins”, implying that gains and losses are always computed.<br>
+However, this may not be desirable since investor’s behaviours are not expected to change with very high frequencies.<br>
+Hence, for instance, setting it to “60 mins” states that gains and losses are calculated only if 60 minutes are passed from the last transaction.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
   portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, 
   market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, 
-  method <span class="op">=</span> <span class="st">"count"</span>, 
   time_threshold <span class="op">=</span> <span class="st">"60 mins"</span>
-<span class="op">)</span>
-
-
-<span class="co"># allow_short</span>
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
+<span class="op">)</span></code></pre></div>
+<p>This parameter is very important also because it allows to somewhat filters human operations from machines operations, without actually removing them from the analysis.</p>
+<p>Different units may be specified.</p>
+</div>
+<div id="exact-market-prices" class="section level2">
+<h2 class="hasAnchor">
+<a href="#exact-market-prices" class="anchor"></a>Exact Market Prices</h2>
+<p>The argument <code>exact_market_prices</code> is set to TRUE by default, since it is expected that the user provides market prices of each traded asset for each transaction datetime.<br>
+However, when this is not the case, one may want to set it to FALSE to allow for non exact market prices. It essentially means that the nearest price in time is used.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
   portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, 
   market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, 
-  method <span class="op">=</span> <span class="st">"count"</span>, 
-  allow_short <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># exact_market_prices</span>
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
+  exact_market_prices <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span></code></pre></div>
+<p>Note, however, that with <code>exact_market_prices</code> set to FALSE, unreliable results may be obtained when transactions occur with low frequency, since the market prices used as reference for the calculation may be outdated.</p>
+</div>
+<div id="interactivity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#interactivity" class="anchor"></a>Interactivity</h2>
+<p>The <code>verbose</code> and <code>progress</code> arguments may be useful for interactive use and for very long calculations on large portfolios of transactions.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
   portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, 
   market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, 
-  method <span class="op">=</span> <span class="st">"count"</span>, 
-  exact_market_prices <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="co"># interactive use</span>
-<span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
-  portfolio_transactions <span class="op">=</span> <span class="va">trx_QZ621</span>, 
-  market_prices <span class="op">=</span> <span class="va">mkt_QZ621</span>, 
-  method <span class="op">=</span> <span class="st">"count"</span>, 
   verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
   progress <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
+</div>
+<div id="other-arguments" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-arguments" class="anchor"></a>Other Arguments</h2>
+<p>See <a href="">Portfolio Driven Disposition Effect</a> and <a href="https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html">Time Series Disposition Effect</a> for a guide on the usage of other, more advanced, arguments.</p>
+<p> </p>
+</div>
+</div>
+<div id="disposition-effect-multiple-investors-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#disposition-effect-multiple-investors-analysis" class="anchor"></a>Disposition Effect: Multiple Investors Analysis</h1>
+<p>Although the analysis of disposition effect can be performed simply on a single investor, the real advantages of this analysis derive from the capacity to study and understand the behaviours of many different investors that actively operate on the financial markets.</p>
+<p>Hence, to fully grasp the power of <code>dispositionEffect</code> package, we can proceed to jointly analyse all the 10 investors’ transactions that are available into the <code>DEanalysis</code> dataset.</p>
+<p>Furthermore, if you are interested in computing the disposition effect on large datasets, please see <a href="https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html">Disposition Effect in Parallel</a> to understand how the benefits of parallel computing can be exploited within this framework.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># list of transactions separated by investor</span>
+<span class="va">trx_list</span> <span class="op">&lt;-</span> <span class="va">trx</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_split.html">group_split</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div id="gains-losses-calculation-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#gains-losses-calculation-1" class="anchor"></a>Gains &amp; Losses Calculation</h2>
+<p>This time to calculate gains and losses for each investor’s portfolio we can simply <code>map</code> <code>portfolio_compute</code> on the list of transactions, specifying all the other necerrasy arguments as usual.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_res_full</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">trx_list</span>, <span class="va">portfolio_compute</span>, market_prices <span class="op">=</span> <span class="va">mkt</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="disposition-effect-computation-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#disposition-effect-computation-1" class="anchor"></a>Disposition Effect Computation</h2>
+<p>The same procedure can be used to quickly compute the disposition effect on each resulting portfolio.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">de</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_compute</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">de</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">de</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">576</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">investor</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">asset</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">337</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">DE_count</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.59</td>
+<td align="right">-1</td>
+<td align="right">-0.29</td>
+<td align="right">0.01</td>
+<td align="right">0.5</td>
+<td align="right">1</td>
+<td align="left">▃▃▇▅▅</td>
+</tr></tbody>
+</table>
+<p>As it is shown, <code>de</code> is a data frame containing disposition effect results (variable <code>DE_count</code>) on the 10 investors for all their 337 traded assets.<br>
+Also the average disposition effects of the investors can be easily obtained,</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">de_mean</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_compute</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">DE_count</span><span class="op">)</span><span class="op">)</span>
+<span class="va">de_mean</span>
+<span class="co">#&gt;    investor      DE_count</span>
+<span class="co">#&gt; 1     46Z68  0.6705760963</span>
+<span class="co">#&gt; 2     8ZQ32  0.5318072092</span>
+<span class="co">#&gt; 3     62NQ8  0.5049538124</span>
+<span class="co">#&gt; 4     44382  0.4917751394</span>
+<span class="co">#&gt; 5     743Q1  0.0005595955</span>
+<span class="co">#&gt; 6     QZNZN -0.0089654513</span>
+<span class="co">#&gt; 7     4Q17Z -0.1678092462</span>
+<span class="co">#&gt; 8     QZ621 -0.2115754843</span>
+<span class="co">#&gt; 9     QZ31Q -0.2149247491</span>
+<span class="co">#&gt; 10    784ZZ -0.2611998354</span></code></pre></div>
+<p>and the disposition effect summary statistics.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">de_stat</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">p_res_full</span>, <span class="va">disposition_summary</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">de_stat</span>, <span class="fl">7</span><span class="op">)</span>
+<span class="co">#&gt;   investor   stat   DE_count</span>
+<span class="co">#&gt; 1    44382     Q1  0.3141026</span>
+<span class="co">#&gt; 2    44382 Median  0.5000000</span>
+<span class="co">#&gt; 3    44382     Q3  0.6500000</span>
+<span class="co">#&gt; 4    44382   Mean  0.4917751</span>
+<span class="co">#&gt; 5    44382  StDev  0.3506436</span>
+<span class="co">#&gt; 6    44382    Min -0.3333333</span>
+<span class="co">#&gt; 7    44382    Max  1.0000000</span></code></pre></div>
+<p>It is clearer now that some investors display irrational behaviours while other don’t.</p>
+</div>
+<div id="visual-analysis" class="section level2">
+<h2 class="hasAnchor">
+<a href="#visual-analysis" class="anchor"></a>Visual Analysis</h2>
+<p>The graphical inspection of disposition effect results allows to easily understand what is going on and to spot possible interesting behaviours.</p>
+<p>One may want to investigate the overall distribution, or the distributions of every statistics obtained.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">de</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DE_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkblue"</span>, fill <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkblue"</span>, fill <span class="op">=</span> <span class="st">"yellow"</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
+        panel.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey92"</span><span class="op">)</span>,
+        plot.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey85"</span>, colour <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,
+        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
+        legend.position <span class="op">=</span> <span class="st">"none"</span>
+    <span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Disposition Effect Distribution"</span>, x <span class="op">=</span> <span class="st">"Disposition Effect"</span>, y <span class="op">=</span> <span class="st">"Frequency"</span><span class="op">)</span></code></pre></div>
+<p><img src="de-analysis_files/figure-html/unnamed-chunk-29-1.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">de_stat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DE_count</span>, y <span class="op">=</span> <span class="va">stat</span>, fill <span class="op">=</span> <span class="va">stat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://wilkelab.org/ggridges/reference/geom_density_ridges.html">geom_density_ridges</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
+        panel.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey92"</span><span class="op">)</span>,
+        plot.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey85"</span>, colour <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,
+        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
+        legend.position <span class="op">=</span> <span class="st">"none"</span>
+    <span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+        title <span class="op">=</span> <span class="st">"Disposition Effect Statistics' Distributions"</span>,
+        x <span class="op">=</span> <span class="st">"Disposition Effect"</span>, y <span class="op">=</span> <span class="st">""</span>
+    <span class="op">)</span></code></pre></div>
+<p><img src="de-analysis_files/figure-html/unnamed-chunk-31-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Or deeper, one can also analyse investors’ behaviours on some specific assets to understand whether there exists on the market assets that are more subject to irrationality.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">top5_assets</span> <span class="op">&lt;-</span> <span class="va">trx</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">asset</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">asset</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">de</span>, <span class="va">asset</span> <span class="op">%in%</span> <span class="va">top5_assets</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gghalves/man/geom_half_boxplot.html">geom_half_boxplot</a></span><span class="op">(</span>center <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0.8</span>, nudge <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gghalves/man/geom_half_violin.html">geom_half_violin</a></span><span class="op">(</span>side <span class="op">=</span> <span class="st">"r"</span>, nudge <span class="op">=</span> <span class="fl">0.02</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey40"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
+        panel.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey92"</span><span class="op">)</span>,
+        plot.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey85"</span>, colour <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,
+        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
+        legend.position <span class="op">=</span> <span class="st">"none"</span>
+    <span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Volatility &amp; Disposition Effect"</span>, x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">"Disposition Effect"</span><span class="op">)</span></code></pre></div>
+<p><img src="de-analysis_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <hr>
-<p>For more detailed tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
+<p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
+</div>
 </div>
   </div>
 

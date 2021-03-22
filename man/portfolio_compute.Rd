@@ -7,14 +7,13 @@
 portfolio_compute(
   portfolio_transactions,
   market_prices,
-  method = "all",
+  method = "count",
   allow_short = TRUE,
   time_threshold = "0 mins",
   exact_market_prices = TRUE,
   portfolio_driven_DE = FALSE,
   time_series_DE = FALSE,
   assets_time_series_DE = NULL,
-  portfolio_statistics = FALSE,
   verbose = c(0, 0),
   progress = FALSE
 )
@@ -26,8 +25,8 @@ portfolio_compute(
 
 \item{method}{Character string containing the method to use to compute
 realized and paper gains and losses. If "none" nothing is computed but the
-investor's portfolio update. Otherwise it has to be one of "count", "total",
-"value", "duration" and "all".}
+investor's portfolio updates. Otherwise it has to be one of "count" (default),
+"total", "value", "duration", or "all".}
 
 \item{allow_short}{Logical. If TRUE short positions are allowed, otherwise only
 long positions are allowed.}
@@ -57,9 +56,6 @@ is computed on 'count' and 'value' methods only.}
 \item{assets_time_series_DE}{Character vector of assets' names as contained
 into \code{portfolio_transactions} on which to compute the time series disposition
 effect.}
-
-\item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
-on the portfolio and returned.}
 
 \item{verbose}{Numeric or logical vector of length 2 that allows to control
 for the function verbosity.}

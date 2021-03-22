@@ -5,15 +5,12 @@
 \alias{evaluate_portfolio}
 \title{Portfolio evaluation}
 \usage{
-evaluate_portfolio(portfolio, market_prices, portfolio_statistics = FALSE)
+evaluate_portfolio(portfolio, market_prices)
 }
 \arguments{
 \item{portfolio}{Data frame of the investor's portfolio at time t.}
 
 \item{market_prices}{Data frame containing the market prices.}
-
-\item{portfolio_statistics}{Logical. If TRUE some statistical indexes are computed
-on the portfolio and returned.}
 }
 \value{
 The portfolio value as the sum of each asset quantity times the

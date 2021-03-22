@@ -26,7 +26,7 @@ test_that("portfolio_compute works (arg exact_market_prices)", {
 
 test_that("portfolio_compute works (arg time_threshold)", {
 	# skip_on_cran()
-	expect_equal(portfolio_compute(investor, marketprices, time_threshold = "5 mins"), portfolio_results, tolerance = 0.001)
+	expect_equal(portfolio_compute(investor, marketprices, time_threshold = "5 mins"), portfolio_results[, 1:9], tolerance = 0.001)
 	expect_type(portfolio_compute(investor, marketprices, time_threshold = "30 days"), "list")
 })
 

@@ -9,11 +9,10 @@
 #' @inheritParams closest_market_price
 #' @inheritParams paper_compute
 #' @inheritParams difference_in_time
-#' @inheritParams evaluate
 #' @param method Character string containing the method to use to compute
 #'   realized and paper gains and losses. If "none" nothing is computed but the
-#'   investor's portfolio update. Otherwise it has to be one of "count", "total",
-#'   "value", "duration" and "all".
+#'   investor's portfolio updates. Otherwise it has to be one of "count" (default),
+#'   "total", "value", "duration", or "all".
 #' @param exact_market_prices Logical. If TRUE then \code{\link{closest_market_price}}
 #'   uses exact datetime match to look for the closest price of each asset.
 #'   It usually speeds up computation by a small degree, but it requires the
@@ -49,14 +48,13 @@
 portfolio_compute <- function(
 	portfolio_transactions,
 	market_prices,
-	method = "all",
+	method = "count",
 	allow_short = TRUE,
 	time_threshold = "0 mins",
 	exact_market_prices = TRUE,
 	portfolio_driven_DE = FALSE,
 	time_series_DE = FALSE,
 	assets_time_series_DE = NULL,
-	portfolio_statistics = FALSE,
 	verbose = c(0, 0),
 	progress = FALSE
 ) {
@@ -121,6 +119,11 @@ portfolio_compute <- function(
 		if (!is.null(chk$target) | !is.null(chk$input)) {
 			stop(paste0("assets_time_series_DE must contain valid assets' names (present into portfolio_transactions).\n"), call. = FALSE)
 		}
+	}
+	# check exact_market_prices
+	if (!exact_market_prices) {
+		message("Note: exact_market_prices set to FALSE, unreliable results may be obtained when
+						transactions occur with low frequence.\n")
 	}
 
 
@@ -252,8 +255,7 @@ portfolio_compute <- function(
 			if (verb_lvl1) message("Evaluating global portfolio position..")
 			portfolio_value <- evaluate_portfolio(
 				portfolio = portfolio,
-				market_prices = rbind(market_przs, data.frame("asset" = trx_asset, "price" = trx_prz)),
-				portfolio_statistics
+				market_prices = rbind(market_przs, data.frame("asset" = trx_asset, "price" = trx_prz))
 			)
 
 

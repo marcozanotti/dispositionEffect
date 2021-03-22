@@ -123,7 +123,7 @@ portfolio_compute <- function(
 	# check exact_market_prices
 	if (!exact_market_prices) {
 		message("Note: exact_market_prices set to FALSE, unreliable results may be obtained when
-						transactions occur with low frequence.\n")
+						transactions occur with low frequency.\n")
 	}
 
 

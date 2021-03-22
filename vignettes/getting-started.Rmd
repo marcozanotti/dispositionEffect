@@ -128,7 +128,7 @@ each traded asset and the updated investor's portfolio.
 
 Once that gains and losses have been computed, it is finally 
 possible to evaluate both the disposition effect of the investor
-and each traded assets, where the disposition effect is defined as:
+and of each traded assets, where the disposition effect is defined as:
 
 $$DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)$$
 

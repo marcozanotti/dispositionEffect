@@ -144,8 +144,8 @@ mkt <- DEanalysis$marketprices
 
 ```{r, eval=FALSE}
 res <- bench::mark(
-  "sequential" = portfolio_compute_parallel(trx, mkt, plan = "sequential", method = "count"),
-  "parallel" = portfolio_compute_parallel(trx, mkt, plan = "multisession", method = "count")
+  "sequential" = portfolio_compute_parallel(trx, mkt, plan = "sequential"),
+  "parallel" = portfolio_compute_parallel(trx, mkt, plan = "multisession")
 )
 
 res$expression <- c("sequential", "parallel")
@@ -214,8 +214,7 @@ portfolio_compute_onfiles <- function(files, plan = "sequential") {
       tmp_res <- tryCatch(
         dispositionEffect::portfolio_compute(
           portfolio_transactions = df$transactions,
-          market_prices = df$marketprices,
-          method = "count"
+          market_prices = df$marketprices
         ),
         error = function(e) "Error"
       )
@@ -233,11 +232,9 @@ portfolio_compute_onfiles <- function(files, plan = "sequential") {
         tmp_res <- tryCatch(
           dispositionEffect::portfolio_compute(
             portfolio_transactions = df$transactions,
-            market_prices = df$marketprices,
-            method = "count"
+            market_prices = df$marketprices
           ),
-          error = function(e)
-            "Error"
+          error = function(e) "Error"
         )
       }
     parallel::stopCluster(cl)
@@ -293,7 +290,7 @@ version
 
 &nbsp;  
 
-For more detailed tutorials on disposition effect visit 
+For more tutorials on disposition effect visit 
 [dispositionEffect](https://marcozanotti.github.io/dispositionEffect).
 
 

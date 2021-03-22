@@ -81,7 +81,6 @@ series disposition effect computations.
 portfolio_results_ts <- portfolio_compute(
 	portfolio_transactions = investor, 
 	market_prices = marketprices,
-	method = "count",
 	time_series_DE = TRUE
 )
 ```
@@ -157,7 +156,6 @@ investor) on which to compute the disposition effect over time.
 portfolio_results_ts_assets <- portfolio_compute(
 	portfolio_transactions = investor, 
 	market_prices = marketprices,
-	method = "count",
 	time_series_DE = TRUE,
 	assets_time_series_DE = c("ACO", "LSUG")
 )
@@ -219,8 +217,6 @@ for (i in seq_along(investor_id)) {
     dispositionEffect::portfolio_compute(
       portfolio_transactions = tmp_trx,
       market_prices = mkt,
-      method = "count",
-      exact_market_prices = TRUE,
       time_series_DE = TRUE
     ),
     error = function(e) "Error"
@@ -265,5 +261,5 @@ timeseries_10_investors %>%
 
 ---------------------------------------------------------------------------
 
-For more detailed tutorials on disposition effect visit 
+For more tutorials on disposition effect visit 
 [dispositionEffect](https://marcozanotti.github.io/dispositionEffect).

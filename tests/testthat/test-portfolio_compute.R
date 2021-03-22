@@ -32,14 +32,14 @@ test_that("portfolio_compute works (arg time_threshold)", {
 
 test_that("portfolio_compute works (arg portfolio_driven_DE)", {
 	# skip_on_cran()
-	expect_type(portfolio_compute(investor, marketprices, portfolio_driven_DE = TRUE), "list")
+	expect_type(portfolio_compute(investor, marketprices, method = "all", portfolio_driven_DE = TRUE), "list")
 })
 
 test_that("portfolio_compute works (arg time_series_DE)", {
 	# skip_on_cran()
 	expect_type(portfolio_compute(investor, marketprices, time_series_DE = TRUE), "list")
-	expect_type(portfolio_compute(investor, marketprices, method = "count", time_series_DE = TRUE), "list")
 	expect_type(portfolio_compute(investor, marketprices, method = "value", time_series_DE = TRUE), "list")
+	expect_type(portfolio_compute(investor, marketprices, method = "all", time_series_DE = TRUE), "list")
 })
 
 test_that("portfolio_compute works (arg assets_time_series_DE)", {
@@ -49,11 +49,11 @@ test_that("portfolio_compute works (arg assets_time_series_DE)", {
 		"list"
 	)
 	expect_type(
-		portfolio_compute(investor, marketprices, method = "count", time_series_DE = TRUE, assets_time_series_DE = "ACO"),
+		portfolio_compute(investor, marketprices, method = "value", time_series_DE = TRUE, assets_time_series_DE = "ACO"),
 		"list"
 	)
 	expect_type(
-		portfolio_compute(investor, marketprices, method = "value", time_series_DE = TRUE, assets_time_series_DE = "ACO"),
+		portfolio_compute(investor, marketprices, method = "all", time_series_DE = TRUE, assets_time_series_DE = "ACO"),
 		"list"
 	)
 })

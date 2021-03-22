@@ -16,8 +16,33 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+  
+&nbsp;     
+  
+# The Disposition Effect
 
-
+In recent years, an irrational phenomenon in financial markets is grabbing
+the attention of behavioral economists: the disposition effect. 
+Firstly discovered by H. Shefrin and M. Statman (1985), the disposition effect
+consists in the realization that investors are more likely to sell an asset 
+when it is gaining value compared to when it is losing value. A phenomenon 
+which is closely related to sunk costs’ bias, diminishing sensitivity, and 
+loss aversion.   
+  
+From 1985 until now, the disposition effect has been documented in US retail
+stock investors as well as in foreign retail investors and even among 
+professionals and institutions. By the time, it is a well-established fact that
+the disposition effect is a real behavioral anomaly that strongly influences the
+final profits (or losses) of investors. Furthermore, being able to correctly 
+capture these irrational behaviors timely is even more important in periods of 
+high financial volatility as nowadays.   
+  
+The `dispositionEffect` package allows to quickly evaluate the presence of 
+disposition effect’s behaviors of an investor based solely on his transactions 
+and the market prices of the traded assets.  
+  
+&nbsp;     
+  
 # Package loading
 
 ```{r, eval = TRUE}
@@ -25,113 +50,230 @@ library(dispositionEffect)
 library(dplyr)
 library(tidyr)
 library(lubridate)
+library(skimr)
 library(ggplot2)
+library(ggridges)
+library(gghalves)
+```
+  
+&nbsp;     
+  
+# Data
+
+The dataset `DEanalysis` is  provided within the package allowing to
+reproduce a full analysis on the disposition effect.  
+
+```{r, eval=FALSE}
+help("DEanalysis")
+```
+  
+The disposition effect analysis is performed on two fundamental types
+of data frames: 
+
+* portfolio transactions, that is all the financial transactions an
+investor did during a specific period of time. 
+A single transaction is made up of 6 features: the investor id, 
+the asset id, the type of the transaction (it can be a buy or a sell), 
+the traded quantity, the traded price, and the datetime.  
+  
+* market prices, that is the prices found on the stock markets for 
+each traded asset and each transaction datetimes.  
+
+
+## Portfolio Transactions
+
+First of all, we need to extract and understand the structure 
+of the transaction dataset.   
+
+```{r, eval=TRUE}
+trx <- DEanalysis$transactions # transactions
+head(trx)
 ```
 
-```{r, eval = FALSE}
-help("DEanalysis")
-str(DEanalysis)
+```{r, eval=TRUE}
+skimr::skim(trx)
+```
 
-# Transactions
-trx <- DEanalysis$transactions
+The portfolio transaction dataset is made up of the six 
+fundamental variables described above.  
+This real sample dataset contains transactions on 10 investors
+on 337 traded assets, from January 2010 until December 2018.  
 
-str(trx)
-head(trx)
+One important feature is the `type` variable. It states if
+a transaction is a "Buy" (B) or a "Sell" (S), and only this
+two values are allowed.  
 
-trx %>% 
-  dplyr::count(investor)
+```{r, eval=TRUE}
+unique(trx$type)
+```
 
+Moreover, as expected, not all the investors are active
+on the whole period of analysis.   
+
+```{r, eval=TRUE}
+# number of transactions of each investor over years
 trx %>% 
   dplyr::mutate(year = lubridate::year(datetime)) %>% 
   dplyr::count(investor, year) %>% 
   dplyr::arrange(year) %>% 
-  tidyr::pivot_wider(names_from = year, values_from = n)
+  tidyr::pivot_wider(names_from = year, values_from = n) %>% 
+  dplyr::left_join(dplyr::count(trx, investor), by = "investor")
+```
 
-trx$asset %>% unique() %>% length()
+Clearly, they have similar number of transactions as a whole, 
+but they traded on different years.  
 
-trx$type %>% unique()
 
+## Market Prices
 
-# Market prices
-mkt <- DEanalysis$marketprices
+The market prices dataset needs only to have three variables:
+asset, datetime and price.  
 
-str(mkt)
+```{r, eval=TRUE}
+mkt <- DEanalysis$marketprices # market prices
 head(mkt)
+```
 
-mkt$asset %>% unique() %>% length()
-  
+```{r, eval=TRUE}
+skimr::skim(mkt)
+```
+Again, not all the assets prices are available in every year
+because we only need the market prices for those assets for
+the traded datetime (i.e. the datetime of the transactions
+dataset).  
+
+```{r, eval=TRUE}
 mkt %>% 
   dplyr::mutate(year = lubridate::year(datetime)) %>% 
   dplyr::count(asset, year) %>% 
   dplyr::arrange(year) %>% 
-  tidyr::pivot_wider(names_from = year, values_from = n)
+  tidyr::pivot_wider(names_from = year, values_from = n) %>% 
+  head(10)
+```
+  
+&nbsp;     
+  
+# Disposition Effect: Single Investor Analysis
 
+Now, first proceed to analyse the behaviour of a single investor.  
 
+```{r, eval=TRUE}
 # Investor QZ621
-trx_QZ621 <- trx %>% 
-  dplyr::filter(investor == "QZ621")
-trx_QZ621$asset %>% unique() %>% length()
-mkt_QZ621 <- mkt %>% 
-  dplyr::filter(asset %in% unique(trx_QZ621$asset))
-
-head(trx_QZ621)
-head(mkt_QZ621)
+trx_QZ621 <- dplyr::filter(trx, investor == "QZ621") # transactions
+mkt_QZ621 <- dplyr::filter(mkt, asset %in% unique(trx_QZ621$asset)) # market prices
+```
 
 
-p_res <- portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "count")
-str(p_res)
-head(p_res)
+## Gains & Losses Calculation
 
-disposition_effect(realized_gains = p_res$RG_count, paper_gains = p_res$PG_count, 
-                   realized_losses = p_res$RL_count, paper_losses = p_res$PL_count)
+Based solely on this two data frames it is possible to compute
+the so-called realized gains (RG), realized losses (RL), 
+paper gains (PG), and paper losses (PL), as defined by 
+L. Mazzucchelli et al. (2021).
 
-disposition_effect(realized_gains = p_res$RG_count, paper_gains = p_res$PG_count, 
-                   realized_losses = p_res$RL_count, paper_losses = p_res$PL_count) %>% 
-  mean(na.rm = TRUE)
+To sum up the main concepts are the followings:
 
-disposition_compute(gainslosses = p_res) %>% 
-  head()
+* Realized Gain / Loss => whenever an investor closes a position 
+in its portfolio in gain / loss  
 
+* Paper Gain / Loss => all the open positions at the moment of
+the transaction, and all the partially closed positions.
+
+The `portfolio_compute` is the core interface of the package and 
+it is used to perform all the gains and losses computations.  
+
+```{r, eval=TRUE}
+p_res <- portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621)
+head(p_res)[, -5]
+skimr::skim(p_res)
+```
+
+Hence, the result is a data frame containing:  
+
+* the final portfolio of the investor (first 5 variables)  
+* gains and losses results of the chosen method (all the other variables),
+where RG = Realized Gains, RL = Realized Losses, PG = Paper Gains, and 
+PL = Paper Losses.  
+
+
+## Disposition Effect Computation
+
+Once that gains and losses have been computed, it is finally 
+possible to evaluate both the disposition effect of the investor
+and of each traded assets, where the disposition effect is defined as:
+
+$$DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)$$
+
+The DE varies between -1 and 1. Positive DE values show the 
+presence of disposition effect irrational behaviours, while
+negative values show the presence of opposite disposition
+effect behaviours. A value of zero show that no disposition
+effect exists.  
+  
+You almost never want to compute the disposition effect directly
+via the `disposition_effect` function, but you will mostly rely
+on the quicker and easier `disposition_compute` interface, since
+it designed to handle many situations.  
+
+```{r, eval=TRUE}
+de <- disposition_compute(gainslosses = p_res)
+head(de)
+```
+
+As can be seen, `disposition_compute` calculates a value of disposition
+effect for each asset. In order to obtain the value of disposition
+effect of the investor, one can simply compute an aggregate statistic,
+such as the mean or the median, on the assets' values.  
+To do this we can simply use once again `disposition_compute` specifying
+the desired `aggregate_fun`.  
+
+```{r, eval=TRUE}
 disposition_compute(gainslosses = p_res, aggregate_fun = mean, na.rm = TRUE)
+```
 
-disposition_summary(gainslosses = p_res)
+Moreover, by means of the `disposition_summary` function
+it is also easy to summarise the disposition effect behaviour 
+of the investor, obtaining common summary statistics.   
 
-# Graphics
+```{r, eval=TRUE}
+de_stat <- disposition_summary(gainslosses = p_res)
+de_stat
+```
+  
+&nbsp;     
+  
+# Disposition Effect: Testing Different Arguments
 
+Until now, we limited our analysis to the default parameters of 
+`portfolio_compute`. However, this function has many different
+arguments that can be used both to fine tune the analysis and to
+perform more advanced calculations, such as the so-called 
+*portfolio driven disposition effect* and the 
+*time series disposition effect*.  
 
-# Let go back to our full db
-
-trx_list <- trx %>% 
-  dplyr::group_by(investor) %>% 
-  dplyr::group_split()
-
-p_res_full <- purrr::map(trx_list, portfolio_compute, market_prices = mkt, method = "count")
-length(p_res_full)
-head(p_res_full[[1]])
-
-purrr::map(p_res_full, disposition_compute)
-purrr::map(p_res_full, disposition_compute, aggregate_fun = mean, na.rm = TRUE) %>% 
-  dplyr::bind_rows() %>% 
-  dplyr::arrange(dplyr::desc(DE_count))
-
-purrr::map(p_res_full, disposition_compute, aggregate_fun = mean, na.rm = TRUE) %>% 
-  dplyr::bind_rows() %>% 
-  dplyr::arrange(dplyr::desc(DE_count)) %>% 
-  dplyr::pull("DE_count") %>% 
-  summary()
-
-purrr::map(p_res_full, disposition_summary) %>% 
-  dplyr::bind_rows()
-
-# Graphics
+Hence, we focus here on the usage of five fundamental 
+different arguments.  
 
 
+## Method
 
-# Appendix
-# method arg
+Let's start by the `method` argument. It is probably the most relevant
+parameter the user can control since it allows to perform five different 
+types of analysis.  
 
+If set to "none", no gains and losses are computed but the investor's
+portfolio is updated at every transaction, resulting in the actual 
+portfolio of the investors at time T (the end of the period).  
+
+```{r, eval=TRUE}
 portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "none") %>% 
   head()
+```
+
+If set to one of "count", "total", "value", or "duration", 
+gains and losses are computed for the corresponding method.  
+
+```{r, eval=TRUE}
 portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "count") %>% 
   head()
 portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "total") %>% 
@@ -140,55 +282,264 @@ portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621,
   head()
 portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "duration") %>% 
   head()
+```
+
+In particular:  
+
+* `count` computes gains and losses as simple counts  
+* `total` calculates gains and losses as the sum of the quantity  
+* `value` measures the expected percentage gains and losses based on prices  
+* `duration` calculates the time in hours of held gains and losses.  
+
+Instead, when method is set to "all", then all the four measures are
+computed.  
+
+```{r, eval=TRUE}
 p_res_all <- portfolio_compute(portfolio_transactions = trx_QZ621, market_prices = mkt_QZ621, method = "all")
-str(p_res_all)
+skimr::skim(p_res_all)
+```
 
-disposition_compute(gainslosses = p_res_all) %>% 
-  head()
+It is important to notice that the disposition effect is 
+only meaningful for methods `coount` and `total`. In all 
+the other cases the disposition difference is used instead.    
 
+```{r, eval=TRUE}
 disposition_compute(gainslosses = p_res_all, aggregate_fun = mean, na.rm = TRUE)
+```
 
-disposition_summary(gainslosses = p_res_all)
+
+## Allow Short
+
+The `allow_short` argument, instead, allows for short selling 
+transactions. If set to FALSE, short selling will not be allowed
+and no gains or losses will be computed when this happens.  
 
 
-# time_threshold
+## Time Threshold
+
+The `time_threshold` argument is a fundamental fine tuning 
+parameter. It essentially controls the minimum time distance 
+necessary to compute gains and losses.  
+By default it is set to "0 mins", implying that gains and losses
+are always computed.  
+However, this may not be desirable since investor's behaviours 
+are not expected to change with very high frequencies.  
+Hence, for instance, setting it to "60 mins" states that gains and
+losses are calculated only if 60 minutes are passed from the last
+transaction.  
+
+```{r, eval=FALSE}
 portfolio_compute(
   portfolio_transactions = trx_QZ621, 
   market_prices = mkt_QZ621, 
-  method = "count", 
   time_threshold = "60 mins"
 )
+```
+
+This parameter is very important also because it allows to 
+somewhat filters human operations from machines operations, 
+without actually removing them from the analysis.  
+
+Different units may be specified.  
 
 
-# allow_short
+## Exact Market Prices
+
+The argument `exact_market_prices` is set to TRUE by default,
+since it is expected that the user provides market prices of
+each traded asset for each transaction datetime.  
+However, when this is not the case, one may want to set it to
+FALSE to allow for non exact market prices. It essentially 
+means that the nearest price in time is used.  
+
+```{r, eval=FALSE}
 portfolio_compute(
   portfolio_transactions = trx_QZ621, 
   market_prices = mkt_QZ621, 
-  method = "count", 
-  allow_short = FALSE
+  exact_market_prices = FALSE
 )
+```
 
-# exact_market_prices
+Note, however, that with `exact_market_prices` set to FALSE, 
+unreliable results may be obtained when transactions occur 
+with low frequency, since the market prices used as reference
+for the calculation may be outdated.  
+
+
+## Interactivity
+
+The `verbose` and `progress` arguments may be useful for 
+interactive use and for very long calculations on large
+portfolios of transactions.  
+
+```{r, eval = FALSE}
 portfolio_compute(
   portfolio_transactions = trx_QZ621, 
   market_prices = mkt_QZ621, 
-  method = "count", 
-  exact_market_prices = TRUE
-)
-
-# interactive use
-portfolio_compute(
-  portfolio_transactions = trx_QZ621, 
-  market_prices = mkt_QZ621, 
-  method = "count", 
   verbose = c(1, 1),
   progress = TRUE
 )
+```
+
+
+## Other Arguments
+
+See 
+[Portfolio Driven Disposition Effect]() and
+[Time Series Disposition Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html)
+for a guide on the usage of other, more advanced, arguments.
+  
+&nbsp;     
+  
+# Disposition Effect: Multiple Investors Analysis
+
+Although the analysis of disposition effect can be performed simply
+on a single investor, the real advantages of this analysis derive from
+the capacity to study and understand the behaviours of many different
+investors that actively operate on the financial markets.  
+
+Hence, to fully grasp the power of `dispositionEffect` package, we can
+proceed to jointly analyse all the 10 investors' transactions that are
+available into the `DEanalysis` dataset.  
+
+Furthermore, if you are interested in computing the disposition effect
+on large datasets, please see 
+[Disposition Effect in Parallel](https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html)
+to understand how the benefits of parallel computing can be exploited
+within this framework.  
+
+```{r, eval=TRUE}
+# list of transactions separated by investor
+trx_list <- trx %>% 
+  dplyr::group_by(investor) %>% 
+  dplyr::group_split()
+```
+
+## Gains & Losses Calculation
+
+This time to calculate gains and losses for each investor's
+portfolio we can simply `map` `portfolio_compute` on the list
+of transactions, specifying all the other necerrasy arguments
+as usual.  
+
+```{r, eval=FALSE}
+p_res_full <- purrr::map(trx_list, portfolio_compute, market_prices = mkt)
+```
+
+```{r, eval=TRUE, include=FALSE}
+load("figures/p_res_full.RData")
+```
+
+
+## Disposition Effect Computation
+
+The same procedure can be used to quickly compute the disposition
+effect on each resulting portfolio.  
+
+```{r, eval=TRUE}
+de <- purrr::map(p_res_full, disposition_compute) %>% 
+  dplyr::bind_rows()
+skimr::skim(de)
+```
+As it is shown, `de` is a data frame containing disposition effect
+results (variable `DE_count`) on the 10 investors for all their 337 
+traded assets.  
+Also the average disposition effects of the investors can be easily obtained,   
+
+```{r, eval=TRUE}
+de_mean <- purrr::map(p_res_full, disposition_compute, aggregate_fun = mean, na.rm = TRUE) %>% 
+  dplyr::bind_rows() %>% 
+  dplyr::arrange(dplyr::desc(DE_count))
+de_mean
+```
+
+and the disposition effect summary statistics.
+
+```{r, eval=TRUE}
+de_stat <- purrr::map(p_res_full, disposition_summary) %>% 
+  dplyr::bind_rows()
+head(de_stat, 7)
+```
+
+It is clearer now that some investors display irrational behaviours
+while other don't.
+
+  
+## Visual Analysis
+
+The graphical inspection of disposition effect results allows
+to easily understand what is going on and to spot possible
+interesting behaviours.  
+
+One may want to investigate the overall distribution, or 
+the distributions of every statistics obtained.  
+
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+ggplot(de, aes(x = DE_count)) +
+	geom_histogram(aes(y = ..density..), color = "darkblue", fill = "yellow") +
+  geom_density(aes(y = ..density..), color = "darkblue", fill = "yellow", alpha = 0.4) +
+	scale_x_continuous(limits = c(-1, 1)) +
+	theme(
+		panel.background = element_rect(fill = "grey92"),
+		plot.background = element_rect(fill = "grey85", colour = NA),
+		plot.title = element_text(size = 20),
+		legend.position = "none"
+	) +
+	labs(title = "Disposition Effect Distribution", x = "Disposition Effect", y = "Frequency")
+```
+
+```{r, eval=TRUE, include=FALSE}
+de_stat <- de_stat %>%
+  dplyr::filter(stat != "StDev") %>% 
+  dplyr::mutate(stat = factor(stat, levels = c("Min", "Q1", "Median", "Mean", "Q3", "Max")))
+```
+
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+ggplot(de_stat, aes(x = DE_count, y = stat, fill = stat)) +
+	geom_density_ridges() +
+  scale_fill_viridis_d() +
+	scale_x_continuous(limits = c(-1, 1)) +
+	theme(
+		panel.background = element_rect(fill = "grey92"),
+		plot.background = element_rect(fill = "grey85", colour = NA),
+		plot.title = element_text(size = 20),
+		legend.position = "none"
+	) +
+	labs(
+		title = "Disposition Effect Statistics' Distributions",
+		x = "Disposition Effect", y = ""
+	)
+```
+
+Or deeper, one can also analyse investors' behaviours on some
+specific assets to understand whether there exists on the market
+assets that are more subject to irrationality.    
+
+```{r, eval=TRUE, fig.width=8, fig.height=5, fig.align='center'}
+top5_assets <- trx %>% 
+  dplyr::count(asset) %>% 
+  dplyr::arrange(dplyr::desc(n)) %>% 
+  dplyr::slice(1:6) %>% 
+  dplyr::pull(asset)
+
+dplyr::filter(de, asset %in% top5_assets) %>% 
+  ggplot(aes(x = asset, y = DE_count, fill = asset)) +
+	geom_half_boxplot(center = TRUE, width = 0.8, nudge = 0.02) +
+	geom_half_violin(side = "r", nudge = 0.02, alpha = 0.8) +
+	geom_jitter(color = "grey40") +
+  scale_fill_viridis_d() +
+	theme(
+		panel.background = element_rect(fill = "grey92"),
+		plot.background = element_rect(fill = "grey85", colour = NA),
+		plot.title = element_text(size = 20),
+		legend.position = "none"
+	) +
+	labs(title = "Volatility & Disposition Effect", x = "",	y = "Disposition Effect")
 ```
 
 &nbsp;  
 
 ---------------------------------------------------------------------------
 
-For more detailed tutorials on disposition effect visit 
+For more tutorials on disposition effect visit 
 [dispositionEffect](https://marcozanotti.github.io/dispositionEffect).

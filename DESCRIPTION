@@ -1,7 +1,7 @@
 Package: dispositionEffect
 Type: Package
 Title: Analysis of Disposition Effect on Financial Portfolios
-Version: 0.0.0.9023
+Version: 0.0.0.9024
 Authors@R: c(
     person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
     person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = c("aut", "cre")))
@@ -19,14 +19,17 @@ Imports:
     progress,
     rlang,
 Suggests: 
-    ggplot2,
-    tidyr,
     devtools,
     knitr,
     rmarkdown,
     roxygen2,
     testthat,
     covr,
+    tidyr,
+    skimr,
+    ggplot2,
+    ggridges,
+    gghalves,
     furrr,
     future,
     foreach,

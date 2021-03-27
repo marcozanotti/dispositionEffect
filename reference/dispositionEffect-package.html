@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>dispositionEffect: A package that allows to perform analyses on disposition effect — dispositionEffect-package • dispositionEffect</title>
+<title>dispositionEffect: Behavioural Analysis on Financial Data — dispositionEffect-package • dispositionEffect</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,13 @@
 
 
 
-<meta property="og:title" content="dispositionEffect: A package that allows to perform analyses on disposition effect — dispositionEffect-package" />
-<meta property="og:description" content="The dispositionEffect package allows to perform analyses on the
-disposition effect using financial market data." />
+<meta property="og:title" content="dispositionEffect: Behavioural Analysis on Financial Data — dispositionEffect-package" />
+<meta property="og:description" content="The dispositionEffect package allows to perform different
+types of behavioural analysis using financial market and experimental
+data.
+The analysis of disposition effect, portfolio-driven disposition
+effect, and time series disposition effect can be performed with
+four different implemented methods." />
 <meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png" />
 
 
@@ -138,28 +142,60 @@ disposition effect using financial market data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>dispositionEffect: A package that allows to perform analyses on disposition effect</h1>
+    <h1>dispositionEffect: Behavioural Analysis on Financial Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/marcozanotti/dispositionEffect/blob/master/R/dispositionEffect-package.R'><code>R/dispositionEffect-package.R</code></a></small>
     <div class="hidden name"><code>dispositionEffect-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The dispositionEffect package allows to perform analyses on the
-disposition effect using financial market data.</p>
+    <p>The dispositionEffect package allows to perform different
+types of behavioural analysis using financial market and experimental
+data.
+The analysis of disposition effect, portfolio-driven disposition
+effect, and time series disposition effect can be performed with
+four different implemented methods.</p>
     </div>
 
 
 
-    <h2 class="hasAnchor" id="dispositioneffect-functions"><a class="anchor" href="#dispositioneffect-functions"></a>dispositionEffect functions</h2>
+    <h2 class="hasAnchor" id="main-functions"><a class="anchor" href="#main-functions"></a>Main functions</h2>
 
     
 
-<dl>
-<dt>disposition_effect</dt><dd><p>Compute the disposition effect based on
-realized and paper gains and losses</p></dd>
+<ul>
+<li><p><code>portfolio_compute</code> is a wrapper function that compute realized and
+paper gains and losses from the investor's transactions and the market
+prices of the traded assets and updates the investor's portfolio</p></li>
+<li><p><code>gains_losses</code> is the core function of the package. It performs all
+the necessary calculations and can be used for real-time processing
+(it is intended for advanced users only)</p></li>
+<li><p><code>disposition_effect</code> Compute the disposition effect based on
+realized and paper gains and losses</p></li>
+<li><p><code>disposition_difference</code> Compute the disposition difference
+based on realized gains and losses</p></li>
+<li><p><code>disposition_compute</code>and <code>disposition_summary</code>interfaces that allow
+to easily compute disposition effect and summary statistics.</p></li>
+</ul>
 
-</dl>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
+    
+<ul>
+<li><p>An, Li and Engelberg, Joseph and Henriksson, Matthew and Wang, Baolian and Williams,
+Jared, 2019, "The Portfolio-Driven Disposition Effect", available at <a href='https://ssrn.com/abstract=3126997'>SSRN</a>.</p></li>
+<li><p>L. Mazzucchelli et al. (working paper).</p></li>
+<li><p>Odean, Terrance, 1998, "Are investors reluctant to realize their losses?" Journal of Finance 53:5, 1775-98.</p></li>
+<li><p>Sakaguchi, Hiroaki and Stewart, Neil and Walasek, Lukasz, 2019, "The Disposition Effect Varies with Portfolio
+Composition Because People Take Gain-Loss-Domain-Level Sell Decisions", available at <a href='https://ssrn.com/abstract=3053331'>SSRN</a>.</p></li>
+<li><p>Shefrin, Hersh, and Meir Statman, 1985, "The disposition to sell winners too early and ride losers too long",
+Journal of Finance 40:3, 777-90.</p></li>
+<li><p>Weber, Martin, and Colin F. Camerer, 1998, "The disposition effect in securities trading: An experimental analysis",
+Journal of Economic Behavior and Organization 33:2, 167-84.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>L. Mazzucchelli &amp; M. Zanotti</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

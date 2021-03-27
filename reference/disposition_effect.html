@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="Disposition Effect — disposition_effect" />
-<meta property="og:description" content="Compute the disposition effect in a vectorized way." />
+<meta property="og:description" content="Compute the disposition effect and the disposition
+difference in a vectorized way." />
 <meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png" />
 
 
@@ -143,7 +144,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Compute the disposition effect in a vectorized way.</p>
+    <p>Compute the disposition effect and the disposition
+difference in a vectorized way.</p>
     </div>
 
     <pre class="usage"><span class='fu'>disposition_effect</span><span class='op'>(</span><span class='va'>realized_gains</span>, <span class='va'>paper_gains</span>, <span class='va'>realized_losses</span>, <span class='va'>paper_losses</span><span class='op'>)</span>
@@ -214,8 +216,7 @@ results of each asset are shown.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Numeric vector (or scalar) with the value(s) of disposition
-effect(s) or disposition difference(s).
-A <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a> is returned by ................</p>
+effect(s) or disposition difference(s).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The disposition effect is defined as
@@ -229,10 +230,8 @@ or
 
     
 <ul>
-<li><p><code>disposition_effect</code>: Compute the disposition effect as defined
-by L. Mazzucchelli et al.</p></li>
-<li><p><code>disposition_difference</code>: Compute the disposition difference as defined
-by L. Mazzucchelli et al.</p></li>
+<li><p><code>disposition_effect</code>: Compute the disposition effect</p></li>
+<li><p><code>disposition_difference</code>: Compute the disposition difference</p></li>
 <li><p><code>disposition_compute</code>: Compute the disposition effect directly on
 the investor's portfolio containing realized and paper gains and losses
 results.</p></li>
@@ -243,12 +242,6 @@ summary statistics related to the disposition effect.</p></li>
 <li><p><code>disposition_summary_ts</code>: Wrapper that returns the most important
 summary statistics related to the time series disposition effect.</p></li>
 </ul>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>H. Shefrin &amp; M. Statman, 1985</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>L. Mazzucchelli &amp; M. Zanotti</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

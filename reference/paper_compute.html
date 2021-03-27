@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="Papers' estimation — paper_compute" />
-<meta property="og:description" content="Papers' estimation" />
+<meta property="og:description" content="Compute paper gains and paper losses as either simple counts,
+total quantities, expected returns and financial duration." />
 <meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png" />
 
 
@@ -143,7 +144,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Papers' estimation</p>
+    <p>Compute paper gains and paper losses as either simple counts,
+total quantities, expected returns and financial duration.</p>
     </div>
 
     <pre class="usage"><span class='fu'>paper_count</span><span class='op'>(</span>
@@ -241,55 +243,45 @@ Allowed values are "count", "total", "value", "duration" and "all".</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The described functions have different return behaviours.</p>
-<dl>
-<dt><code>paper_compute</code></dt><dd><p>returns a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a>
-containing the values of paper gains and paper losses computed by
-means of the chosen method on each portfolio assets.</p></dd>
-<dt><code>paper_count</code></dt><dd><p>returns a named vector containing the values
-of paper gains and paper losses computed using the count method.</p></dd>
-<dt><code>paper_total</code></dt><dd><p>returns a named vector containing the values
-of paper gains and paper losses computed using the total method.</p></dd>
-<dt><code>paper_value</code></dt><dd><p>returns a named vector containing the values
-of paper gains and paper losses computed using the value method.</p></dd>
-<dt><code>paper_duration</code></dt><dd><p>returns a named vector containing the values
-of paper gains and paper losses computed using the duration method.</p></dd>
+    <p>The described functions have different return behaviours</p><ul>
+<li><p><code>paper_compute</code> returns a data frame containing the values of
+paper gains and paper losses computed by means of the chosen method
+on each portfolio assets.</p></li>
+<li><p><code>paper_count</code> returns a named vector containing the values of
+paper gains and paper losses computed using the count method.</p></li>
+<li><p><code>paper_total</code> returns a named vector containing the values of
+paper gains and paper losses computed using the total method.</p></li>
+<li><p><code>paper_value</code> returns a named vector containing the values of
+paper gains and paper losses computed using the value method.</p></li>
+<li><p><code>paper_duration</code> returns a named vector containing the values
+of paper gains and paper losses computed using the duration method.</p></li>
+</ul>
 
-</dl>
-
-<p>In particular:</p>
-<dl>
-<dt><code>RG_"method"</code></dt><dd><p>contains Realized Gains results.</p></dd>
-<dt><code>RL_"method"</code></dt><dd><p>contains Realized Losses results.</p></dd>
-<dt><code>PG_"method"</code></dt><dd><p>contains Paper Gains results.</p></dd>
-<dt><code>PL_"method"</code></dt><dd><p>contains Paper Losses results.</p></dd>
-
-</dl>
+<p>In particular:</p><ul>
+<li><p><code>RG_"method"</code> contains Realized Gains results</p></li>
+<li><p><code>RL_"method"</code> contains Realized Losses results</p></li>
+<li><p><code>PG_"method"</code> contains Paper Gains results</p></li>
+<li><p><code>PL_"method"</code> contains Paper Losses results</p></li>
+</ul>
 
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
 <li><p><code>paper_count</code>: Computation of paper gains and paper losses as
-simple counts.</p></li>
+simple counts (default method).</p></li>
 <li><p><code>paper_total</code>: Computation of paper gains and paper losses as
-simple quantity of assets.</p></li>
+total quantity of assets.</p></li>
 <li><p><code>paper_value</code>: Computation of paper gains and paper losses as
-simple expected return of assets.</p></li>
+expected return of assets.</p></li>
 <li><p><code>paper_duration</code>: Computation of paper gains and paper losses as
-simple financial duration.</p></li>
+financial duration.</p></li>
 <li><p><code>paper_compute</code>: Wrapper that calls other paper_. functions to
 compute paper gains and paper losses based on the chosen method.</p></li>
 </ul>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>H. Shefrin &amp; M. Statman, 1985</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='realized_compute.html'>realized_compute</a></code>, <code><a href='gains_losses.html'>gains_losses</a></code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>L. Mazzucchelli &amp; M. Zanotti</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

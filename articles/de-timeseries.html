@@ -190,13 +190,13 @@ In particular, the argument <code>time_series_DE</code> is used to enable time s
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_summary_ts</a></span><span class="op">(</span><span class="va">timeseries</span><span class="op">)</span>
 <span class="co">#&gt;   investor   stat DETs_count  DEts_count</span>
-<span class="co">#&gt; 1    4273N     Q1 -0.3199405  0.00000000</span>
-<span class="co">#&gt; 2    4273N Median -0.2916667  0.00000000</span>
-<span class="co">#&gt; 3    4273N     Q3 -0.1166667  0.00000000</span>
-<span class="co">#&gt; 4    4273N   Mean -0.1949405  0.06666667</span>
-<span class="co">#&gt; 5    4273N  StDev  0.1912683  0.49521520</span>
-<span class="co">#&gt; 6    4273N    Min -0.3666667 -1.00000000</span>
-<span class="co">#&gt; 7    4273N    Max  0.2500000  1.00000000</span></code></pre></div>
+<span class="co">#&gt; 1    4273N    Min -0.3666667 -1.00000000</span>
+<span class="co">#&gt; 2    4273N     Q1 -0.3199405  0.00000000</span>
+<span class="co">#&gt; 3    4273N Median -0.2916667  0.00000000</span>
+<span class="co">#&gt; 4    4273N     Q3 -0.1166667  0.00000000</span>
+<span class="co">#&gt; 5    4273N   Mean -0.1949405  0.06666667</span>
+<span class="co">#&gt; 6    4273N    Max  0.2500000  1.00000000</span>
+<span class="co">#&gt; 7    4273N  StDev  0.1912683  0.49521520</span></code></pre></div>
 <p>A visual time series analysis can be performed as usual with <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">timeseries</span> <span class="op">%&gt;%</span> 
@@ -246,22 +246,22 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_summary_ts</a></span><span class="op">(</span><span class="va">timeseries_assets</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>
 <span class="co">#&gt;     stat DETs_count  DEts_count ACO_DETs_count ACO_DEts_count</span>
-<span class="co">#&gt; 1     Q1 -0.3199405  0.00000000      0.2708333      0.0000000</span>
-<span class="co">#&gt; 2 Median -0.2916667  0.00000000      0.5000000      0.0000000</span>
-<span class="co">#&gt; 3     Q3 -0.1166667  0.00000000      0.5000000      0.0000000</span>
-<span class="co">#&gt; 4   Mean -0.1949405  0.06666667      0.3940476      0.1111111</span>
-<span class="co">#&gt; 5  StDev  0.1912683  0.49521520      0.1657201      0.3333333</span>
-<span class="co">#&gt; 6    Min -0.3666667 -1.00000000      0.0000000      0.0000000</span>
-<span class="co">#&gt; 7    Max  0.2500000  1.00000000      0.5000000      1.0000000</span>
+<span class="co">#&gt; 1    Min -0.3666667 -1.00000000      0.0000000      0.0000000</span>
+<span class="co">#&gt; 2     Q1 -0.3199405  0.00000000      0.2708333      0.0000000</span>
+<span class="co">#&gt; 3 Median -0.2916667  0.00000000      0.5000000      0.0000000</span>
+<span class="co">#&gt; 4     Q3 -0.1166667  0.00000000      0.5000000      0.0000000</span>
+<span class="co">#&gt; 5   Mean -0.1949405  0.06666667      0.3940476      0.1111111</span>
+<span class="co">#&gt; 6    Max  0.2500000  1.00000000      0.5000000      1.0000000</span>
+<span class="co">#&gt; 7  StDev  0.1912683  0.49521520      0.1657201      0.3333333</span>
 <span class="fu"><a href="../reference/disposition_effect.html">disposition_summary_ts</a></span><span class="op">(</span><span class="va">timeseries_assets</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt;     stat DETs_count  DEts_count LSUG_DETs_count LSUG_DEts_count</span>
-<span class="co">#&gt; 1     Q1 -0.3199405  0.00000000       0.2000000       0.0000000</span>
-<span class="co">#&gt; 2 Median -0.2916667  0.00000000       0.3333333       0.0000000</span>
-<span class="co">#&gt; 3     Q3 -0.1166667  0.00000000       0.3333333       0.7500000</span>
-<span class="co">#&gt; 4   Mean -0.1949405  0.06666667       0.2235294       0.3333333</span>
-<span class="co">#&gt; 5  StDev  0.1912683  0.49521520       0.1393261       0.5163978</span>
-<span class="co">#&gt; 6    Min -0.3666667 -1.00000000       0.0000000       0.0000000</span>
-<span class="co">#&gt; 7    Max  0.2500000  1.00000000       0.3333333       1.0000000</span></code></pre></div>
+<span class="co">#&gt; 1    Min -0.3666667 -1.00000000       0.0000000       0.0000000</span>
+<span class="co">#&gt; 2     Q1 -0.3199405  0.00000000       0.2000000       0.0000000</span>
+<span class="co">#&gt; 3 Median -0.2916667  0.00000000       0.3333333       0.0000000</span>
+<span class="co">#&gt; 4     Q3 -0.1166667  0.00000000       0.3333333       0.7500000</span>
+<span class="co">#&gt; 5   Mean -0.1949405  0.06666667       0.2235294       0.3333333</span>
+<span class="co">#&gt; 6    Max  0.2500000  1.00000000       0.3333333       1.0000000</span>
+<span class="co">#&gt; 7  StDev  0.1912683  0.49521520       0.1393261       0.5163978</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">timeseries_assets</span> <span class="op">%&gt;%</span> 
   <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"DE"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 

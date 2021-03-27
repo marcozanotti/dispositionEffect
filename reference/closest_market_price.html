@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Closest market price — closest_market_price" />
 <meta property="og:description" content="Find the market price closest to a certain datetime and for
-as specific asset." />
+specific assets." />
 <meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png" />
 
 
@@ -145,7 +145,7 @@ as specific asset." />
 
     <div class="ref-description">
     <p>Find the market price closest to a certain datetime and for
-as specific asset.</p>
+specific assets.</p>
     </div>
 
     <pre class="usage"><span class='fu'>closest_market_price</span><span class='op'>(</span>
@@ -180,28 +180,22 @@ price.</p></td>
     <tr>
       <th>exact</th>
       <td><p>Logical. If TRUE then it looks for market prices at the same
-datetime only, otherwise it looks for the nearest.</p></td>
+datetime only, otherwise it looks for the nearest before the datetime.</p></td>
     </tr>
     <tr>
       <th>substitute_datetime</th>
       <td><p>Logical. If TRUE the datetime is substituted
-with the passed argument.</p></td>
+with the datetime argument.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The value of the asset's price.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>H. Shefrin &amp; M. Statman, 1985</p>
+    <p>The data frame of closest market prices.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='evaluate.html'>evaluate</a></code>,
 <code>lubridate::<a href='http://lubridate.tidyverse.org/reference/round_date.html'>round_date</a></code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>L. Mazzucchelli &amp; M. Zanotti</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

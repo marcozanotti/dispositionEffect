@@ -759,13 +759,13 @@ To do this we can simply use once again <code>disposition_compute</code> specify
 <code class="sourceCode R"><span class="va">de_stat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res</span><span class="op">)</span>
 <span class="va">de_stat</span>
 <span class="co">#&gt;   investor   stat   DE_count</span>
-<span class="co">#&gt; 1    QZ621     Q1 -0.6250000</span>
-<span class="co">#&gt; 2    QZ621 Median  0.0000000</span>
-<span class="co">#&gt; 3    QZ621     Q3  0.1284957</span>
-<span class="co">#&gt; 4    QZ621   Mean -0.2115755</span>
-<span class="co">#&gt; 5    QZ621  StDev  0.5740599</span>
-<span class="co">#&gt; 6    QZ621    Min -1.0000000</span>
-<span class="co">#&gt; 7    QZ621    Max  1.0000000</span></code></pre></div>
+<span class="co">#&gt; 1    QZ621    Min -1.0000000</span>
+<span class="co">#&gt; 2    QZ621     Q1 -0.6250000</span>
+<span class="co">#&gt; 3    QZ621 Median  0.0000000</span>
+<span class="co">#&gt; 4    QZ621     Q3  0.1284957</span>
+<span class="co">#&gt; 5    QZ621   Mean -0.2115755</span>
+<span class="co">#&gt; 6    QZ621    Max  1.0000000</span>
+<span class="co">#&gt; 7    QZ621  StDev  0.5740599</span></code></pre></div>
 <p> </p>
 </div>
 </div>
@@ -1440,13 +1440,13 @@ Also the average disposition effects of the investors can be easily obtained,</p
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">de_stat</span>, <span class="fl">7</span><span class="op">)</span>
 <span class="co">#&gt;   investor   stat   DE_count</span>
-<span class="co">#&gt; 1    44382     Q1  0.3141026</span>
-<span class="co">#&gt; 2    44382 Median  0.5000000</span>
-<span class="co">#&gt; 3    44382     Q3  0.6500000</span>
-<span class="co">#&gt; 4    44382   Mean  0.4917751</span>
-<span class="co">#&gt; 5    44382  StDev  0.3506436</span>
-<span class="co">#&gt; 6    44382    Min -0.3333333</span>
-<span class="co">#&gt; 7    44382    Max  1.0000000</span></code></pre></div>
+<span class="co">#&gt; 1    44382    Min -0.3333333</span>
+<span class="co">#&gt; 2    44382     Q1  0.3141026</span>
+<span class="co">#&gt; 3    44382 Median  0.5000000</span>
+<span class="co">#&gt; 4    44382     Q3  0.6500000</span>
+<span class="co">#&gt; 5    44382   Mean  0.4917751</span>
+<span class="co">#&gt; 6    44382    Max  1.0000000</span>
+<span class="co">#&gt; 7    44382  StDev  0.3506436</span></code></pre></div>
 <p>It is clearer now that some investors display irrational behaviours while other don’t.</p>
 </div>
 <div id="visual-analysis" class="section level2">

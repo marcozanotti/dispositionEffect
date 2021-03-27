@@ -43,11 +43,8 @@ of investor's realized and paper gains and losses results based on
 the chosen method.
 
 \item \code{initializer_timeseries_DE}: Empty \code{data.frame}
-of investor's time series Disposition Effect based on
+of investor's time series disposition effect based on
 the chosen method.
 }}
 
-\author{
-L. Mazzucchelli & M. Zanotti
-}
 \keyword{internal}

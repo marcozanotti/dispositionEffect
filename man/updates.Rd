@@ -9,7 +9,7 @@
 \alias{update_realized_and_paper}
 \alias{update_timeseries_DE}
 \alias{update_expectedvalue}
-\title{Update investor's portfolio or realized and paper results}
+\title{Update results over time}
 \usage{
 update_price(
   portfolio_quantity,
@@ -91,33 +91,9 @@ effect.}
 \item{num_transaction_assets}{Data frame containing the number of transactions for
 each asset traded by the investor.}
 }
-\value{
-The described functions have different return behaviours.
-
-\describe{
-\item{\code{update_price}}{returns a numeric value of the new portfolio
-price of the traded asset.}
-\item{\code{update_datetime}}{returns a datetime value of the new portfolio
-datetime of the traded asset.}
-\item{\code{update_realized_and_paper}}{returns a \link[tibble:tibble-package]{tibble}
-containing the realized and paper gains and losses with the updated
-values.}
-\item{\code{update_expectedvalue}}{returns a \link[tibble:tibble-package]{tibble}
-containing the realized and paper gains and losses with the updated
-values.}
-}
-
-In particular:
-
-\describe{
-\item{\code{RG_"method"}}{contains Realized Gains results.}
-\item{\code{RL_"method"}}{contains Realized Losses results.}
-\item{\code{PG_"method"}}{contains Paper Gains results.}
-\item{\code{PL_"method"}}{contains Paper Losses results.}
-}
-}
 \description{
-Unpdate investor's portfolio or realized and paper results
+Update investor's portfolio, realized and paper results
+and time series disposition effect computations.
 }
 \section{Functions}{
 \itemize{
@@ -133,22 +109,12 @@ and datetime of the traded asset.
 \item \code{update_realized_and_paper}: Update the realized and paper gains and losses
 results with the results obtained on the last occurred transaction.
 
-\item \code{update_timeseries_DE}: Update the realized and paper gains and losses
-results averaging the total value by the number of transactions
-for each asset.
+\item \code{update_timeseries_DE}: Update the time series disposition effect
+averaging values over time.
 
 \item \code{update_expectedvalue}: Update the realized and paper gains and losses
 results averaging the total value by the number of transactions
 for each asset.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
-\seealso{
-\code{\link{portfolio_compute}}, \code{\link{gains_losses}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
-}
 \keyword{internal}

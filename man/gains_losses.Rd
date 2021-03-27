@@ -53,25 +53,20 @@ long positions are allowed.}
 \item{verbose}{Logical. If TRUE than messages are printed to the console.}
 }
 \value{
-A \link[tibble:tibble-package]{tibble} containing the values of
-realized and paper gains and losses computed by means of the chosen
-method on each portfolio assets.
+A data frame containing the values of realized and paper gains
+and losses computed by means of the chosen method on each portfolio assets.
 }
 \description{
 Calculation of the realized gains and losses and the paper
 gains and losses.
 }
 \details{
-It is essentially a wrapper of the \code{\link{paper_compute}}
-and the \code{\link{realized_compute}} functions.
-}
-\references{
-H. Shefrin & M. Statman, 1985
+It is essentially a wrapper around \code{\link{paper_compute}}
+and \code{\link{realized_compute}} functions.
+It is the function that can be used for streaming computations of
+gains and losses.
 }
 \seealso{
 \code{\link{realized_compute}}, \code{\link{paper_compute}},
 \code{\link{portfolio_compute}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

@@ -2,7 +2,8 @@
 #'
 #' @title Realized estimation
 #'
-#' @description Realized estimation
+#' @description Compute realized gains and realized losses as either simple
+#'   counts, total quantities, expected returns and financial duration.
 #'
 #' @param portfolio_quantity Numeric vector. The portfolio quantities of assets into the
 #'   investor's portfolio.
@@ -20,36 +21,33 @@
 #' @inheritParams paper_compute
 #'
 #' @return
-#'   The described functions have different return behaviours.
+#'   The described functions have different return behaviours
 #'
-#'   \describe{
-#'     \item{\code{realized_compute}}{returns a [tibble][tibble::tibble-package]
-#'       containing the values of realized and paper gains and losses computed by
-#'       means of the chosen method on each portfolio assets.}
-#'     \item{\code{realized_count}}{returns a named vector containing the values
-#'       of realized and paper gains and losses computed using the count method.}
-#'     \item{\code{realized_total}}{returns a named vector containing the values
-#'       of realized and paper gains and losses computed using the total method.}
-#'     \item{\code{realized_value}}{returns a named vector containing the values
-#'       of realized and paper gains and losses computed using the value method.}
-#'     \item{\code{realized_duration}}{returns a named vector containing the values
-#'       of realized and paper gains and losses computed using the duration method.}
-#'     \item{\code{realized_empty}}{returns a named vector containing empty values
-#'       of realized and paper gains and losses computed using the chosen method.}
-#'   }
+#'   * \code{realized_compute} returns a data frame
+#'   containing the values of realized and paper gains and losses computed by
+#'   means of the chosen method on each portfolio assets.
+#'
+#'   * \code{realized_count} returns a named vector containing the values
+#'   of realized and paper gains and losses computed using the count method.
+#'
+#'   * \code{realized_total} returns a named vector containing the values
+#'   of realized and paper gains and losses computed using the total method.
+#'
+#'   * \code{realized_value} returns a named vector containing the values
+#'   of realized and paper gains and losses computed using the value method.
+#'
+#'   * \code{realized_duration} returns a named vector containing the values
+#'   of realized and paper gains and losses computed using the duration method.
+#'
+#'   * \code{realized_empty} returns a named vector containing empty values
+#'   of realized and paper gains and losses computed using the chosen method.
 #'
 #'   In particular:
 #'
-#'   \describe{
-#'     \item{\code{RG_"method"}}{contains Realized Gains results.}
-#'     \item{\code{RL_"method"}}{contains Realized Losses results.}
-#'     \item{\code{PG_"method"}}{contains Paper Gains results.}
-#'     \item{\code{PL_"method"}}{contains Paper Losses results.}
-#'   }
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
+#'   * \code{RG_"method"} contains Realized Gains results
+#'   * \code{RL_"method"} contains Realized Losses results
+#'   * \code{PG_"method"} contains Paper Gains results
+#'   * \code{PL_"method"} contains Paper Losses results
 #'
 #' @seealso \code{\link{paper_compute}}, \code{\link{gains_losses}}
 NULL
@@ -326,7 +324,7 @@ realized_count <- function(
 }
 
 
-#' @describeIn realized_compute Computation, as simple quantity, of realized
+#' @describeIn realized_compute Computation, as total quantity, of realized
 #'   gains and realized losses of the traded asset.
 #' @export
 realized_total <- function(
@@ -599,7 +597,7 @@ realized_total <- function(
 }
 
 
-#' @describeIn realized_compute Computation, as simple expected return, of
+#' @describeIn realized_compute Computation, as expected return, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
 realized_value <- function(
@@ -872,7 +870,7 @@ realized_value <- function(
 }
 
 
-#' @describeIn realized_compute Computation, as simple financial duration, of
+#' @describeIn realized_compute Computation, as financial duration, of
 #'   realized gains and realized losses of the traded asset.
 #' @export
 realized_duration <- function(

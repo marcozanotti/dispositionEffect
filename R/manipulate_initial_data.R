@@ -1,9 +1,10 @@
 #' @name manipulate_initial_data
 #'
-#' @title Manipulate market prices
+#' @title Pre-process transactions and market prices data frames
 #'
-#' @description Aggregate the data frame of market prices with a
-#'   specific aggregate function within a time interval.
+#' @description These functions allows to pre-process transactions
+#'   and market prices data frames performing aggregation and
+#'   subsetting operations.
 #'
 #' @param portfolio_transactions Data frame. The investor's transactions data frame.
 #' @param market_prices Data frame containing the market prices.
@@ -20,12 +21,6 @@
 #' @param subset Logical. If TRUE, `subset_market_prices` is used to generate
 #'   investor's data.
 #'
-#' @return The data frame of aggregated market prices.
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
-#'
 #' @seealso \code{\link{closest_market_price}},
 #'   \code{lubridate::\link[lubridate:round_date]{round_date}}
 #'
@@ -35,7 +30,6 @@ NULL
 
 #' @describeIn manipulate_initial_data Aggregate the data frame of investors'
 #'   transactions that happened at the same datetime.
-#' @keywords internal
 aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
@@ -62,7 +56,6 @@ aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 #' @describeIn manipulate_initial_data Reduce the data frame of investors'
 #'   transactions by aggregating those transactions that happened within
 #'   a time interval.
-#' @keywords internal
 reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
@@ -94,7 +87,6 @@ reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 #' @describeIn manipulate_initial_data Clean the data frame of investors'
 #'   transactions.
-#' @keywords internal
 clean_transactions <- function(portfolio_transactions, unit = "1 mins", reduce = FALSE) {
 
 	if (reduce) {
@@ -112,7 +104,6 @@ clean_transactions <- function(portfolio_transactions, unit = "1 mins", reduce =
 
 #' @describeIn manipulate_initial_data Aggregate the data frame of market prices
 #'   with a specific aggregate function within a time interval.
-#' @keywords internal
 aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_fun = mean) {
 
 	if (!is.null(unit)) {
@@ -133,7 +124,6 @@ aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_
 
 #' @describeIn manipulate_initial_data Subset the data frame of market prices
 #'   based on investor's traded assets and datetimes of transactions.
-#' @keywords internal
 subset_market_prices <- function(market_prices, portfolio_assets, portfolio_datetimes, unit = NULL) {
 
 	if (!is.null(unit)) {
@@ -150,7 +140,6 @@ subset_market_prices <- function(market_prices, portfolio_assets, portfolio_date
 
 #' @describeIn manipulate_initial_data Generate investors' data from transactions
 #'   and market prices.
-#' @keywords internal
 generate_data <- function(
 	portfolio_transactions,
 	market_prices,

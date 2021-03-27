@@ -15,9 +15,6 @@ A data frame with 19 rows and 6 variables:
 \item{DDTs_value}{Complete disposition difference computed after updating at time t}
 }
 }
-\source{
-\url{https://www.directa.it/index-ita.html}
-}
 \usage{
 portfolio_results_ts
 }

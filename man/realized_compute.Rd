@@ -104,48 +104,47 @@ is going to occur.}
 Allowed values are "count", "total", "value", "duration" and "all".}
 }
 \value{
-The described functions have different return behaviours.
-
-\describe{
-\item{\code{realized_compute}}{returns a \link[tibble:tibble-package]{tibble}
+The described functions have different return behaviours
+\itemize{
+\item \code{realized_compute} returns a data frame
 containing the values of realized and paper gains and losses computed by
-means of the chosen method on each portfolio assets.}
-\item{\code{realized_count}}{returns a named vector containing the values
-of realized and paper gains and losses computed using the count method.}
-\item{\code{realized_total}}{returns a named vector containing the values
-of realized and paper gains and losses computed using the total method.}
-\item{\code{realized_value}}{returns a named vector containing the values
-of realized and paper gains and losses computed using the value method.}
-\item{\code{realized_duration}}{returns a named vector containing the values
-of realized and paper gains and losses computed using the duration method.}
-\item{\code{realized_empty}}{returns a named vector containing empty values
-of realized and paper gains and losses computed using the chosen method.}
+means of the chosen method on each portfolio assets.
+\item \code{realized_count} returns a named vector containing the values
+of realized and paper gains and losses computed using the count method.
+\item \code{realized_total} returns a named vector containing the values
+of realized and paper gains and losses computed using the total method.
+\item \code{realized_value} returns a named vector containing the values
+of realized and paper gains and losses computed using the value method.
+\item \code{realized_duration} returns a named vector containing the values
+of realized and paper gains and losses computed using the duration method.
+\item \code{realized_empty} returns a named vector containing empty values
+of realized and paper gains and losses computed using the chosen method.
 }
 
 In particular:
-
-\describe{
-\item{\code{RG_"method"}}{contains Realized Gains results.}
-\item{\code{RL_"method"}}{contains Realized Losses results.}
-\item{\code{PG_"method"}}{contains Paper Gains results.}
-\item{\code{PL_"method"}}{contains Paper Losses results.}
+\itemize{
+\item \code{RG_"method"} contains Realized Gains results
+\item \code{RL_"method"} contains Realized Losses results
+\item \code{PG_"method"} contains Paper Gains results
+\item \code{PL_"method"} contains Paper Losses results
 }
 }
 \description{
-Realized estimation
+Compute realized gains and realized losses as either simple
+counts, total quantities, expected returns and financial duration.
 }
 \section{Functions}{
 \itemize{
 \item \code{realized_count}: Computation, as simple counts, of realized
 gains and realized losses of the traded asset.
 
-\item \code{realized_total}: Computation, as simple quantity, of realized
+\item \code{realized_total}: Computation, as total quantity, of realized
 gains and realized losses of the traded asset.
 
-\item \code{realized_value}: Computation, as simple expected return, of
+\item \code{realized_value}: Computation, as expected return, of
 realized gains and realized losses of the traded asset.
 
-\item \code{realized_duration}: Computation, as simple financial duration, of
+\item \code{realized_duration}: Computation, as financial duration, of
 realized gains and realized losses of the traded asset.
 
 \item \code{realized_compute}: Wrapper that calls other realized_. functions to
@@ -156,12 +155,6 @@ chosen method.
 realized and paper computations based on the chosen method.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
 \seealso{
 \code{\link{paper_compute}}, \code{\link{gains_losses}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

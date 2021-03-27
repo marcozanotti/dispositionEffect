@@ -12,9 +12,6 @@ A data frame with 6895 rows and 4 variables:
 \item{price}{market price of the asset}
 }
 }
-\source{
-\url{https://www.directa.it/index-ita.html}
-}
 \usage{
 marketprices
 }

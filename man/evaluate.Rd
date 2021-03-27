@@ -13,19 +13,14 @@ evaluate_portfolio(portfolio, market_prices)
 \item{market_prices}{Data frame containing the market prices.}
 }
 \value{
-The portfolio value as the sum of each asset quantity times the
-excess return of each asset with respect to the market.
+The portfolio value.
 }
 \description{
-Portfolio evaluation
-}
-\references{
-H. Shefrin & M. Statman, 1985
+Calculate the portfolio value as the sum of each
+asset portfolio quantity times the excess return of each asset
+with respect to the market.
 }
 \seealso{
 \code{\link{portfolio_compute}}, \code{\link{gains_losses}},
 \code{\link{closest_market_price}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

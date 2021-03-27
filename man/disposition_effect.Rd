@@ -53,10 +53,10 @@ results of each asset are shown.}
 \value{
 Numeric vector (or scalar) with the value(s) of disposition
 effect(s) or disposition difference(s).
-A \link[tibble:tibble-package]{tibble} is returned by ................
 }
 \description{
-Compute the disposition effect in a vectorized way.
+Compute the disposition effect and the disposition
+difference in a vectorized way.
 }
 \details{
 The disposition effect is defined as
@@ -70,11 +70,9 @@ or
 }
 \section{Functions}{
 \itemize{
-\item \code{disposition_effect}: Compute the disposition effect as defined
-by L. Mazzucchelli et al.
+\item \code{disposition_effect}: Compute the disposition effect
 
-\item \code{disposition_difference}: Compute the disposition difference as defined
-by L. Mazzucchelli et al.
+\item \code{disposition_difference}: Compute the disposition difference
 
 \item \code{disposition_compute}: Compute the disposition effect directly on
 the investor's portfolio containing realized and paper gains and losses
@@ -90,9 +88,3 @@ summary statistics related to the disposition effect.
 summary statistics related to the time series disposition effect.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
-\author{
-L. Mazzucchelli & M. Zanotti
-}

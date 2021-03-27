@@ -31,9 +31,6 @@ updating process}
 \item{PL_duration}{paper losses via duration method}
 }
 }
-\source{
-\url{https://www.directa.it/index-ita.html}
-}
 \usage{
 portfolio_results
 }

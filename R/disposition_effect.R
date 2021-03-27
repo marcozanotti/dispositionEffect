@@ -2,7 +2,8 @@
 #'
 #' @title Disposition Effect
 #'
-#' @description Compute the disposition effect in a vectorized way.
+#' @description Compute the disposition effect and the disposition
+#'   difference in a vectorized way.
 #'
 #' @details
 #'   The disposition effect is defined as
@@ -35,16 +36,11 @@
 #'
 #' @return Numeric vector (or scalar) with the value(s) of disposition
 #'   effect(s) or disposition difference(s).
-#'   A [tibble][tibble::tibble-package] is returned by ................
 #'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
 NULL
 
 
-#' @describeIn disposition_effect Compute the disposition effect as defined
-#'   by L. Mazzucchelli et al.
+#' @describeIn disposition_effect Compute the disposition effect
 #' @export
 disposition_effect <- function(realized_gains, paper_gains, realized_losses, paper_losses) {
 
@@ -61,8 +57,7 @@ disposition_effect <- function(realized_gains, paper_gains, realized_losses, pap
 }
 
 
-#' @describeIn disposition_effect Compute the disposition difference as defined
-#'   by L. Mazzucchelli et al.
+#' @describeIn disposition_effect Compute the disposition difference
 #' @export
 disposition_difference <- function(gains, losses) {
 
@@ -200,15 +195,15 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 disposition_summary <- function(gainslosses) {
 
 	res <- dplyr::bind_rows(
+		disposition_compute(gainslosses, min, na.rm = TRUE),
 		disposition_compute(gainslosses, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
 		disposition_compute(gainslosses, stats::median, na.rm = TRUE),
 		disposition_compute(gainslosses, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
 		disposition_compute(gainslosses, mean, na.rm = TRUE),
-		disposition_compute(gainslosses, stats::sd, na.rm = TRUE),
-		disposition_compute(gainslosses, min, na.rm = TRUE),
-		disposition_compute(gainslosses, max, na.rm = TRUE)
+		disposition_compute(gainslosses, max, na.rm = TRUE),
+		disposition_compute(gainslosses, stats::sd, na.rm = TRUE)
 	) %>%
-		dplyr::mutate(stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"), .after = "investor")
+		dplyr::mutate(stat = c("Min", "Q1", "Median", "Q3", "Mean", "Max", "StDev"), .after = "investor")
 
 	return(res)
 
@@ -221,17 +216,17 @@ disposition_summary_ts <- function(de_timeseries) {
 
 	df_tmp <- dplyr::select(de_timeseries, dplyr::matches("D(E|D)"))
 	res <- dplyr::bind_rows(
+		purrr::map(df_tmp, min, na.rm = TRUE),
 		purrr::map(df_tmp, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
 		purrr::map(df_tmp, stats::median, na.rm = TRUE),
 		purrr::map(df_tmp, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
 		purrr::map(df_tmp, mean, na.rm = TRUE),
-		purrr::map(df_tmp, stats::sd, na.rm = TRUE),
-		purrr::map(df_tmp, min, na.rm = TRUE),
-		purrr::map(df_tmp, max, na.rm = TRUE)
+		purrr::map(df_tmp, max, na.rm = TRUE),
+		purrr::map(df_tmp, stats::sd, na.rm = TRUE)
 	) %>%
 		dplyr::mutate(
 			investor = de_timeseries$investor[1],
-			stat = c("Q1", "Median", "Q3", "Mean", "StDev", "Min", "Max"),
+			stat = c("Min", "Q1", "Median", "Q3", "Mean", "Max", "StDev"),
 			.before = dplyr::everything()
 		) %>%
 		as.data.frame()

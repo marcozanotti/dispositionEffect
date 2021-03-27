@@ -2,18 +2,15 @@
 #'
 #' @title Portfolio evaluation
 #'
-#' @description Portfolio evaluation
+#' @description Calculate the portfolio value as the sum of each
+#'   asset portfolio quantity times the excess return of each asset
+#'   with respect to the market.
 #'
 #' @param portfolio Data frame of the investor's portfolio at time t.
 #' @inheritParams closest_market_price
 #'
-#' @return The portfolio value as the sum of each asset quantity times the
-#'   excess return of each asset with respect to the market.
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
-#'
+#' @return The portfolio value.
+#
 #' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_losses}},
 #'   \code{\link{closest_market_price}}
 #'

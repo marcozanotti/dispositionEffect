@@ -15,9 +15,6 @@ A data frame with 19 rows and 6 variables:
 \item{datetime}{timestamp of the operation}
 }
 }
-\source{
-\url{https://www.directa.it/index-ita.html}
-}
 \usage{
 investor
 }

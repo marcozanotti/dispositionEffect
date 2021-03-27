@@ -2,7 +2,9 @@
 #'
 #' @title Difference in time
 #'
-#' @description Difference in time
+#' @description Financial implementation of
+#'   \code{base::\link[base:difftime]{difftime}}, that takes into account
+#'   trading day horizons (including pre and after market hours.)
 #'
 #' @param from POSIXct for the initial date.
 #' @param to POSIXct for the final date.
@@ -30,10 +32,6 @@
 #'       \code{difftime_financial} evaluated between the two dates is greater or
 #'       smaller than the chosen threshold.}
 #'   }
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
 #'
 #' @seealso \code{base::\link[base:difftime]{difftime}}
 NULL

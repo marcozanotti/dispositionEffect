@@ -12,7 +12,6 @@
 #'   \item{datetime}{timestamp of the operation}
 #' }
 #'
-#' @source \url{https://www.directa.it/index-ita.html}
 "investor"
 
 
@@ -27,7 +26,6 @@
 #'   \item{price}{market price of the asset}
 #' }
 #'
-#' @source \url{https://www.directa.it/index-ita.html}
 "marketprices"
 
 
@@ -62,7 +60,6 @@
 #'   \item{PL_duration}{paper losses via duration method}
 #' }
 #'
-#' @source \url{https://www.directa.it/index-ita.html}
 "portfolio_results"
 
 
@@ -81,7 +78,6 @@
 #'   \item{DDTs_value}{Complete disposition difference computed after updating at time t}
 #' }
 #'
-#' @source \url{https://www.directa.it/index-ita.html}
 "portfolio_results_ts"
 
 
@@ -100,5 +96,4 @@
 #'   \item{datetime}{timestamp of the operation}
 #' }
 #'
-#' @source \url{https://www.directa.it/index-ita.html}
 "DEanalysis"

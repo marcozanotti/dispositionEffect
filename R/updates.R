@@ -1,8 +1,9 @@
 #' @name updates
 #'
-#' @title Update investor's portfolio or realized and paper results
+#' @title Update results over time
 #'
-#' @description Unpdate investor's portfolio or realized and paper results
+#' @description Update investor's portfolio, realized and paper results
+#'   and time series disposition effect computations.
 #'
 #' @param portfolio_price Numeric value. The portfolio price of the traded asset.
 #' @param portfolio_quantity Numeric value. The portfolio quantity of the traded asset.
@@ -20,44 +21,11 @@
 #' @param timeseries_DE Data frame of time series disposition effect results.
 #' @param transaction_id Numeric, the id of transaction.
 #'
-#'
-#' @return
-#'   The described functions have different return behaviours.
-#'
-#'   \describe{
-#'     \item{\code{update_price}}{returns a numeric value of the new portfolio
-#'       price of the traded asset.}
-#'     \item{\code{update_datetime}}{returns a datetime value of the new portfolio
-#'       datetime of the traded asset.}
-#'     \item{\code{update_realized_and_paper}}{returns a [tibble][tibble::tibble-package]
-#'       containing the realized and paper gains and losses with the updated
-#'       values.}
-#'     \item{\code{update_expectedvalue}}{returns a [tibble][tibble::tibble-package]
-#'       containing the realized and paper gains and losses with the updated
-#'       values.}
-#'   }
-#'
-#'   In particular:
-#'
-#'   \describe{
-#'     \item{\code{RG_"method"}}{contains Realized Gains results.}
-#'     \item{\code{RL_"method"}}{contains Realized Losses results.}
-#'     \item{\code{PG_"method"}}{contains Paper Gains results.}
-#'     \item{\code{PL_"method"}}{contains Paper Losses results.}
-#'   }
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
-#'
-#' @seealso \code{\link{portfolio_compute}}, \code{\link{gains_losses}}
-#'
 #' @keywords internal
 NULL
 
 
 #' @describeIn updates Update the portfolio price of the traded asset.
-#' @keywords internal
 update_price <- function(portfolio_quantity, portfolio_price, transaction_quantity, transaction_price, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
@@ -118,7 +86,6 @@ update_price <- function(portfolio_quantity, portfolio_price, transaction_quanti
 
 
 #' @describeIn updates Update the portfolio datetime of the traded asset.
-#' @keywords internal
 update_datetime <- function(portfolio_quantity, portfolio_datetime, transaction_quantity, transaction_datetime, transaction_type) {
 
 	# short positions are allowed but qty have to be negative
@@ -180,7 +147,6 @@ update_datetime <- function(portfolio_quantity, portfolio_datetime, transaction_
 
 
 #' @describeIn updates Update the portfolio quantity of the traded asset.
-#' @keywords internal
 update_quantity <- function(portfolio_quantity, transaction_quantity) {
 
 	# the portfolio quantity of the traded asset has to be updated just
@@ -195,7 +161,6 @@ update_quantity <- function(portfolio_quantity, transaction_quantity) {
 
 #' @describeIn updates Update the portfolio with the new quantity, price
 #'   and datetime of the traded asset.
-#' @keywords internal
 update_portfolio <- function(portfolio, transaction_asset, transaction_quantity, transaction_price, transaction_datetime, transaction_type) {
 
 	# qty, prz and dtt of transaction asset already into portfolio
@@ -227,7 +192,6 @@ update_portfolio <- function(portfolio, transaction_asset, transaction_quantity,
 
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results with the results obtained on the last occurred transaction.
-#' @keywords internal
 update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper, method) {
 
 	assets <- new_realized_and_paper$asset
@@ -466,10 +430,8 @@ update_realized_and_paper <- function(realized_and_paper, new_realized_and_paper
 }
 
 
-#' @describeIn updates Update the realized and paper gains and losses
-#'   results averaging the total value by the number of transactions
-#'   for each asset.
-#' @keywords internal
+#' @describeIn updates Update the time series disposition effect
+#'   averaging values over time.
 update_timeseries_DE <- function(
 	timeseries_DE,
 	realized_and_paper,
@@ -560,7 +522,6 @@ update_timeseries_DE <- function(
 #' @describeIn updates Update the realized and paper gains and losses
 #'   results averaging the total value by the number of transactions
 #'   for each asset.
-#' @keywords internal
 update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 
 	weights <- num_transaction_assets[["numtrx"]]

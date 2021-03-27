@@ -50,7 +50,9 @@ smaller than the chosen threshold.}
 }
 }
 \description{
-Difference in time
+Financial implementation of
+\code{base::\link[base:difftime]{difftime}}, that takes into account
+trading day horizons (including pre and after market hours.)
 }
 \section{Functions}{
 \itemize{
@@ -63,13 +65,7 @@ moments and financial markets closing days.
 with respect to a given time threshold.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
 \seealso{
 \code{base::\link[base:difftime]{difftime}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }
 \keyword{internal}

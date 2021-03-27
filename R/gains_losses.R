@@ -3,8 +3,10 @@
 #' @description Calculation of the realized gains and losses and the paper
 #'   gains and losses.
 #'
-#' @details It is essentially a wrapper of the \code{\link{paper_compute}}
-#'   and the \code{\link{realized_compute}} functions.
+#' @details It is essentially a wrapper around \code{\link{paper_compute}}
+#'   and \code{\link{realized_compute}} functions.
+#'   It is the function that can be used for streaming computations of
+#'   gains and losses.
 #'
 #' @inheritParams paper_compute
 #' @inheritParams realized_compute
@@ -13,13 +15,8 @@
 #' @param portfolio Data frame of the investor's portfolio at time t.
 #' @param verbose Logical. If TRUE than messages are printed to the console.
 #'
-#' @return A [tibble][tibble::tibble-package] containing the values of
-#'   realized and paper gains and losses computed by means of the chosen
-#'   method on each portfolio assets.
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
+#' @return A data frame containing the values of realized and paper gains
+#'   and losses computed by means of the chosen method on each portfolio assets.
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{paper_compute}},
 #'   \code{\link{portfolio_compute}}
@@ -142,7 +139,7 @@ gains_losses <- function(
 		}
 
 
-		# if the difference transaction_datetime - previous_datetime < time_threshold 
+		# if the difference transaction_datetime - previous_datetime < time_threshold
 		# --> compute only realized
 	} else {
 

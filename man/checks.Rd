@@ -28,9 +28,6 @@ targets.}
 
 \item{df}{Data frame}
 }
-\value{
-A vector or list containing the wrong values.
-}
 \description{
 Functions to perform checks on arguments.
 }

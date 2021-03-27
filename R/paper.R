@@ -2,7 +2,8 @@
 #'
 #' @title Papers' estimation
 #'
-#' @description Papers' estimation
+#' @description Compute paper gains and paper losses as either simple counts,
+#'   total quantities, expected returns and financial duration.
 #'
 #' @param portfolio_quantity Numeric vector. The portfolio quantities of assets into the
 #'   investor's portfolio.
@@ -25,41 +26,37 @@
 #'   Allowed values are "count", "total", "value", "duration" and "all".
 #'
 #' @return
-#'   The described functions have different return behaviours.
+#'   The described functions have different return behaviours
 #'
-#'   \describe{
-#'     \item{\code{paper_compute}}{returns a [tibble][tibble::tibble-package]
-#'       containing the values of paper gains and paper losses computed by
-#'       means of the chosen method on each portfolio assets.}
-#'     \item{\code{paper_count}}{returns a named vector containing the values
-#'       of paper gains and paper losses computed using the count method.}
-#'     \item{\code{paper_total}}{returns a named vector containing the values
-#'       of paper gains and paper losses computed using the total method.}
-#'     \item{\code{paper_value}}{returns a named vector containing the values
-#'       of paper gains and paper losses computed using the value method.}
-#'     \item{\code{paper_duration}}{returns a named vector containing the values
-#'       of paper gains and paper losses computed using the duration method.}
-#'   }
+#'   * \code{paper_compute} returns a data frame containing the values of
+#'   paper gains and paper losses computed by means of the chosen method
+#'   on each portfolio assets.
+#'
+#'   * \code{paper_count} returns a named vector containing the values of
+#'   paper gains and paper losses computed using the count method.
+#'
+#'   * \code{paper_total} returns a named vector containing the values of
+#'   paper gains and paper losses computed using the total method.
+#'
+#'   * \code{paper_value} returns a named vector containing the values of
+#'   paper gains and paper losses computed using the value method.
+#'
+#'   * \code{paper_duration} returns a named vector containing the values
+#'   of paper gains and paper losses computed using the duration method.
 #'
 #'   In particular:
 #'
-#'   \describe{
-#'     \item{\code{RG_"method"}}{contains Realized Gains results.}
-#'     \item{\code{RL_"method"}}{contains Realized Losses results.}
-#'     \item{\code{PG_"method"}}{contains Paper Gains results.}
-#'     \item{\code{PL_"method"}}{contains Paper Losses results.}
-#'   }
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
+#'   * \code{RG_"method"} contains Realized Gains results
+#'   * \code{RL_"method"} contains Realized Losses results
+#'   * \code{PG_"method"} contains Paper Gains results
+#'   * \code{PL_"method"} contains Paper Losses results
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{gains_losses}}
 NULL
 
 
 #' @describeIn paper_compute Computation of paper gains and paper losses as
-#'   simple counts.
+#'   simple counts (default method).
 #' @export
 paper_count <- function(portfolio_quantity, portfolio_price, market_price, allow_short = TRUE) {
 
@@ -93,7 +90,7 @@ paper_count <- function(portfolio_quantity, portfolio_price, market_price, allow
 
 
 #' @describeIn paper_compute Computation of paper gains and paper losses as
-#'   simple quantity of assets.
+#'   total quantity of assets.
 #' @export
 paper_total <- function(portfolio_quantity, portfolio_price, market_price, allow_short = TRUE) {
 
@@ -127,7 +124,7 @@ paper_total <- function(portfolio_quantity, portfolio_price, market_price, allow
 
 
 #' @describeIn paper_compute Computation of paper gains and paper losses as
-#'   simple expected return of assets.
+#'   expected return of assets.
 #' @export
 paper_value <- function(portfolio_quantity,	portfolio_price, market_price, allow_short = TRUE) {
 
@@ -162,7 +159,7 @@ paper_value <- function(portfolio_quantity,	portfolio_price, market_price, allow
 
 
 #' @describeIn paper_compute Computation of paper gains and paper losses as
-#'   simple financial duration.
+#'   financial duration.
 #' @export
 paper_duration <- function(
 	portfolio_quantity,

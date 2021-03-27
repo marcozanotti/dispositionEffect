@@ -80,58 +80,51 @@ portfolio but the traded asset.}
 Allowed values are "count", "total", "value", "duration" and "all".}
 }
 \value{
-The described functions have different return behaviours.
-
-\describe{
-\item{\code{paper_compute}}{returns a \link[tibble:tibble-package]{tibble}
-containing the values of paper gains and paper losses computed by
-means of the chosen method on each portfolio assets.}
-\item{\code{paper_count}}{returns a named vector containing the values
-of paper gains and paper losses computed using the count method.}
-\item{\code{paper_total}}{returns a named vector containing the values
-of paper gains and paper losses computed using the total method.}
-\item{\code{paper_value}}{returns a named vector containing the values
-of paper gains and paper losses computed using the value method.}
-\item{\code{paper_duration}}{returns a named vector containing the values
-of paper gains and paper losses computed using the duration method.}
+The described functions have different return behaviours
+\itemize{
+\item \code{paper_compute} returns a data frame containing the values of
+paper gains and paper losses computed by means of the chosen method
+on each portfolio assets.
+\item \code{paper_count} returns a named vector containing the values of
+paper gains and paper losses computed using the count method.
+\item \code{paper_total} returns a named vector containing the values of
+paper gains and paper losses computed using the total method.
+\item \code{paper_value} returns a named vector containing the values of
+paper gains and paper losses computed using the value method.
+\item \code{paper_duration} returns a named vector containing the values
+of paper gains and paper losses computed using the duration method.
 }
 
 In particular:
-
-\describe{
-\item{\code{RG_"method"}}{contains Realized Gains results.}
-\item{\code{RL_"method"}}{contains Realized Losses results.}
-\item{\code{PG_"method"}}{contains Paper Gains results.}
-\item{\code{PL_"method"}}{contains Paper Losses results.}
+\itemize{
+\item \code{RG_"method"} contains Realized Gains results
+\item \code{RL_"method"} contains Realized Losses results
+\item \code{PG_"method"} contains Paper Gains results
+\item \code{PL_"method"} contains Paper Losses results
 }
 }
 \description{
-Papers' estimation
+Compute paper gains and paper losses as either simple counts,
+total quantities, expected returns and financial duration.
 }
 \section{Functions}{
 \itemize{
 \item \code{paper_count}: Computation of paper gains and paper losses as
-simple counts.
+simple counts (default method).
 
 \item \code{paper_total}: Computation of paper gains and paper losses as
-simple quantity of assets.
+total quantity of assets.
 
 \item \code{paper_value}: Computation of paper gains and paper losses as
-simple expected return of assets.
+expected return of assets.
 
 \item \code{paper_duration}: Computation of paper gains and paper losses as
-simple financial duration.
+financial duration.
 
 \item \code{paper_compute}: Wrapper that calls other paper_. functions to
 compute paper gains and paper losses based on the chosen method.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
 \seealso{
 \code{\link{realized_compute}}, \code{\link{gains_losses}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

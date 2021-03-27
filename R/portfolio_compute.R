@@ -33,13 +33,12 @@
 #'   for the function verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
 #'
-#' @return A [tibble][tibble::tibble-package] containing the investor's
+#' @return A data frame containing the investor's
 #'   portfolio and the values of realized and paper gains and losses
 #'   computed by means of the chosen method on each portfolio assets.
 #'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
+#'   If time_series_DE is set to TRUE, then also time series disposition effect
+#'   results are returned.
 #'
 #' @seealso \code{\link{realized_compute}}, \code{\link{paper_compute}},
 #'   \code{\link{gains_losses}}

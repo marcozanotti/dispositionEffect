@@ -16,35 +16,12 @@ ewise_mean(x, y, na.rm = FALSE, zero.substitute = FALSE)
 \item{zero.substitute}{Logical. If TRUE zero values are substituted with
 corresponding non-missing values whether possible.}
 }
-\value{
-Different return behaviours.
-}
 \description{
-Functions that help the computations.
+Utilities funcions
 }
 \section{Functions}{
 \itemize{
 \item \code{ewise_mean}: Element-wise mean calculation.
 }}
 
-\examples{
-  \dontrun{
-  x <- 1:10
-  y <- 99:90
-  ewise_mean(x, y)
-
-  x[1] <- NA
-  ewise_mean(x, y, na.rm = TRUE)
-
-  x[1] <- 0
-  ewise_mean(x, y, zero.substitute = TRUE)
-  }
-
-}
-\references{
-H. Shefrin & M. Statman, 1985
-}
-\author{
-L. Mazzucchelli & M. Zanotti
-}
 \keyword{internal}

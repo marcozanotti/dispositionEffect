@@ -24,25 +24,19 @@ price.}
 \item{price_only}{Logical. If TRUE then only the price is returned.}
 
 \item{exact}{Logical. If TRUE then it looks for market prices at the same
-datetime only, otherwise it looks for the nearest.}
+datetime only, otherwise it looks for the nearest before the datetime.}
 
 \item{substitute_datetime}{Logical. If TRUE the datetime is substituted
-with the passed argument.}
+with the datetime argument.}
 }
 \value{
-The value of the asset's price.
+The data frame of closest market prices.
 }
 \description{
 Find the market price closest to a certain datetime and for
-as specific asset.
-}
-\references{
-H. Shefrin & M. Statman, 1985
+specific assets.
 }
 \seealso{
 \code{\link{evaluate}},
 \code{lubridate::\link[lubridate:round_date]{round_date}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

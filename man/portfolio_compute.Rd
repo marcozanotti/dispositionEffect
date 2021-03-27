@@ -63,21 +63,18 @@ for the function verbosity.}
 \item{progress}{Logical. If TRUE a progress bar is displayed.}
 }
 \value{
-A \link[tibble:tibble-package]{tibble} containing the investor's
+A data frame containing the investor's
 portfolio and the values of realized and paper gains and losses
 computed by means of the chosen method on each portfolio assets.
+
+If time_series_DE is set to TRUE, then also time series disposition effect
+results are returned.
 }
 \description{
 Computation of all the transaction updates and the
 realized and paper gains and losses for each assets.
 }
-\references{
-H. Shefrin & M. Statman, 1985
-}
 \seealso{
 \code{\link{realized_compute}}, \code{\link{paper_compute}},
 \code{\link{gains_losses}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }

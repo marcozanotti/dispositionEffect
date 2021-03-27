@@ -8,7 +8,7 @@
 \alias{aggregate_market_prices}
 \alias{subset_market_prices}
 \alias{generate_data}
-\title{Manipulate market prices}
+\title{Pre-process transactions and market prices data frames}
 \usage{
 aggregate_transactions(portfolio_transactions, unit = "1 mins")
 
@@ -57,12 +57,10 @@ the round unit. Default to \code{mean}.}
 \item{subset}{Logical. If TRUE, \code{subset_market_prices} is used to generate
 investor's data.}
 }
-\value{
-The data frame of aggregated market prices.
-}
 \description{
-Aggregate the data frame of market prices with a
-specific aggregate function within a time interval.
+These functions allows to pre-process transactions
+and market prices data frames performing aggregation and
+subsetting operations.
 }
 \section{Functions}{
 \itemize{
@@ -86,14 +84,8 @@ based on investor's traded assets and datetimes of transactions.
 and market prices.
 }}
 
-\references{
-H. Shefrin & M. Statman, 1985
-}
 \seealso{
 \code{\link{closest_market_price}},
 \code{lubridate::\link[lubridate:round_date]{round_date}}
-}
-\author{
-L. Mazzucchelli & M. Zanotti
 }
 \keyword{internal}

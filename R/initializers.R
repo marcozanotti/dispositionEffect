@@ -15,8 +15,6 @@
 #'   portfolio, investor's realized and paper gains and losses results,
 #'   or time series Disposition Effect based on the chosen method.
 #'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
 #' @keywords internal
 NULL
 
@@ -110,7 +108,7 @@ initializer_realized_and_paper <- function(investor, assets, method = "all") {
 
 
 #' @describeIn initializers Empty \code{data.frame}
-#'   of investor's time series Disposition Effect based on
+#'   of investor's time series disposition effect based on
 #'   the chosen method.
 initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 

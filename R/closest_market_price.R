@@ -1,7 +1,7 @@
 #' @title Closest market price
 #'
 #' @description Find the market price closest to a certain datetime and for
-#'   as specific asset.
+#'   specific assets.
 #'
 #' @param asset Character vector of assets' names to look for.
 #' @param datetime POSIXct of the datetime at which looking for the asset's
@@ -9,15 +9,11 @@
 #' @param market_prices Data frame containing the market prices.
 #' @param price_only Logical. If TRUE then only the price is returned.
 #' @param exact Logical. If TRUE then it looks for market prices at the same
-#'   datetime only, otherwise it looks for the nearest.
+#'   datetime only, otherwise it looks for the nearest before the datetime.
 #' @param substitute_datetime Logical. If TRUE the datetime is substituted
-#'   with the passed argument.
+#'   with the datetime argument.
 #'
-#' @return The value of the asset's price.
-#'
-#' @author L. Mazzucchelli & M. Zanotti
-#'
-#' @references H. Shefrin & M. Statman, 1985
+#' @return The data frame of closest market prices.
 #'
 #' @seealso \code{\link{evaluate}},
 #'   \code{lubridate::\link[lubridate:round_date]{round_date}}

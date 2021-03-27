@@ -1,13 +1,13 @@
 Package: dispositionEffect
 Type: Package
 Title: Analysis of Disposition Effect on Financial Portfolios
-Version: 0.0.0.9024
+Version: 0.1.0
 Authors@R: c(
     person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
     person("Marco", "Zanotti", email = "zanotti.marco17@gmail.com", role = c("aut", "cre")))
 Description: Evaluate the presence of disposition effect and others irrational
-    investor's behaviors based solely on investor's transactions and fiinancial
-    market data.
+    investor's behaviors based solely on investor's transactions and financial
+    market data. Experimental data can also be used to perform the analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

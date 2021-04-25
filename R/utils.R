@@ -10,7 +10,7 @@
 #' @inheritParams base::mean
 #'
 #' @keywords internal
-NULL
+NULL 
 
 
 #' @describeIn utils Element-wise mean calculation.

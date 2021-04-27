@@ -13,11 +13,16 @@ disposition_effect(realized_gains, paper_gains, realized_losses, paper_losses)
 
 disposition_difference(gains, losses)
 
-disposition_compute(gainslosses, aggregate_fun = NULL, ...)
+disposition_compute(
+  gainslosses,
+  dispdiff_value = FALSE,
+  aggregate_fun = NULL,
+  ...
+)
 
 disposition_compute_ts(gainslosses, aggregate_fun = NULL, ...)
 
-disposition_summary(gainslosses)
+disposition_summary(gainslosses, dispdiff_value = FALSE)
 
 disposition_summary_ts(de_timeseries)
 }
@@ -41,6 +46,9 @@ values.}
 \item{gainslosses}{Data frame, the portfolio of the investor containing the
 realized and paper gains and losses results (as those obtained via
 \code{\link{portfolio_compute}}).}
+
+\item{dispdiff_value}{Logical, if TRUE the disposition difference on the
+"value" method is computed. Default to disposition effect (FALSE).}
 
 \item{aggregate_fun}{Function to use to aggregate results.
 Default to \code{NULL}, that is no aggregation is performed and the

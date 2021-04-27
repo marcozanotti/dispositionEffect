@@ -28,6 +28,8 @@
 #' @param gainslosses Data frame, the portfolio of the investor containing the
 #'   realized and paper gains and losses results (as those obtained via
 #'   \code{\link{portfolio_compute}}).
+#' @param dispdiff_value Logical, if TRUE the disposition difference on the
+#'   "value" method is computed. Default to disposition effect (FALSE).
 #' @param aggregate_fun Function to use to aggregate results.
 #'   Default to \code{NULL}, that is no aggregation is performed and the
 #'   results of each asset are shown.
@@ -71,7 +73,7 @@ disposition_difference <- function(gains, losses) {
 #'   the investor's portfolio containing realized and paper gains and losses
 #'   results.
 #' @export
-disposition_compute <- function(gainslosses, aggregate_fun = NULL, ...) {
+disposition_compute <- function(gainslosses, dispdiff_value = FALSE, aggregate_fun = NULL, ...) {
 
 	res <- NULL
 
@@ -105,11 +107,21 @@ disposition_compute <- function(gainslosses, aggregate_fun = NULL, ...) {
 			res$DE_total <- de_total
 		}
 		if (value) {
-			dd_value <- disposition_difference(
-				gainslosses$RG_value,
-				gainslosses$RL_value
-			)
-			res$DD_value <- dd_value
+			if (dispdiff_value) {
+				dd_value <- disposition_difference(
+					gainslosses$RG_value,
+					gainslosses$RL_value
+				)
+				res$DD_value <- dd_value
+			} else {
+				de_value <- disposition_effect(
+					gainslosses$RG_value,
+					gainslosses$PG_value,
+					gainslosses$RL_value,
+					gainslosses$PL_value
+				)
+				res$DE_value <- de_value
+			}
 		}
 		if (duration) {
 			dd_duration <- disposition_difference(
@@ -154,11 +166,13 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 				gainslosses$RL_count,
 				gainslosses$PL_count
 			)
-			dd_value <- disposition_difference(
+			de_value <- disposition_effect(
 				gainslosses$RG_value,
-				gainslosses$RL_value
+				gainslosses$PG_value,
+				gainslosses$RL_value,
+				gainslosses$PL_value
 			)
-			res <- data.frame("DE_count" = de_count, "DD_value" = dd_value)
+			res <- data.frame("DE_count" = de_count, "DE_value" = de_value)
 		} else	if (count) {
 			de_count <- disposition_effect(
 				gainslosses$RG_count,
@@ -168,11 +182,13 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 			)
 			res <- data.frame("DE_count" = de_count)
 		} else {
-			dd_value <- disposition_difference(
+			de_value <- disposition_effect(
 				gainslosses$RG_value,
-				gainslosses$RL_value
+				gainslosses$PG_value,
+				gainslosses$RL_value,
+				gainslosses$PL_value
 			)
-			res <- data.frame("DD_value" = dd_value)
+			res <- data.frame("DE_value" = de_value)
 		}
 
 	}
@@ -192,16 +208,16 @@ disposition_compute_ts <- function(gainslosses, aggregate_fun = NULL, ...) {
 #' @describeIn disposition_effect Wrapper that returns the most important
 #'   summary statistics related to the disposition effect.
 #' @export
-disposition_summary <- function(gainslosses) {
+disposition_summary <- function(gainslosses, dispdiff_value = FALSE) {
 
 	res <- dplyr::bind_rows(
-		disposition_compute(gainslosses, min, na.rm = TRUE),
-		disposition_compute(gainslosses, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
-		disposition_compute(gainslosses, stats::median, na.rm = TRUE),
-		disposition_compute(gainslosses, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
-		disposition_compute(gainslosses, mean, na.rm = TRUE),
-		disposition_compute(gainslosses, max, na.rm = TRUE),
-		disposition_compute(gainslosses, stats::sd, na.rm = TRUE)
+		disposition_compute(gainslosses, dispdiff_value, min, na.rm = TRUE),
+		disposition_compute(gainslosses, dispdiff_value, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),
+		disposition_compute(gainslosses, dispdiff_value, stats::median, na.rm = TRUE),
+		disposition_compute(gainslosses, dispdiff_value, stats::quantile, probs = .75, na.rm = TRUE, names = FALSE),
+		disposition_compute(gainslosses, dispdiff_value, mean, na.rm = TRUE),
+		disposition_compute(gainslosses, dispdiff_value, max, na.rm = TRUE),
+		disposition_compute(gainslosses, dispdiff_value, stats::sd, na.rm = TRUE)
 	) %>%
 		dplyr::mutate(stat = c("Min", "Q1", "Median", "Q3", "Mean", "Max", "StDev"), .after = "investor")
 
@@ -214,7 +230,7 @@ disposition_summary <- function(gainslosses) {
 #' @export
 disposition_summary_ts <- function(de_timeseries) {
 
-	df_tmp <- dplyr::select(de_timeseries, dplyr::matches("D(E|D)"))
+	df_tmp <- dplyr::select(de_timeseries, dplyr::matches("D(E|D)")) # allows also DD
 	res <- dplyr::bind_rows(
 		purrr::map(df_tmp, min, na.rm = TRUE),
 		purrr::map(df_tmp, stats::quantile, probs = .25, na.rm = TRUE, names = FALSE),

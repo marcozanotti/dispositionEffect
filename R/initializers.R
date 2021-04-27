@@ -125,8 +125,8 @@ initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 			ts_df <- data.frame(
 				investor = investor,
 				datetime = datetimes,
-				DDTs_value = rep(NA_real_, length(datetimes)),
-				DDts_value = rep(NA_real_, length(datetimes))
+				DETs_value = rep(NA_real_, length(datetimes)),
+				DEts_value = rep(NA_real_, length(datetimes))
 			)
 		} else {# method all
 			ts_df <- data.frame(
@@ -134,8 +134,8 @@ initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 				datetime = datetimes,
 				DETs_count = rep(NA_real_, length(datetimes)),
 				DEts_count = rep(NA_real_, length(datetimes)),
-				DDTs_value = rep(NA_real_, length(datetimes)),
-				DDts_value = rep(NA_real_, length(datetimes))
+				DETs_value = rep(NA_real_, length(datetimes)),
+				DEts_value = rep(NA_real_, length(datetimes))
 			)
 		}
 
@@ -155,11 +155,11 @@ initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 		} else if (method == "value") {
 
 			assets_nms <- sort(
-				paste(assets,	c(rep("DDTs_value", length(assets)), rep("DDts_value", length(assets))), sep = "_"),
+				paste(assets,	c(rep("DETs_value", length(assets)), rep("DEts_value", length(assets))), sep = "_"),
 				method = "radix"
 			)
 			ts_df <- as.data.frame(matrix(NA_real_, length(datetimes), 2 + 2 + length(assets_nms)))
-			names(ts_df) <- c("investor", "datetime", "DDTs_value", "DDts_value", assets_nms)
+			names(ts_df) <- c("investor", "datetime", "DETs_value", "DEts_value", assets_nms)
 			ts_df$investor <- investor
 			ts_df$datetime <- datetimes
 
@@ -171,12 +171,12 @@ initializer_timeseries_DE <- function(investor, assets, datetimes, method) {
 					method = "radix"
 				),
 				sort(
-					paste(assets,	c(rep("DDTs_value", length(assets)), rep("DDts_value", length(assets))), sep = "_"),
+					paste(assets,	c(rep("DETs_value", length(assets)), rep("DEts_value", length(assets))), sep = "_"),
 					method = "radix"
 				)
 			)
 			ts_df <- as.data.frame(matrix(NA_real_, length(datetimes), 2 + 4 + length(assets_nms)))
-			names(ts_df) <- c("investor", "datetime", "DETs_count", "DEts_count", "DDTs_value", "DDts_value", assets_nms)
+			names(ts_df) <- c("investor", "datetime", "DETs_count", "DEts_count", "DETs_value", "DEts_value", assets_nms)
 			ts_df$investor <- investor
 			ts_df$datetime <- datetimes
 

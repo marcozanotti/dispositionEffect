@@ -15,7 +15,7 @@ res <- data.frame(
 	"asset" = c("ACO", "AST"),
 	"DE_count" = c(0.1428571, -1),
 	"DE_total" = c(0.04094631, -1),
-	"DD_value" = c(0.008701958, -0.074978204),
+	"DE_value" = c(0.22469836, -1),
 	"DD_duration" = c(439.9000, -165.1167)
 )
 

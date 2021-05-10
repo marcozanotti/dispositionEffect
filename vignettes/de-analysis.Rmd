@@ -202,7 +202,7 @@ Once that gains and losses have been computed, it is finally
 possible to evaluate both the disposition effect of the investor
 and of each traded assets, where the disposition effect is defined as:
 
-$$DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)$$
+$$DE = \bigg(\frac{RG}{RG + PG}\bigg) - \bigg(\frac{RL}{RL + PL}\bigg)$$
 
 The DE varies between -1 and 1. Positive DE values show the 
 presence of disposition effect irrational behaviours, while

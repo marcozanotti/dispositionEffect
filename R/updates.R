@@ -447,7 +447,7 @@ update_timeseries_DE <- function(
 		# compute instant time series DE
 		tsDE_df <- disposition_compute_ts(gainslosses, aggregate_fun = mean, na.rm = TRUE)
 	} else {
-		tsDE_df <- data.frame("DE_count" = NA_real_, "DD_value" = NA_real_)
+		tsDE_df <- data.frame("DE_count" = NA_real_, "DE_value" = NA_real_)
 	}
 
 	if (!is.null(assets_time_series_DE)) {
@@ -457,7 +457,7 @@ update_timeseries_DE <- function(
 			gnl <- gainslosses[gainslosses$asset %in% assets_time_series_DE, ]
 			assets_tsDE_df <- disposition_compute_ts(gnl)
 		} else {
-			assets_tsDE_df <- data.frame("asset" = assets_time_series_DE, "DE_count" = NA_real_, "DD_value" = NA_real_)
+			assets_tsDE_df <- data.frame("asset" = assets_time_series_DE, "DE_count" = NA_real_, "DE_value" = NA_real_)
 		}
 	}
 
@@ -479,16 +479,16 @@ update_timeseries_DE <- function(
 
 	} else if (method == "value") {
 		# update investor DE
-		timeseries_DE$DDTs_value[transaction_id] <- TsDE_df$DD_value
-		timeseries_DE$DDts_value[transaction_id] <- tsDE_df$DD_value
+		timeseries_DE$DETs_value[transaction_id] <- TsDE_df$DE_value
+		timeseries_DE$DEts_value[transaction_id] <- tsDE_df$DE_value
 		# update asset DE
 		if (!is.null(assets_time_series_DE)) {
 			for (a in assets_time_series_DE) {
-				ddT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DD_value
-				ddt <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DD_value
-				if (length(ddt) == 0) ddt <- NA_real_ # if there is no such asset into gainslosses
+				deT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_value
+				det <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_value
+				if (length(det) == 0) det <- NA_real_ # if there is no such asset into gainslosses
 				cols_idx <- grep(paste0(a, "_"), names(timeseries_DE))
-				timeseries_DE[transaction_id, cols_idx] <- c(ddT, ddt)
+				timeseries_DE[transaction_id, cols_idx] <- c(deT, det)
 			}
 		}
 
@@ -496,19 +496,19 @@ update_timeseries_DE <- function(
 		# update investor DE
 		timeseries_DE$DETs_count[transaction_id] <- TsDE_df$DE_count
 		timeseries_DE$DEts_count[transaction_id] <- tsDE_df$DE_count
-		timeseries_DE$DDTs_value[transaction_id] <- TsDE_df$DD_value
-		timeseries_DE$DDts_value[transaction_id] <- tsDE_df$DD_value
+		timeseries_DE$DETs_value[transaction_id] <- TsDE_df$DE_value
+		timeseries_DE$DEts_value[transaction_id] <- tsDE_df$DE_value
 		# update asset DE
 		if (!is.null(assets_time_series_DE)) {
 			for (a in assets_time_series_DE) {
-				deT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_count
-				det <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_count
-				ddT <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DD_value
-				ddt <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DD_value
-				if (length(det) == 0) det <- NA_real_
-				if (length(ddt) == 0) ddt <- NA_real_
+				deTc <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_count
+				detc <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_count
+				deTv <- assets_TsDE_df[assets_TsDE_df$asset == a, ]$DE_value
+				detv <- assets_tsDE_df[assets_tsDE_df$asset == a, ]$DE_value
+				if (length(detc) == 0) detc <- NA_real_
+				if (length(detv) == 0) detv <- NA_real_
 				cols_idx <- grep(paste0(a, "_"), names(timeseries_DE))
-				timeseries_DE[transaction_id, cols_idx] <- c(deT, det, ddT, ddt)
+				timeseries_DE[transaction_id, cols_idx] <- c(deTc, detc, deTv, detv)
 			}
 		}
 

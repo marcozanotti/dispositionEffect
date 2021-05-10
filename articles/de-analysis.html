@@ -735,7 +735,7 @@ This real sample dataset contains transactions on 10 investors on 337 traded ass
 <h2 class="hasAnchor">
 <a href="#disposition-effect-computation" class="anchor"></a>Disposition Effect Computation</h2>
 <p>Once that gains and losses have been computed, it is finally possible to evaluate both the disposition effect of the investor and of each traded assets, where the disposition effect is defined as:</p>
-<p><span class="math display">\[DE = \bigg(\frac{RG}{RG - PG}\bigg) - \bigg(\frac{RL}{RL - PL}\bigg)\]</span></p>
+<p><span class="math display">\[DE = \bigg(\frac{RG}{RG + PG}\bigg) - \bigg(\frac{RL}{RL + PL}\bigg)\]</span></p>
 <p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviours, while negative values show the presence of opposite disposition effect behaviours. A value of zero show that no disposition effect exists.</p>
 <p>You almost never want to compute the disposition effect directly via the <code>disposition_effect</code> function, but you will mostly rely on the quicker and easier <code>disposition_compute</code> interface, since it designed to handle many situations.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -1229,8 +1229,8 @@ To do this we can simply use once again <code>disposition_compute</code> specify
 <p>It is important to notice that the disposition effect is only meaningful for methods <code>coount</code> and <code>total</code>. In all the other cases the disposition difference is used instead.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_compute</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">p_res_all</span>, aggregate_fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt;   investor   DE_count   DE_total      DD_value DD_duration</span>
-<span class="co">#&gt; 1    QZ621 -0.2115755 -0.2048348 -6.650902e-06    112.7756</span></code></pre></div>
+<span class="co">#&gt;   investor   DE_count   DE_total   DE_value DD_duration</span>
+<span class="co">#&gt; 1    QZ621 -0.2115755 -0.2048348 -0.1806207    112.7756</span></code></pre></div>
 </div>
 <div id="allow-short" class="section level2">
 <h2 class="hasAnchor">

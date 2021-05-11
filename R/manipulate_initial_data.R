@@ -182,3 +182,140 @@ generate_data <- function(
 	return(res)
 
 }
+
+
+#' @describeIn manipulate_initial_data Select months with assets' returns
+#'   greater (or lower) than the threshold.
+select_months <- function(market_prices, return_threshold = 5) {
+
+	db_monthly_logreturns <- market_prices %>%
+		dplyr::arrange(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%
+		dplyr::mutate(
+			yearmon = paste(
+				lubridate::year(!!rlang::sym("datetime")),
+				lubridate::month(!!rlang::sym("datetime")),
+				sep = "-"
+			),
+			yearmon = stringr::str_replace_all(!!rlang::sym("yearmon"), "^(\\d{4,4}-)(\\d$)", "\\10\\2")
+		) %>%
+		dplyr::group_by(!!rlang::sym("asset"), !!rlang::sym("yearmon")) %>%
+		dplyr::slice(1, dplyr::n()) %>% # keep first and last transaction per month
+		dplyr::mutate(return = diff(log(!!rlang::sym("price"))) * 100) %>% # monthly log-returns = log(last) - log(first)
+		dplyr::ungroup() %>%
+		dplyr::select(!!rlang::sym("asset"), !!rlang::sym("yearmon"), !!rlang::sym("return")) %>%
+		dplyr::distinct(!!rlang::sym("asset"), !!rlang::sym("yearmon"), !!rlang::sym("return"))
+
+	# remove assets traded in just one month
+	assets_to_remove <- db_monthly_logreturns %>%
+		dplyr::count(!!rlang::sym("asset")) %>%
+		dplyr::filter(!!rlang::sym("n") == 1) %>%
+		dplyr::pull(!!rlang::sym("asset"))
+	db_monthly_logreturns <- db_monthly_logreturns %>%
+		dplyr::filter(!(!!rlang::sym("asset") %in% assets_to_remove))
+
+	assets <- unique(db_monthly_logreturns$asset)
+	res <- vector("list", length(assets))
+	# assign 1 to consecutive months with return > (or <) than threshold
+	for (a in seq_along(assets)) {
+
+		db_tmp <- db_monthly_logreturns %>%
+			dplyr::filter(!!rlang::sym("asset") == assets[a])
+
+		is_ok <- vector("numeric", nrow(db_tmp))
+		for (i in 2:nrow(db_tmp)) {
+			# if threshold > 0 then >= otherwise <=
+			if (return_threshold > 0) {
+				check_i1 <- db_tmp$return[i - 1] >= return_threshold
+				check_i <- db_tmp$return[i] >= return_threshold
+			} else {
+				check_i1 <- db_tmp$return[i - 1] <= return_threshold
+				check_i <- db_tmp$return[i] <= return_threshold
+			}
+			# if both months satisfy the condition then set them to 1
+			if (check_i1 & check_i) {
+				is_ok[i - 1] <- 1
+				is_ok[i] <- 1
+			}
+		}
+
+		db_tmp$is_ok <- is_ok
+		res[[a]] <- db_tmp
+
+	}
+
+	db_monthly_threshold <- dplyr::bind_rows(res)
+	return(db_monthly_threshold)
+
+}
+
+
+#' @describeIn manipulate_initial_data Select assets with highest number of
+#'   transactions within a reference period.
+select_assets <- function(market_prices, market_thresholds, yearmon_t1, yearmon_t2, n_top = 20) {
+
+	# assets ok in month t1
+	assets_ym1 <- market_thresholds %>%
+		dplyr::filter(!!rlang::sym("is_ok") == 1 & !!rlang::sym("yearmon") == yearmon_t1) %>%
+		dplyr::pull("asset")
+	# assets ok in month t2
+	assets_ym2 <- market_thresholds %>%
+		dplyr::filter(!!rlang::sym("is_ok") == 1 & !!rlang::sym("yearmon") == yearmon_t2) %>%
+		dplyr::pull("asset")
+	# keep assets traded in both periods
+	db_marketprices_top_assets <- db_marketprices %>%
+		dplyr::filter(!!rlang::sym("asset") %in% assets_ym1[assets_ym1 %in% assets_ym2]) %>%
+		dplyr::mutate(
+			yearmon =
+				paste(lubridate::year(!!rlang::sym("datetime")), lubridate::month(!!rlang::sym("datetime")), sep = "-") %>%
+				stringr::str_replace_all("^(\\d{4,4}-)(\\d$)", "\\10\\2")
+		) %>%
+		dplyr::filter(!!rlang::sym("yearmon") == yearmon_t1 | !!rlang::sym("yearmon") == yearmon_t2)
+
+	# n_top assets by number of transactions
+	top_assets <- db_marketprices_top_assets %>%
+		dplyr::count(!!rlang::sym("asset")) %>%
+		dplyr::arrange(dplyr::desc(!!rlang::sym("n"))) %>%
+		dplyr::slice(1:n_top) %>%
+		dplyr::pull("asset")
+	# keep only n_top assets
+	db_marketprices_top_assets <- db_marketprices_top_assets %>%
+		dplyr::filter(!!rlang::sym("asset") %in% top_assets)
+
+	return(db_marketprices_top_assets)
+
+}
+
+
+#' @describeIn manipulate_initial_data Select investors that traded specific
+#'   assets within a specific year-month.
+select_investors <- function(portfolio_transactions, top_assets) {
+
+	# clean portfolio transaction from outliers
+	portfolio_transactions <- portfolio_transactions %>%
+		dplyr::filter(!(!!rlang::sym("investor") %in% c("7381Z", "8147Z", "63763"))) %>% # remove outliers
+		dplyr::mutate(
+			yearmon =
+				paste(lubridate::year(!!rlang::sym("datetime")), lubridate::month(!!rlang::sym("datetime")), sep = "-") %>%
+				stringr::str_replace_all("^(\\d{4,4}-)(\\d$)", "\\10\\2")
+		)
+
+	# select investors based on top_assets
+	top_investors <- vector("list", length(top_assets)) %>%
+		purrr::set_names(names(top_assets))
+	for (nm in names(top_assets)) {
+		ym2_tmp <- stringr::str_remove_all(nm, "^.*_")
+		assets_tmp <- top_assets[[nm]]
+		investors_tmp <- portfolio_transactions %>%
+			dplyr::filter(!!rlang::sym("yearmon") == ym2_tmp & !!rlang::sym("asset") %in% assets_tmp) %>%
+			dplyr::pull("investor") %>%
+			unique()
+		top_investors[[nm]] <- portfolio_transactions %>%
+			dplyr::filter(!!rlang::sym("yearmon") == ym2_tmp & !!rlang::sym("investor") %in% investors_tmp) %>%
+			dplyr::count(!!rlang::sym("investor")) %>%
+			dplyr::filter(!!rlang::sym("n") >= 12) %>% # keep only investors with at least 12 transactions
+			dplyr::pull("investor")
+	}
+
+	return(top_investors)
+
+}

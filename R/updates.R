@@ -20,6 +20,9 @@
 #'   each asset traded by the investor.
 #' @param timeseries_DE Data frame of time series disposition effect results.
 #' @param transaction_id Numeric, the id of transaction.
+#' @param meanrev_portfolio Data frame containing the portfolio of mean reversion
+#'   information to be updated.
+#' @inheritParams meanrev_compute
 #'
 #' @keywords internal
 NULL
@@ -532,5 +535,79 @@ update_expectedvalue <- function(realized_and_paper, num_transaction_assets) {
 	realized_and_paper[["PL_value"]] <- realized_and_paper[["PL_value"]] / weights
 
 	return(realized_and_paper)
+
+}
+
+
+#' @describeIn updates Update the mean-reversion portfolio with the new quantity
+#'   and increasing follower/contrarian counts.
+update_meanrev_portfolio <- function(
+	meanrev_portfolio,
+	transaction_asset,
+	transaction_quantity,
+	transaction_type,
+	trend
+) {
+
+	# qty, prz and dtt of transaction asset already into portfolio
+	ptf_qty <- meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ]$quantity
+
+	if (is.na(ptf_qty)) {
+		# if qty is NA (initial condition), simply update the meanrev_portfolio
+		meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["quantity"]] <- transaction_quantity
+
+		# if trend + & buy  => follower +1
+		# if trend + & sell => contrarian +1
+		# if trend - & buy  => contrarian +1
+		# if trend - & sell => follower +1
+		if (trend == "positive") {
+			if (transaction_type == "B") {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] <- 1
+			} else {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] <- 1
+			}
+		} else {# negative trend
+			if (transaction_type == "B") {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] <- 1
+			} else {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] <- 1
+			}
+		}
+
+	} else {
+		# else sum the qtys (if trx_type is sell, trx_qty is negative)
+		meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["quantity"]] <-
+			update_quantity(ptf_qty, transaction_quantity)
+
+		ptf_qty_new <- meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ]$quantity
+		# if trend + & ptf_qty_new + => follower +1
+		# if trend + & ptf_qty_new - => contrarian +1
+		# if trend - & ptf_qty_new + => contrarian +1
+		# if trend - & ptf_qty_new - => follower +1
+		if (trend == "positive") {
+			if (ptf_qty_new > 0) {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] <-
+					meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] + 1
+			} else if (ptf_qty_new < 0) {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] <-
+					meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] + 1
+			} else {# ptf_qty_new == 0
+				# nothing changes
+			}
+		} else {# negative trend
+			if (ptf_qty_new > 0) {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] <-
+					meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["contrarian"]] + 1
+			} else if (ptf_qty_new < 0) {
+				meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] <-
+					meanrev_portfolio[meanrev_portfolio$asset == transaction_asset, ][["follower"]] + 1
+			} else {# ptf_qty_new == 0
+				# nothing changes
+			}
+		}
+
+	}
+
+	return(meanrev_portfolio)
 
 }

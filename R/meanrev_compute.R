@@ -62,10 +62,10 @@ meanrev_compute <- function(
 	# global parameters
 	investor_id <- portfolio_transactions$investor[1]
 	investor_assets <- sort(unique(portfolio_transactions$asset), method = "radix")
-	investor_initial_assets <- sort(unique(initial_portfolio$asset), method = "radix")
 
 	# investor's initial portfolio (portfolio at time 0)
 	if (!is.null(initial_portfolio)) {
+		investor_initial_assets <- sort(unique(initial_portfolio$asset), method = "radix")
 		meanrev_portfolio <- initializer_portfolio(investor_id, investor_assets) %>%
 			dplyr::select("investor", "asset", "quantity") %>%
 			dplyr::mutate("follower" = 0, "contrarian" = 0) %>%

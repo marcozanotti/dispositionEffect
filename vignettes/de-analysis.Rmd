@@ -155,7 +155,7 @@ mkt %>%
   
 # Disposition Effect: Single Investor Analysis
 
-Now, first proceed to analyse the behaviour of a single investor.  
+Now, first proceed to analyze the behavior of a single investor.  
 
 ```{r, eval=TRUE}
 # Investor QZ621
@@ -205,9 +205,9 @@ and of each traded assets, where the disposition effect is defined as:
 $$DE = \bigg(\frac{RG}{RG + PG}\bigg) - \bigg(\frac{RL}{RL + PL}\bigg)$$
 
 The DE varies between -1 and 1. Positive DE values show the 
-presence of disposition effect irrational behaviours, while
+presence of disposition effect irrational behaviors, while
 negative values show the presence of opposite disposition
-effect behaviours. A value of zero show that no disposition
+effect behaviors. A value of zero show that no disposition
 effect exists.  
   
 You almost never want to compute the disposition effect directly
@@ -232,7 +232,7 @@ disposition_compute(gainslosses = p_res, aggregate_fun = mean, na.rm = TRUE)
 ```
 
 Moreover, by means of the `disposition_summary` function
-it is also easy to summarise the disposition effect behaviour 
+it is also easy to summarize the disposition effect behavior 
 of the investor, obtaining common summary statistics.   
 
 ```{r, eval=TRUE}
@@ -322,7 +322,7 @@ parameter. It essentially controls the minimum time distance
 necessary to compute gains and losses.  
 By default it is set to "0 mins", implying that gains and losses
 are always computed.  
-However, this may not be desirable since investor's behaviours 
+However, this may not be desirable since investor's behaviors 
 are not expected to change with very high frequencies.  
 Hence, for instance, setting it to "60 mins" states that gains and
 losses are calculated only if 60 minutes are passed from the last
@@ -385,7 +385,7 @@ portfolio_compute(
 ## Other Arguments
 
 See 
-[Portfolio Driven Disposition Effect]() and
+Portfolio Driven Disposition Effect and
 [Time Series Disposition Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html)
 for a guide on the usage of other, more advanced, arguments.
   
@@ -395,11 +395,11 @@ for a guide on the usage of other, more advanced, arguments.
 
 Although the analysis of disposition effect can be performed simply
 on a single investor, the real advantages of this analysis derive from
-the capacity to study and understand the behaviours of many different
+the capacity to study and understand the behaviors of many different
 investors that actively operate on the financial markets.  
 
 Hence, to fully grasp the power of `dispositionEffect` package, we can
-proceed to jointly analyse all the 10 investors' transactions that are
+proceed to jointly analyze all the 10 investors' transactions that are
 available into the `DEanalysis` dataset.  
 
 Furthermore, if you are interested in computing the disposition effect
@@ -419,7 +419,7 @@ trx_list <- trx %>%
 
 This time to calculate gains and losses for each investor's
 portfolio we can simply `map` `portfolio_compute` on the list
-of transactions, specifying all the other necerrasy arguments
+of transactions, specifying all the other necessary arguments
 as usual.  
 
 ```{r, eval=FALSE}
@@ -461,7 +461,7 @@ de_stat <- purrr::map(p_res_full, disposition_summary) %>%
 head(de_stat, 7)
 ```
 
-It is clearer now that some investors display irrational behaviours
+It is clearer now that some investors display irrational behaviors
 while other don't.
 
   
@@ -469,7 +469,7 @@ while other don't.
 
 The graphical inspection of disposition effect results allows
 to easily understand what is going on and to spot possible
-interesting behaviours.  
+interesting behaviors.  
 
 One may want to investigate the overall distribution, or 
 the distributions of every statistics obtained.  
@@ -511,7 +511,7 @@ ggplot(de_stat, aes(x = DE_count, y = stat, fill = stat)) +
 	)
 ```
 
-Or deeper, one can also analyse investors' behaviours on some
+Or deeper, one can also analyze investors' behaviors on some
 specific assets to understand whether there exists on the market
 assets that are more subject to irrationality.    
 
@@ -542,4 +542,4 @@ dplyr::filter(de, asset %in% top5_assets) %>%
 ---------------------------------------------------------------------------
 
 For more tutorials on disposition effect visit 
-[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect/).

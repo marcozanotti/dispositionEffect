@@ -31,7 +31,7 @@ markets. In particular, it is a violation of the well-known
 "efficient market hypothesis" that bases its foundations on the
 theory of rational agents.  
   
-Hence, timely capturing and understanding irrational behaviours 
+Hence, timely capturing and understanding irrational behaviors 
 on the financial markets is of primary interest both of 
 researchers and investors. For this reason, the `dispositionEffect`
 package allows to quickly collect both aggregate and time series
@@ -117,7 +117,7 @@ disposition effect).
 
 # Investor's time series disposition effect
 
-The `disposition_summary_ts` function can be used to summarise
+The `disposition_summary_ts` function can be used to summarize
 the evolution of disposition effect over time.  
 
 ```{r, eval=TRUE}
@@ -187,15 +187,15 @@ timeseries_assets %>%
   ggplot2::theme(legend.position = "bottom")
 ``` 
  
-This way it is possible to better understand the behaviour
+This way it is possible to better understand the behavior
 of an investor on his traded assets. It may be possible, 
-in practice that, disposition effect behaviours are only
+in practice that, disposition effect behaviors are only
 present on some specific assets, and understanding what assets
 are more subject to irrationality can be critical.  
   
 &nbsp;   
 
-# Compare investors' behaviours
+# Compare investors' behaviors
 
 In order to better understand the relevance of the time 
 series analysis of disposition effect, we can test the
@@ -262,4 +262,4 @@ timeseries_10_investors %>%
 ---------------------------------------------------------------------------
 
 For more tutorials on disposition effect visit 
-[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect/).

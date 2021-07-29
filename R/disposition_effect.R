@@ -3,7 +3,7 @@
 #' @title Disposition Effect
 #'
 #' @description Compute the disposition effect and the disposition
-#'   difference in a vectorized way.
+#'   difference.
 #'
 #' @details
 #'   The disposition effect is defined as

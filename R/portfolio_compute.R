@@ -17,7 +17,7 @@
 #'   uses exact datetime match to look for the closest price of each asset.
 #'   It usually speeds up computation by a small degree, but it requires the
 #'   `market_prices` to have the prices for each transaction asset along each
-#'   transaction datatimes.
+#'   transaction datetimes.
 #' @param portfolio_driven_DE Logical. If TRUE the realized and paper gains and
 #'   losses for the positive (that is when the investor's portfolio value, as
 #'   computed through \code{\link{evaluate_portfolio}}, is greater than zero)
@@ -30,7 +30,7 @@
 #'   into `portfolio_transactions` on which to compute the time series disposition
 #'   effect.
 #' @param verbose Numeric or logical vector of length 2 that allows to control
-#'   for the function verbosity.
+#'   for the function's verbosity.
 #' @param progress Logical. If TRUE a progress bar is displayed.
 #'
 #' @return A data frame containing the investor's

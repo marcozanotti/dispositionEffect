@@ -26,6 +26,8 @@ NULL
 #' @param table vector or NULL: the values to be matched against. Long vectors are
 #'   not supported.
 #'
+#' @return Logical vector.
+#'
 #' @rdname negative_match
 #' @keywords internal
 `%!in%` <- function(x, table) {

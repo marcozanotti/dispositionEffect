@@ -91,6 +91,9 @@ effect.}
 \item{num_transaction_assets}{Data frame containing the number of transactions for
 each asset traded by the investor.}
 }
+\value{
+The updated input data.
+}
 \description{
 Update investor's portfolio, realized and paper results
 and time series disposition effect computations.

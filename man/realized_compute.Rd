@@ -104,7 +104,7 @@ is going to occur.}
 Allowed values are "count", "total", "value", "duration" and "all".}
 }
 \value{
-The described functions have different return behaviours
+The described functions have different return behaviors
 \itemize{
 \item \code{realized_compute} returns a data frame
 containing the values of realized and paper gains and losses computed by

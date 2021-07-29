@@ -1,9 +1,9 @@
 #' @name dispositionEffect-package
 #'
-#' @title dispositionEffect: Behavioural Analysis on Financial Data
+#' @title dispositionEffect: behavioral Analysis on Financial Data
 #'
 #' @description The dispositionEffect package allows to perform different
-#'   types of behavioural analysis using financial market and experimental
+#'   types of behavioral analysis using financial market and experimental
 #'   data.
 #'   The analysis of disposition effect, portfolio-driven disposition
 #'   effect, and time series disposition effect can be performed with
@@ -35,7 +35,9 @@
 #' * An, Li and Engelberg, Joseph and Henriksson, Matthew and Wang, Baolian and Williams,
 #' Jared, 2019, "The Portfolio-Driven Disposition Effect", available at [SSRN](https://ssrn.com/abstract=3126997).
 #'
-#' * L. Mazzucchelli et al. (working paper).
+#' * Filippin, Mazzucchelli and Zanotti, 2021, "An analysis of the short selling impact on the disposition effect extended in the portfolio framework" (working paper).
+#'
+#' * Mazzucchelli, 2021, "An Analysis of Short Selling and Volatility Impact on the Disposition Effect" (working paper).
 #'
 #' * Odean, Terrance, 1998, "Are investors reluctant to realize their losses?" Journal of Finance 53:5, 1775-98.
 #'

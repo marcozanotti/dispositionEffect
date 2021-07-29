@@ -2,15 +2,17 @@
 #'
 #' @title Utilities
 #'
-#' @description Utilities funcions
+#' @description Utilities functions
 #'
 #' @param x,y Numeric vectors of the same length.
 #' @param zero.substitute Logical. If TRUE zero values are substituted with
 #'   corresponding non-missing values whether possible.
 #' @inheritParams base::mean
 #'
+#' @return Numeric vector.
+#'
 #' @keywords internal
-NULL 
+NULL
 
 
 #' @describeIn utils Element-wise mean calculation.

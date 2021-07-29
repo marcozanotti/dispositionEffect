@@ -21,6 +21,8 @@
 #' @param timeseries_DE Data frame of time series disposition effect results.
 #' @param transaction_id Numeric, the id of transaction.
 #'
+#' @return The updated input data.
+#'
 #' @keywords internal
 NULL
 

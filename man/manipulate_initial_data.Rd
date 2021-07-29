@@ -57,6 +57,9 @@ the round unit. Default to \code{mean}.}
 \item{subset}{Logical. If TRUE, \code{subset_market_prices} is used to generate
 investor's data.}
 }
+\value{
+A modified version of the input data frame.
+}
 \description{
 These functions allows to pre-process transactions
 and market prices data frames performing aggregation and

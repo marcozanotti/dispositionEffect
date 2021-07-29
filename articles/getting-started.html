@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -73,6 +73,9 @@
       <a href="../articles/getting-started.html">Getting Started</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -117,16 +120,16 @@
 <div id="installation-loading" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation-loading" class="anchor"></a>Installation &amp; Loading</h1>
-<p>By the moment, you can only install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>You can install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
+<p>Otherwise, you can also install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"marcozanotti/dispositionEffect"</span><span class="op">)</span></code></pre></div>
-<p>You will be able to install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
 <p>To load the package simply use the usual <code>library</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
 <p> </p>
 </div>
 <div id="data" class="section level1">
@@ -190,7 +193,7 @@
 <a href="#disposition-effect" class="anchor"></a>Disposition Effect</h1>
 <p>Once that gains and losses have been computed, it is finally possible to evaluate both the disposition effect of the investor and of each traded assets, where the disposition effect is defined as:</p>
 <p><span class="math display">\[DE = \bigg(\frac{RG}{RG + PG}\bigg) - \bigg(\frac{RL}{RL + PL}\bigg)\]</span></p>
-<p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviours, while negative values show the presence of opposite disposition effect behaviours. A value of zero show that no disposition effect exists.</p>
+<p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviors, while negative values show the presence of opposite disposition effect behaviors. A value of zero show that no disposition effect exists.</p>
 <p>The function <code>disposition_effect</code> allow us to compute it.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># assets' disposition effects</span>
@@ -228,7 +231,7 @@
 <span class="va">investor_de</span>
 <span class="co">#&gt;   investor   DE_count</span>
 <span class="co">#&gt; 1    4273N -0.3047619</span></code></pre></div>
-<p>Moreover, by means of the <code>disposition_summary</code> function it is also easy to summarise the disposition effect behaviour of the investor.</p>
+<p>Moreover, by means of the <code>disposition_summary</code> function it is also easy to summarize the disposition effect behavior of the investor.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># investor's disposition effect summary statistics</span>
 <span class="fu"><a href="../reference/disposition_effect.html">disposition_summary</a></span><span class="op">(</span>gainslosses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">)</span>
@@ -261,7 +264,7 @@
 <p><img src="getting-started_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <hr>
-<p>For more detailed tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
+<p>For more detailed tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a>.</p>
 </div>
   </div>
 

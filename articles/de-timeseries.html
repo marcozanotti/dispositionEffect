@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -73,6 +73,9 @@
       <a href="../articles/getting-started.html">Getting Started</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -111,7 +114,7 @@
 <a href="#the-importance-of-time" class="anchor"></a>The importance of time</h1>
 <p>The disposition effect consists in the realization that investors are more likely to sell an asset when it is gaining value compared to when it is losing value. A phenomenon which is closely related to sunk costs’ bias, diminishing sensitivity, and loss aversion.</p>
 <p>This irrational phenomenon has strong implications on financial markets. In particular, it is a violation of the well-known “efficient market hypothesis” that bases its foundations on the theory of rational agents.</p>
-<p>Hence, timely capturing and understanding irrational behaviours on the financial markets is of primary interest both of researchers and investors. For this reason, the <code>dispositionEffect</code> package allows to quickly collect both aggregate and time series results of the disposition effect, allowing to deeply study the evolution in time of irrationalities.</p>
+<p>Hence, timely capturing and understanding irrational behaviors on the financial markets is of primary interest both of researchers and investors. For this reason, the <code>dispositionEffect</code> package allows to quickly collect both aggregate and time series results of the disposition effect, allowing to deeply study the evolution in time of irrationalities.</p>
 <p> </p>
 </div>
 <div id="package-loading" class="section level1">
@@ -119,7 +122,7 @@
 <a href="#package-loading" class="anchor"></a>Package loading</h1>
 <p>To load the package simply use the usual <code>library</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
@@ -186,7 +189,7 @@ In particular, the argument <code>time_series_DE</code> is used to enable time s
 <div id="investors-time-series-disposition-effect" class="section level1">
 <h1 class="hasAnchor">
 <a href="#investors-time-series-disposition-effect" class="anchor"></a>Investor’s time series disposition effect</h1>
-<p>The <code>disposition_summary_ts</code> function can be used to summarise the evolution of disposition effect over time.</p>
+<p>The <code>disposition_summary_ts</code> function can be used to summarize the evolution of disposition effect over time.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/disposition_effect.html">disposition_summary_ts</a></span><span class="op">(</span><span class="va">timeseries</span><span class="op">)</span>
 <span class="co">#&gt;   investor   stat DETs_count  DEts_count</span>
@@ -276,12 +279,12 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
     <span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></code></pre></div>
 <p><img src="de-timeseries_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;"></p>
-<p>This way it is possible to better understand the behaviour of an investor on his traded assets. It may be possible, in practice that, disposition effect behaviours are only present on some specific assets, and understanding what assets are more subject to irrationality can be critical.</p>
+<p>This way it is possible to better understand the behavior of an investor on his traded assets. It may be possible, in practice that, disposition effect behaviors are only present on some specific assets, and understanding what assets are more subject to irrationality can be critical.</p>
 <p> </p>
 </div>
-<div id="compare-investors-behaviours" class="section level1">
+<div id="compare-investors-behaviors" class="section level1">
 <h1 class="hasAnchor">
-<a href="#compare-investors-behaviours" class="anchor"></a>Compare investors’ behaviours</h1>
+<a href="#compare-investors-behaviors" class="anchor"></a>Compare investors’ behaviors</h1>
 <p>In order to better understand the relevance of the time series analysis of disposition effect, we can test the results on the <code>DEanalysis</code> real sample dataset.</p>
 <p>See <a href="https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html">“Disposition Effect in Parallel”</a> to speed up computations with parallel computing in R.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -341,7 +344,7 @@ Indeed, the argument <code>assets_time_series_DE</code> allows to specify a char
 <p><img src="de-timeseries_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <hr>
-<p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect">dispositionEffect</a>.</p>
+<p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a>.</p>
 </div>
   </div>
 

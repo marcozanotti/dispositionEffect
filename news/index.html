@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Disposition Effect — disposition_effect • dispositionEffect</title>
+<title>Changelog • dispositionEffect</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,7 @@
 
 
 
-<meta property="og:title" content="Disposition Effect — disposition_effect" />
-<meta property="og:description" content="Compute the disposition effect and the disposition
-difference." />
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png" />
 
 
@@ -68,7 +66,7 @@ difference." />
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -141,127 +139,25 @@ difference." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Disposition Effect</h1>
-    <small class="dont-index">Source: <a href='https://github.com/marcozanotti/dispositionEffect/blob/master/R/disposition_effect.R'><code>R/disposition_effect.R</code></a></small>
-    <div class="hidden name"><code>disposition_effect.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/marcozanotti/dispositionEffect/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>Compute the disposition effect and the disposition
-difference.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>disposition_effect</span><span class='op'>(</span><span class='va'>realized_gains</span>, <span class='va'>paper_gains</span>, <span class='va'>realized_losses</span>, <span class='va'>paper_losses</span><span class='op'>)</span>
-
-<span class='fu'>disposition_difference</span><span class='op'>(</span><span class='va'>gains</span>, <span class='va'>losses</span><span class='op'>)</span>
-
-<span class='fu'>disposition_compute</span><span class='op'>(</span>
-  <span class='va'>gainslosses</span>,
-  dispdiff_value <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  aggregate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='fu'>disposition_compute_ts</span><span class='op'>(</span><span class='va'>gainslosses</span>, aggregate_fun <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>disposition_summary</span><span class='op'>(</span><span class='va'>gainslosses</span>, dispdiff_value <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='fu'>disposition_summary_ts</span><span class='op'>(</span><span class='va'>de_timeseries</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>realized_gains</th>
-      <td><p>Numeric vector (or scalar) containing realized gains
-values.</p></td>
-    </tr>
-    <tr>
-      <th>paper_gains</th>
-      <td><p>Numeric vector (or scalar) containing paper gains
-values.</p></td>
-    </tr>
-    <tr>
-      <th>realized_losses</th>
-      <td><p>Numeric vector (or scalar) containing realized losses
-values.</p></td>
-    </tr>
-    <tr>
-      <th>paper_losses</th>
-      <td><p>Numeric vector (or scalar) containing paper losses
-values.</p></td>
-    </tr>
-    <tr>
-      <th>gains</th>
-      <td><p>Numeric vector (or scalar) containing gains.</p></td>
-    </tr>
-    <tr>
-      <th>losses</th>
-      <td><p>Numeric vector (or scalar) containing losses.</p></td>
-    </tr>
-    <tr>
-      <th>gainslosses</th>
-      <td><p>Data frame, the portfolio of the investor containing the
-realized and paper gains and losses results (as those obtained via
-<code><a href='portfolio_compute.html'>portfolio_compute</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>dispdiff_value</th>
-      <td><p>Logical, if TRUE the disposition difference on the
-"value" method is computed. Default to disposition effect (FALSE).</p></td>
-    </tr>
-    <tr>
-      <th>aggregate_fun</th>
-      <td><p>Function to use to aggregate results.
-Default to <code>NULL</code>, that is no aggregation is performed and the
-results of each asset are shown.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments to be passed to the aggregate function.</p></td>
-    </tr>
-    <tr>
-      <th>de_timeseries</th>
-      <td><p>Data frame, the time series of disposition effects.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Numeric vector (or scalar) with the value(s) of disposition
-effect(s) or disposition difference(s).</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The disposition effect is defined as
-\(DE = (Realized Gain / (Realized Gain - Paper Gain)) -
-       (Realized Loss / (Realized Loss + Paper Loss))\)</p>
-<p>The disposition difference is defined as
-\(DD = Realized Gain - |Realized Loss|\)
-or
-\(DD = Paper Gain - |Paper Loss|\)</p>
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-
-    
+    <div id="dispositioneffect-100" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.0">
+<a href="#dispositioneffect-100" class="anchor"></a>dispositionEffect 1.0.0</h1>
 <ul>
-<li><p><code>disposition_effect</code>: Compute the disposition effect</p></li>
-<li><p><code>disposition_difference</code>: Compute the disposition difference</p></li>
-<li><p><code>disposition_compute</code>: Compute the disposition effect directly on
-the investor's portfolio containing realized and paper gains and losses
-results.</p></li>
-<li><p><code>disposition_compute_ts</code>: Compute the time series disposition effect
-on the gains and losses results.</p></li>
-<li><p><code>disposition_summary</code>: Wrapper that returns the most important
-summary statistics related to the disposition effect.</p></li>
-<li><p><code>disposition_summary_ts</code>: Wrapper that returns the most important
-summary statistics related to the time series disposition effect.</p></li>
+<li>First release.</li>
 </ul>
-
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 

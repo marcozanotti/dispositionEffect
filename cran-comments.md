@@ -1,9 +1,17 @@
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* Removed wrong URLs.
+
+
 ## Test environments
 
 * local R installation, R 4.0.5
 * win-builder (devel and release) (on github-actions), R 4.1.0
 * macOS (release) (on github-actions), R 4.1.0
 * ubuntu 20.04 (devel and release) (on github-actions), R 4.1.0
+
 
 ## R CMD check results
 

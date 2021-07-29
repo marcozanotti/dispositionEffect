@@ -4,9 +4,8 @@
 # dispositionEffect <a href='https://marcozanotti.github.io/dispositionEffect/index.html'><img src="man/figures/logo.png" align="right" height="200"/></a>
 
 <!-- badges: start -->
+<!--[![CRAN status](https://www.r-pkg.org/badges/version/dispositionEffect)](https://CRAN.R-project.org/package=dispositionEffect)--->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/dispositionEffect)](https://CRAN.R-project.org/package=dispositionEffect)
 [![R build
 status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
 [![Codecov test

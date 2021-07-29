@@ -33,7 +33,7 @@
 #' @references
 #'
 #' * An, Li and Engelberg, Joseph and Henriksson, Matthew and Wang, Baolian and Williams,
-#' Jared, 2019, "The Portfolio-Driven Disposition Effect", available at [SSRN](https://ssrn.com/abstract=3126997).
+#' Jared, 2019, "The Portfolio-Driven Disposition Effect".
 #'
 #' * Filippin, Mazzucchelli and Zanotti, 2021, "An analysis of the short selling impact on the disposition effect extended in the portfolio framework" (working paper).
 #'
@@ -42,7 +42,7 @@
 #' * Odean, Terrance, 1998, "Are investors reluctant to realize their losses?" Journal of Finance 53:5, 1775-98.
 #'
 #' * Sakaguchi, Hiroaki and Stewart, Neil and Walasek, Lukasz, 2019, "The Disposition Effect Varies with Portfolio
-#' Composition Because People Take Gain-Loss-Domain-Level Sell Decisions", available at [SSRN](https://ssrn.com/abstract=3053331).
+#' Composition Because People Take Gain-Loss-Domain-Level Sell Decisions".
 #'
 #' * Shefrin, Hersh, and Meir Statman, 1985, "The disposition to sell winners too early and ride losers too long",
 #' Journal of Finance 40:3, 777-90.

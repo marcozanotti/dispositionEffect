@@ -23,24 +23,24 @@ language](https://img.shields.io/github/languages/top/marcozanotti/dispositionEf
 <!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence
-of disposition effect’s behaviours of an investor based solely on his
+of disposition effect’s behaviors of an investor based solely on his
 transactions and the market prices of the traded assets.
 
 ## Installation
 
-By the moment, you can only install the development version from
+You can install the released version of `dispositionEffect` from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("dispositionEffect")
+```
+
+Otherwise, you can also install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
 install.packages("devtools")
 devtools::install_github("marcozanotti/dispositionEffect")
-```
-
-You will be able to install the released version of `dispositionEffect`
-from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("dispositionEffect")
 ```
 
 ## Overview
@@ -76,6 +76,15 @@ The package contains few user-friendly purpose specific interfaces:
 
 -   [Time Series Disposition
     Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html)
+
+## References
+
+-   Filippin, Mazzucchelli, and Zanotti, 2021, *An analysis of the short
+    selling impact on the disposition effect extended in the portfolio
+    framework* (working paper)
+
+-   Mazzucchelli, 2021, *An Analysis of Short Selling and Volatility
+    Impact on the Disposition Effect* (working paper)
 
 ## Getting help
 

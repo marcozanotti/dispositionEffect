@@ -7,6 +7,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dispositionEffect)](https://CRAN.R-project.org/package=dispositionEffect)
+![](https://cranlogs.r-pkg.org/badges/dispositionEffect?color=brightgreen)
+![](http://cranlogs.r-pkg.org/badges/grand-total/dispositionEffect?color=brightgreen)
 [![R build
 status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
 [![Codecov test

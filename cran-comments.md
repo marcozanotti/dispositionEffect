@@ -1,10 +1,3 @@
-## Resubmission
-
-This is a resubmission. In this version I have:
-
-* Removed wrong URLs.
-
-
 ## Test environments
 
 * local R installation, R 4.0.5

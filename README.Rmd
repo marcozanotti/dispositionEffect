@@ -24,6 +24,8 @@ options(scipen = 1, digits = 2)
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/dispositionEffect)](https://CRAN.R-project.org/package=dispositionEffect)
+![](https://cranlogs.r-pkg.org/badges/dispositionEffect?color=brightgreen)
+![](http://cranlogs.r-pkg.org/badges/grand-total/dispositionEffect?color=brightgreen)
 [![R build status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
 [![Codecov test coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)

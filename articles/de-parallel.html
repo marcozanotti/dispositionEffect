@@ -120,7 +120,7 @@ This tutorial requires also some well-known packages that allows for parallel co
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/foreach">foreach</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-lib/bench">bench</a></span><span class="op">)</span></code></pre></div>
 <p> </p>
@@ -160,7 +160,7 @@ This tutorial requires also some well-known packages that allows for parallel co
     <span class="va">portfolio_compute_safe</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/safely.html">safely</a></span><span class="op">(</span><span class="va">portfolio_compute</span><span class="op">)</span>
 
     <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">plan</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/re-exports.html">availableCores</a></span><span class="op">(</span><span class="op">)</span>
+      <span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/re-exports.html">availableCores</a></span><span class="op">(</span><span class="op">)</span>
       <span class="co"># if there are more than 2 cores than use parallel computing</span>
       <span class="co"># otherwise use sequential computing</span>
       <span class="co"># RULE: be polite, always leave at least 1 free core</span>
@@ -173,7 +173,7 @@ This tutorial requires also some well-known packages that allows for parallel co
       <span class="va">new_plan</span> <span class="op">&lt;-</span> <span class="va">plan</span>
     <span class="op">}</span>
     
-    <span class="va">old_plan</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="va">new_plan</span><span class="op">)</span>
+    <span class="va">old_plan</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="va">new_plan</span><span class="op">)</span>
 
     <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">furrr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/furrr/man/future_map.html">future_map</a></span><span class="op">(</span>
         <span class="va">portfolio_transactions</span>,
@@ -184,7 +184,7 @@ This tutorial requires also some well-known packages that allows for parallel co
     <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/transpose.html">transpose</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">$</span><span class="va">result</span>
     <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">investors_id</span>
 
-    <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">old_plan</span><span class="op">)</span> <span class="co"># set back the old plan</span>
+    <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">old_plan</span><span class="op">)</span> <span class="co"># set back the old plan</span>
 
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
 
@@ -303,14 +303,14 @@ This tutorial requires also some well-known packages that allows for parallel co
 #&gt; system         x86_64, darwin17.0          
 #&gt; status                                     
 #&gt; major          4                           
-#&gt; minor          1.0                         
+#&gt; minor          1.1                         
 #&gt; year           2021                        
-#&gt; month          05                          
-#&gt; day            18                          
-#&gt; svn rev        80317                       
+#&gt; month          08                          
+#&gt; day            10                          
+#&gt; svn rev        80725                       
 #&gt; language       R                           
-#&gt; version.string R version 4.1.0 (2021-05-18)
-#&gt; nickname       Camp Pontanezen</code></pre>
+#&gt; version.string R version 4.1.1 (2021-08-10)
+#&gt; nickname       Kick Things</code></pre>
 <p> </p>
 <p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a>.</p>
 </div>

@@ -13,6 +13,9 @@ x \%!in\% table
 \item{table}{vector or NULL: the values to be matched against. Long vectors are
 not supported.}
 }
+\value{
+Logical vector.
+}
 \description{
 See \code{base::\link[base:match]{\%in\%}} for details on the
 match operator.

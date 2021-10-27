@@ -16,8 +16,11 @@ ewise_mean(x, y, na.rm = FALSE, zero.substitute = FALSE)
 \item{zero.substitute}{Logical. If TRUE zero values are substituted with
 corresponding non-missing values whether possible.}
 }
+\value{
+Numeric vector.
+}
 \description{
-Utilities funcions
+Utilities functions
 }
 \section{Functions}{
 \itemize{

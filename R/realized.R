@@ -21,7 +21,7 @@
 #' @inheritParams paper_compute
 #'
 #' @return
-#'   The described functions have different return behaviours
+#'   The described functions have different return behaviors
 #'
 #'   * \code{realized_compute} returns a data frame
 #'   containing the values of realized and paper gains and losses computed by

@@ -41,7 +41,7 @@ The allowed units are "secs", "mins", "hours", "days" and "weeks"
 uses exact datetime match to look for the closest price of each asset.
 It usually speeds up computation by a small degree, but it requires the
 \code{market_prices} to have the prices for each transaction asset along each
-transaction datatimes.}
+transaction datetimes.}
 
 \item{portfolio_driven_DE}{Logical. If TRUE the realized and paper gains and
 losses for the positive (that is when the investor's portfolio value, as
@@ -58,7 +58,7 @@ into \code{portfolio_transactions} on which to compute the time series dispositi
 effect.}
 
 \item{verbose}{Numeric or logical vector of length 2 that allows to control
-for the function verbosity.}
+for the function's verbosity.}
 
 \item{progress}{Logical. If TRUE a progress bar is displayed.}
 }

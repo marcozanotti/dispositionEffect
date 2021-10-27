@@ -12,6 +12,8 @@
 #' @param weak_target Logical. If TRUE inputs do not need to contain all the
 #'    targets.
 #'
+#' @return A result message or NULL.
+#'
 #' @keywords internal
 NULL
 

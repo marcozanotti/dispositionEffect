@@ -21,6 +21,8 @@
 #' @param subset Logical. If TRUE, `subset_market_prices` is used to generate
 #'   investor's data.
 #'
+#' @return A modified version of the input data frame.
+#'
 #' @seealso \code{\link{closest_market_price}},
 #'   \code{lubridate::\link[lubridate:round_date]{round_date}}
 #'

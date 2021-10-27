@@ -24,6 +24,8 @@ options(scipen = 1, digits = 2)
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/dispositionEffect)](https://CRAN.R-project.org/package=dispositionEffect)
+![](https://cranlogs.r-pkg.org/badges/dispositionEffect?color=brightgreen)
+![](http://cranlogs.r-pkg.org/badges/grand-total/dispositionEffect?color=brightgreen)
 [![R build status](https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg)](https://github.com/marcozanotti/dispositionEffect/actions)
 [![Codecov test coverage](https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg)](https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -34,25 +36,25 @@ options(scipen = 1, digits = 2)
 <!-- badges: end -->
 
 The `dispositionEffect` package allows to quickly evaluate the presence
-of disposition effect's behaviours of an investor based solely on his
+of disposition effect's behaviors of an investor based solely on his
 transactions and the market prices of the traded assets.
   
   
 ## Installation
 
-By the moment, you can only install the development version from
+You can install the released version of `dispositionEffect`
+from [CRAN](https://CRAN.R-project.org) with:
+
+```{r, eval = FALSE}
+install.packages("dispositionEffect")
+```
+
+Otherwise, you can also install the development version from
 [GitHub](https://github.com/) with:
 
 ```{r, eval = FALSE}
 install.packages("devtools")
 devtools::install_github("marcozanotti/dispositionEffect")
-```
-
-You will be able to install the released version of `dispositionEffect`
-from [CRAN](https://CRAN.R-project.org) with:
-
-```{r, eval = FALSE}
-install.packages("dispositionEffect")
 ```
   
   
@@ -85,7 +87,14 @@ to easily compute disposition effect and summary statistics.
 * [Disposition Effect in Parallel](https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html)  
 
 * [Time Series Disposition Effect](https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html)  
-  
+
+
+## References
+
+* Filippin, Mazzucchelli, and Zanotti, 2021, *An analysis of the short selling impact on the disposition effect extended in the portfolio framework* (working paper)
+
+* Mazzucchelli, 2021, *An Analysis of Short Selling and Volatility Impact on the Disposition Effect* (working paper)
+
 
 ## Getting help
 

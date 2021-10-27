@@ -28,6 +28,9 @@ targets.}
 
 \item{df}{Data frame}
 }
+\value{
+A result message or NULL.
+}
 \description{
 Functions to perform checks on arguments.
 }

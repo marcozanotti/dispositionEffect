@@ -24,6 +24,8 @@
 #'   information to be updated.
 #' @inheritParams meanrev_compute
 #'
+#' @return The updated input data.
+#'
 #' @keywords internal
 NULL
 

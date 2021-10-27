@@ -75,7 +75,7 @@ the computation time on large datasets.
   
 &nbsp;     
 
-# The Solution: Parallelization
+# The Solution: Parallel Computing
 
 ## 1) Parallel `porfolio_compute`
 
@@ -85,8 +85,7 @@ on a list containing the transactions portfolios. The first solution
 to this problem is to develop a parallel version of 
 `portfolio_compute` that allows to compute results on many
 investors in parallel, taking advantage of two very useful 
-R packages: 
-[`future`](https://cran.r-project.org/web/packages/future/index.html) and [`furrr`](https://cran.r-project.org/web/packages/furrr/index.html).
+R packages: `future` and `furrr`.
 
 A very simple version of the function would look like this.  
 
@@ -164,16 +163,14 @@ small sample dataset.
 ## 2) Separate files
 
 Although the first solution may be enough with many small
-investors, when things get bigger it may be better to phisically
+investors, when things get bigger it may be better to physically
 separate transactions and market prices for each investor.
 
 This way, a single `.RData` that contains both the transactions and
 the market prices for a single investor is created. 
 Once this process is finished, one can simply perform the computations
 with the usual `portfolio_compute` loading the needed file sequentially
-or in parallel by means of the 
-[`foreach`](https://cran.r-project.org/web/packages/foreach/foreach.pdf) 
-package.
+or in parallel by means of the `foreach`package.
 
 First let's store every investor's datasets into its own file. To do this
 we can make use of the `dispositionEffect:::generate_data` internal function.
@@ -270,7 +267,7 @@ As expected, parallel computation coupled with load in memory
 small portion of datasets is the optimal solution.  
 
 Moreover, sometimes a little gain in computation time can be
-optained by setting the `exact_market_prices` argument of 
+obtained by setting the `exact_market_prices` argument of 
 `portfolio_compute` equal to TRUE. This way, the closest
 market price search is performed on the very same transaction
 datetime, but it requires that the market price dataset contains
@@ -291,6 +288,6 @@ version
 &nbsp;  
 
 For more tutorials on disposition effect visit 
-[dispositionEffect](https://marcozanotti.github.io/dispositionEffect).
+[dispositionEffect](https://marcozanotti.github.io/dispositionEffect/).
 
 

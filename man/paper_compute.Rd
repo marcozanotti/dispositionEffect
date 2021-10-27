@@ -80,7 +80,7 @@ portfolio but the traded asset.}
 Allowed values are "count", "total", "value", "duration" and "all".}
 }
 \value{
-The described functions have different return behaviours
+The described functions have different return behaviors
 \itemize{
 \item \code{paper_compute} returns a data frame containing the values of
 paper gains and paper losses computed by means of the chosen method

@@ -81,9 +81,11 @@ The package contains few user-friendly purpose specific interfaces:
 
 ## References
 
--   Filippin, Mazzucchelli, and Zanotti, 2021, *An analysis of the short
-    selling impact on the disposition effect extended in the portfolio
-    framework* (working paper)
+-   Mazzucchelli and Zanotti, 2021, *Mean Reverting Expectations can
+    help in Rationalizing the Disposition Effect* (working paper)
+
+-   Mazzucchelli and Zanotti, 2021, *The Portfolio Driven Disposition
+    Effect and the Short Selling* (working paper)
 
 -   Mazzucchelli, 2021, *An Analysis of Short Selling and Volatility
     Impact on the Disposition Effect* (working paper)

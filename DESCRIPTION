@@ -20,8 +20,7 @@ Imports:
     purrr,
     lubridate,
     magrittr,
-    progress,
-    rlang,
+    progress
 Suggests: 
     devtools,
     knitr,
@@ -33,7 +32,6 @@ Suggests:
     skimr,
     ggplot2,
     ggridges,
-    gghalves,
     furrr,
     future,
     foreach,

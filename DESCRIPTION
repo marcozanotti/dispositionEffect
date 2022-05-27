@@ -1,7 +1,7 @@
 Package: dispositionEffect
 Type: Package
 Title: Analysis of Disposition Effect on Financial Portfolios
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Lorenzo", "Mazzucchelli", email = "lorenzo.mazzucchelli@unimi.it", role = "aut"),
     person("Marco", "Zanotti", email = "zanottimarco17@gmail.com", role = c("aut", "cre")))

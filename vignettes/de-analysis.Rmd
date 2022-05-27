@@ -53,7 +53,6 @@ library(lubridate)
 library(skimr)
 library(ggplot2)
 library(ggridges)
-library(gghalves)
 ```
   
 &nbsp;     
@@ -524,8 +523,9 @@ top5_assets <- trx %>%
 
 dplyr::filter(de, asset %in% top5_assets) %>% 
   ggplot(aes(x = asset, y = DE_count, fill = asset)) +
-	geom_half_boxplot(center = TRUE, width = 0.8, nudge = 0.02) +
-	geom_half_violin(side = "r", nudge = 0.02, alpha = 0.8) +
+	# geom_half_boxplot(center = TRUE, width = 0.8, nudge = 0.02) +
+	# geom_half_violin(side = "r", nudge = 0.02, alpha = 0.8) +
+	geom_boxplot() +
 	geom_jitter(color = "grey40") +
   scale_fill_viridis_d() +
 	theme(

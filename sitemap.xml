@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/404.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/articles/getting-started.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/authors.html</loc>
+  </url>
+  <url>
     <loc>https://marcozanotti.github.io/dispositionEffect/index.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/news/index.html</loc>
   </url>
   <url>
     <loc>https://marcozanotti.github.io/dispositionEffect/reference/DEanalysis.html</loc>
@@ -26,6 +56,9 @@
   </url>
   <url>
     <loc>https://marcozanotti.github.io/dispositionEffect/reference/gains_losses.html</loc>
+  </url>
+  <url>
+    <loc>https://marcozanotti.github.io/dispositionEffect/reference/index.html</loc>
   </url>
   <url>
     <loc>https://marcozanotti.github.io/dispositionEffect/reference/initializers.html</loc>
@@ -65,17 +98,5 @@
   </url>
   <url>
     <loc>https://marcozanotti.github.io/dispositionEffect/reference/utils.html</loc>
-  </url>
-  <url>
-    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-analysis.html</loc>
-  </url>
-  <url>
-    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-parallel.html</loc>
-  </url>
-  <url>
-    <loc>https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html</loc>
-  </url>
-  <url>
-    <loc>https://marcozanotti.github.io/dispositionEffect/articles/getting-started.html</loc>
   </url>
 </urlset>

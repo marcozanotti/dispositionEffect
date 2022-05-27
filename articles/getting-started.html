@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -80,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/marcozanotti/dispositionEffect/">
+  <a href="https://github.com/marcozanotti/dispositionEffect/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,7 +97,7 @@
       <h1 data-toc-skip>Getting Started</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/marcozanotti/dispositionEffect/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/marcozanotti/dispositionEffect/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
 
     </div>
@@ -109,38 +105,38 @@
     
     
 <p> </p>
-<div id="the-disposition-effect" class="section level1">
-<h1 class="hasAnchor">
-<a href="#the-disposition-effect" class="anchor"></a>The Disposition Effect</h1>
+<div class="section level2">
+<h2 id="the-disposition-effect">The Disposition Effect<a class="anchor" aria-label="anchor" href="#the-disposition-effect"></a>
+</h2>
 <p>In recent years, an irrational phenomenon in financial markets is grabbing the attention of behavioral economists: the disposition effect. Firstly discovered by H. Shefrin and M. Statman (1985), the disposition effect consists in the realization that investors are more likely to sell an asset when it is gaining value compared to when it is losing value. A phenomenon which is closely related to sunk costs’ bias, diminishing sensitivity, and loss aversion.</p>
 <p>From 1985 until now, the disposition effect has been documented in US retail stock investors as well as in foreign retail investors and even among professionals and institutions. By the time, it is a well-established fact that the disposition effect is a real behavioral anomaly that strongly influences the final profits (or losses) of investors. Furthermore, being able to correctly capture these irrational behaviors timely is even more important in periods of high financial volatility as nowadays.</p>
 <p>The <code>dispositionEffect</code> package allows to quickly evaluate the presence of disposition effect’s behaviors of an investor based solely on his transactions and the market prices of the traded assets.</p>
 <p> </p>
 </div>
-<div id="installation-loading" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation-loading" class="anchor"></a>Installation &amp; Loading</h1>
-<p>You can install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation-loading">Installation &amp; Loading<a class="anchor" aria-label="anchor" href="#installation-loading"></a>
+</h2>
+<p>You can install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
-<p>Otherwise, you can also install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
+<p>Otherwise, you can also install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"marcozanotti/dispositionEffect"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"marcozanotti/dispositionEffect"</span><span class="op">)</span></code></pre></div>
 <p>To load the package simply use the usual <code>library</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
 <p> </p>
 </div>
-<div id="data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#data" class="anchor"></a>Data</h1>
+<div class="section level2">
+<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
 <p>The disposition effect analysis is performed on two fundamental types of data frames:</p>
 <ul>
 <li>portfolio transactions, that is all the financial transactions an investor did during a specific period of time. A single transaction is made up of 6 features: the investor id, the asset id, the type of the transaction (it can be a buy or a sell), the traded quantity, the traded price, and the datetime.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span>
 <span class="co">#&gt;   investor type asset quantity  price            datetime</span>
 <span class="co">#&gt; 1    4273N    B   ACO       45 3.9400 2018-04-09 11:17:00</span>
 <span class="co">#&gt; 2    4273N    B  LSUG      450 2.0515 2018-05-17 15:06:00</span>
@@ -152,7 +148,7 @@
 <li>market prices, that is the prices found on the stock markets for each traded asset and each transaction datetimes.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">marketprices</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">marketprices</span><span class="op">)</span>
 <span class="co">#&gt;   asset            datetime   price</span>
 <span class="co">#&gt; 1   ACO 2018-04-09 11:17:00 3.94000</span>
 <span class="co">#&gt; 2   AST 2018-04-09 11:17:00 2.19600</span>
@@ -162,9 +158,9 @@
 <span class="co">#&gt; 6   ACO 2018-05-17 15:06:00 4.56000</span></code></pre></div>
 <p> </p>
 </div>
-<div id="gains-and-losses" class="section level1">
-<h1 class="hasAnchor">
-<a href="#gains-and-losses" class="anchor"></a>Gains and Losses</h1>
+<div class="section level2">
+<h2 id="gains-and-losses">Gains and Losses<a class="anchor" aria-label="anchor" href="#gains-and-losses"></a>
+</h2>
 <p>Based solely on this two data frames it is possible to compute the so-called realized gains (RG), realized losses (RL), paper gains (PG), and paper losses (PL), as defined by L. Mazzucchelli et al. (2021).</p>
 <p>To sum up the main concepts are the followings:</p>
 <ul>
@@ -178,7 +174,7 @@
     market_prices <span class="op">=</span> <span class="va">marketprices</span>,
     method <span class="op">=</span> <span class="st">"count"</span>
 <span class="op">)</span>
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">portfolio_results</span>, <span class="op">-</span><span class="va">datetime</span><span class="op">)</span>
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">portfolio_results</span>, <span class="op">-</span><span class="va">datetime</span><span class="op">)</span>
 <span class="co">#&gt;   investor asset quantity price RG_count RL_count PG_count PL_count</span>
 <span class="co">#&gt; 1    4273N   ACO      222 2.840        1        0        6        0</span>
 <span class="co">#&gt; 2    4273N   AST        0 0.000        0        1        0        0</span>
@@ -188,9 +184,9 @@
 <p>The result is a new data frame containing RG, PG, RL, and PL for each traded asset and the updated investor’s portfolio.</p>
 <p> </p>
 </div>
-<div id="disposition-effect" class="section level1">
-<h1 class="hasAnchor">
-<a href="#disposition-effect" class="anchor"></a>Disposition Effect</h1>
+<div class="section level2">
+<h2 id="disposition-effect">Disposition Effect<a class="anchor" aria-label="anchor" href="#disposition-effect"></a>
+</h2>
 <p>Once that gains and losses have been computed, it is finally possible to evaluate both the disposition effect of the investor and of each traded assets, where the disposition effect is defined as:</p>
 <p><span class="math display">\[DE = \bigg(\frac{RG}{RG + PG}\bigg) - \bigg(\frac{RL}{RL + PL}\bigg)\]</span></p>
 <p>The DE varies between -1 and 1. Positive DE values show the presence of disposition effect irrational behaviors, while negative values show the presence of opposite disposition effect behaviors. A value of zero show that no disposition effect exists.</p>
@@ -211,8 +207,8 @@
     paper_gains <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PG_count</span>, 
   realized_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">RL_count</span>, 
     paper_losses <span class="op">=</span> <span class="va">portfolio_results</span><span class="op">$</span><span class="va">PL_count</span>
-<span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] -0.3047619</span></code></pre></div>
 <p>However, one may prefer to use the <code>disposition_compute</code> function directly on the results obtained from <code>portfolio_compute</code> for quick and clean computations.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -245,18 +241,18 @@
 <span class="co">#&gt; 7    4273N  StDev  0.6455850</span></code></pre></div>
 <p> </p>
 </div>
-<div id="plotting" class="section level1">
-<h1 class="hasAnchor">
-<a href="#plotting" class="anchor"></a>Plotting</h1>
-<p>Finally, by means of <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>, stunning charts can be produced to easily spot the presence of the disposition effect.</p>
+<div class="section level2">
+<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
+<p>Finally, by means of <a href="https://ggplot2.tidyverse.org/" class="external-link"><code>ggplot2</code></a>, stunning charts can be produced to easily spot the presence of the disposition effect.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
-<span class="va">asset_de</span> <span class="op">%&gt;%</span> 
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+<span class="va">asset_de</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">asset</span>, y <span class="op">=</span> <span class="va">DE_count</span>, fill <span class="op">=</span> <span class="va">asset</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>
         title <span class="op">=</span> <span class="st">"Disposition Effect results of the traded assets"</span>,
         subtitle <span class="op">=</span> <span class="st">"Method Count"</span>,
         x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>
@@ -279,11 +275,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
+  <p></p>
+<p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -291,6 +289,8 @@
 
   
 
+
+  
 
   </body>
 </html>

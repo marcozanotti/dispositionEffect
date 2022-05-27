@@ -32,6 +32,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,23 +46,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -86,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/marcozanotti/dispositionEffect/">
+  <a href="https://github.com/marcozanotti/dispositionEffect/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -103,27 +99,26 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="dispositioneffect-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#dispositioneffect-" class="anchor"></a>dispositionEffect <a href="https://marcozanotti.github.io/dispositionEffect/index.html"><img src="reference/figures/logo.png" align="right" height="200"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="dispositioneffect-">dispositionEffect <a href="https://marcozanotti.github.io/dispositionEffect/index.html"><img src="reference/figures/logo.png" align="right" height="200"></a>
+<a class="anchor" aria-label="anchor" href="#dispositioneffect-"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>The <code>dispositionEffect</code> package allows to quickly evaluate the presence of disposition effect’s behaviors of an investor based solely on his transactions and the market prices of the traded assets.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of <code>dispositionEffect</code> from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
-<p>Otherwise, you can also install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dispositionEffect"</span><span class="op">)</span></code></pre></div>
+<p>Otherwise, you can also install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"marcozanotti/dispositionEffect"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"marcozanotti/dispositionEffect"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>The package contains few user-friendly purpose specific interfaces:</p>
 <ul>
 <li><p><code>portfolio_compute</code> is a wrapper function that compute realized and paper gains and losses from the investor’s transactions and the market prices of the traded assets and updates the investor’s portfolio</p></li>
@@ -133,9 +128,9 @@
 <li><p><code>disposition_compute</code>and <code>disposition_summary</code>interfaces that allow to easily compute disposition effect and summary statistics.</p></li>
 </ul>
 </div>
-<div id="tutorials" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tutorials" class="anchor"></a>Tutorials</h2>
+<div class="section level2">
+<h2 id="tutorials">Tutorials<a class="anchor" aria-label="anchor" href="#tutorials"></a>
+</h2>
 <ul>
 <li><p><a href="https://marcozanotti.github.io/dispositionEffect/articles/getting-started.html">Getting started</a></p></li>
 <li><p><a href="https://marcozanotti.github.io/dispositionEffect/articles/de-analysis.html">The Analysis of Disposition Effect</a></p></li>
@@ -143,76 +138,86 @@
 <li><p><a href="https://marcozanotti.github.io/dispositionEffect/articles/de-timeseries.html">Time Series Disposition Effect</a></p></li>
 </ul>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <ul>
 <li><p>Filippin, Mazzucchelli, and Zanotti, 2021, <em>An analysis of the short selling impact on the disposition effect extended in the portfolio framework</em> (working paper)</p></li>
 <li><p>Mazzucchelli, 2021, <em>An Analysis of Short Selling and Volatility Impact on the Disposition Effect</em> (working paper)</p></li>
 </ul>
 </div>
-<div id="getting-help" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-help" class="anchor"></a>Getting help</h2>
-<p>If you encounter a clear bug, please file an issue with a minimal reproducible example on <a href="https://github.com/marcozanotti/dispositionEffect/issues">GitHub</a>.</p>
+<div class="section level2">
+<h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
+</h2>
+<p>If you encounter a clear bug, please file an issue with a minimal reproducible example on <a href="https://github.com/marcozanotti/dispositionEffect/issues" class="external-link">GitHub</a>.</p>
 <p>For questions and other discussion, mail us at <a href="mailto:zanottimarco17@gmail.com" class="email">zanottimarco17@gmail.com</a>.</p>
 </div>
-<div id="acknowledgements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
-<p>A special thank to <a href="https://www.behance.net/claudiocec3c4f">Claud Graphics</a> for our logo.</p>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
+<p>A special thank to <a href="https://www.behance.net/claudiocec3c4f" class="external-link">Claud Graphics</a> for our logo.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=dispositionEffect">https://​cloud.r-project.org/​package=dispositionEffect</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/marcozanotti/dispositionEffect/">https://​github.com/​marcozanotti/​dispositionEffect/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/marcozanotti/dispositionEffect/issues">https://​github.com/​marcozanotti/​dispositionEffect/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=dispositionEffect" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/marcozanotti/dispositionEffect/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/marcozanotti/dispositionEffect/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing dispositionEffect</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Lorenzo Mazzucchelli <br><small class="roles"> Author </small>  </li>
 <li>Marco Zanotti <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=dispositionEffect"><img src="https://www.r-pkg.org/badges/version/dispositionEffect" alt="CRAN status"></a></li>
-<li><a href="https://github.com/marcozanotti/dispositionEffect/actions"><img src="https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master"><img src="https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=dispositionEffect" class="external-link"><img src="https://www.r-pkg.org/badges/version/dispositionEffect" alt="CRAN status"></a></li>
+<li><a href="https://github.com/marcozanotti/dispositionEffect/actions" class="external-link"><img src="https://github.com/marcozanotti/dispositionEffect/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/marcozanotti/dispositionEffect?branch=master" class="external-link"><img src="https://codecov.io/gh/marcozanotti/dispositionEffect/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://marcozanotti.github.io/dispositionEffect/index.html"><img src="https://img.shields.io/website?down_color=red&amp;down_message=offline&amp;up_color=green&amp;up_message=online&amp;url=https%3A%2F%2Fmarcozanotti.github.io%2FdispositionEffect%2F" alt="Website"></a></li>
-<li><a href="https://github.com/marcozanotti/dispositionEffect/issues"><img src="https://img.shields.io/github/issues/marcozanotti/dispositionEffect" alt="GitHub issues"></a></li>
+<li><a href="https://github.com/marcozanotti/dispositionEffect/issues" class="external-link"><img src="https://img.shields.io/github/issues/marcozanotti/dispositionEffect" alt="GitHub issues"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
+  <p></p>
+<p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -220,6 +225,8 @@
 
   
 
+
+  
 
   </body>
 </html>

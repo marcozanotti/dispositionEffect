@@ -135,7 +135,7 @@ portfolio_compute <- function(
 	investor_assets <- sort(unique(portfolio_transactions$asset), method = "radix")
 	investor_datetimes <- portfolio_transactions$datetime
 	asset_numtrx <- portfolio_transactions %>%
-		dplyr::group_by(!!rlang::sym("asset")) %>%
+		dplyr::group_by(!!dplyr::sym("asset")) %>%
 		dplyr::summarise(numtrx = dplyr::n(), .groups = "drop")
 	if (!is.null(assets_time_series_DE)) {
 		assets_time_series_DE <- sort(assets_time_series_DE, method = "radix")
@@ -324,7 +324,7 @@ portfolio_compute <- function(
 			neg_results_df$type <- "negative"
 			results_df <- dplyr::bind_rows(pos_results_df, neg_results_df)
 			final_res <- dplyr::left_join(portfolio, results_df, by = c("investor", "asset"))
-		  final_res <- dplyr::relocate(final_res, !!rlang::sym("type"), .after = !!rlang::sym("datetime"))
+		  final_res <- dplyr::relocate(final_res, !!dplyr::sym("type"), .after = !!dplyr::sym("datetime"))
 		}
 
 	} else {

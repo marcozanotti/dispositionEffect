@@ -40,7 +40,7 @@ closest_market_price <- function(
 		as.data.frame(
 			dplyr::ungroup(
 				dplyr::slice(
-					dplyr::group_by(res, !!rlang::sym("asset")),
+					dplyr::group_by(res, !!dplyr::sym("asset")),
 					dplyr::n()
 				)
 			)

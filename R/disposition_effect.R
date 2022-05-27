@@ -135,7 +135,7 @@ disposition_compute <- function(gainslosses, dispdiff_value = FALSE, aggregate_f
 
 	if (!is.null(aggregate_fun)) {
 		res <- purrr::map_df(res, aggregate_fun, ...)
-		final_res <- cbind(dplyr::select(gainslosses[1, ], !!rlang::sym("investor")), res)
+		final_res <- cbind(dplyr::select(gainslosses[1, ], !!dplyr::sym("investor")), res)
 	} else  {
 		final_res <- cbind(gainslosses[, c("investor", "asset")], res)
 	}

@@ -35,19 +35,19 @@ NULL
 aggregate_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
-		dplyr::mutate(datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit)) %>%
+		dplyr::mutate(datetime = lubridate::floor_date(!!dplyr::sym("datetime"), unit = unit)) %>%
 		dplyr::group_by(
-			!!rlang::sym("investor"),
-			!!rlang::sym("type"),
-			!!rlang::sym("asset"),
-			!!rlang::sym("datetime")
+			!!dplyr::sym("investor"),
+			!!dplyr::sym("type"),
+			!!dplyr::sym("asset"),
+			!!dplyr::sym("datetime")
 		) %>%
 		dplyr::summarise(
-			quantity = sum(!!rlang::sym("quantity")),
-			price = mean(!!rlang::sym("price")),
+			quantity = sum(!!dplyr::sym("quantity")),
+			price = mean(!!dplyr::sym("price")),
 			.groups = "drop"
 		) %>%
-		dplyr::arrange(!!rlang::sym("datetime")) %>%
+		dplyr::arrange(!!dplyr::sym("datetime")) %>%
 		dplyr::select("investor", "type", "asset", "quantity", "price", "datetime")
 
 	return(portfolio_transactions)
@@ -62,24 +62,24 @@ reduce_transactions <- function(portfolio_transactions, unit = "1 mins") {
 
 	portfolio_transactions <- portfolio_transactions %>%
 		dplyr::mutate(
-			datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit),
-			quantity = ifelse(!!rlang::sym("type") == "B", !!rlang::sym("quantity"), -1 * !!rlang::sym("quantity"))
+			datetime = lubridate::floor_date(!!dplyr::sym("datetime"), unit = unit),
+			quantity = ifelse(!!dplyr::sym("type") == "B", !!dplyr::sym("quantity"), -1 * !!dplyr::sym("quantity"))
 		) %>%
 		dplyr::group_by(
-			!!rlang::sym("investor"),
-			!!rlang::sym("asset"),
-			!!rlang::sym("datetime")
+			!!dplyr::sym("investor"),
+			!!dplyr::sym("asset"),
+			!!dplyr::sym("datetime")
 		) %>%
 		dplyr::summarise( # use mean prz and total qty
-			quantity = sum(!!rlang::sym("quantity")),
-			price = mean(!!rlang::sym("price")),
+			quantity = sum(!!dplyr::sym("quantity")),
+			price = mean(!!dplyr::sym("price")),
 			.groups = "drop"
 		) %>%
 		dplyr::mutate(
-			type = ifelse(!!rlang::sym("quantity") >= 0, "B", "S"),
-			quantity = abs(!!rlang::sym("quantity"))
+			type = ifelse(!!dplyr::sym("quantity") >= 0, "B", "S"),
+			quantity = abs(!!dplyr::sym("quantity"))
 		) %>%
-		dplyr::arrange(!!rlang::sym("datetime")) %>%
+		dplyr::arrange(!!dplyr::sym("datetime")) %>%
 		dplyr::select("investor", "type", "asset", "quantity", "price", "datetime")
 
 	return(portfolio_transactions)
@@ -110,14 +110,14 @@ aggregate_market_prices <- function(market_prices, unit = NULL, aggregate_price_
 
 	if (!is.null(unit)) {
 		market_prices <- market_prices %>%
-			dplyr::mutate(datetime = lubridate::floor_date(!!rlang::sym("datetime"), unit = unit))
+			dplyr::mutate(datetime = lubridate::floor_date(!!dplyr::sym("datetime"), unit = unit))
 	}
 
 	market_prices <- market_prices %>%
-		dplyr::select(!!rlang::sym("asset"), !!rlang::sym("datetime"), !!rlang::sym("price")) %>%
-		dplyr::arrange(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%
-		dplyr::group_by(!!rlang::sym("asset"), !!rlang::sym("datetime")) %>%
-		dplyr::summarise(price = aggregate_price_fun(!!rlang::sym("price")), .groups = "drop")
+		dplyr::select(!!dplyr::sym("asset"), !!dplyr::sym("datetime"), !!dplyr::sym("price")) %>%
+		dplyr::arrange(!!dplyr::sym("asset"), !!dplyr::sym("datetime")) %>%
+		dplyr::group_by(!!dplyr::sym("asset"), !!dplyr::sym("datetime")) %>%
+		dplyr::summarise(price = aggregate_price_fun(!!dplyr::sym("price")), .groups = "drop")
 
 	return(market_prices)
 

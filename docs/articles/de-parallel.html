@@ -19,13 +19,15 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Disposition Effect in Parallel">
 <meta property="og:description" content="dispositionEffect">
-<meta property="og:image" content="/logo.png">
+<meta property="og:image" content="https://marcozanotti.github.io/dispositionEffect/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dispositionEffect</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -74,10 +70,13 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/marcozanotti/dispositionEffect/">
+  <a href="https://github.com/marcozanotti/dispositionEffect/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,24 +91,223 @@
 
       
 
-      </header><script src="de-parallel_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Disposition Effect in Parallel</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/marcozanotti/dispositionEffect/blob/master/vignettes/de-parallel.Rmd"><code>vignettes/de-parallel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/marcozanotti/dispositionEffect/blob/HEAD/vignettes/de-parallel.Rmd" class="external-link"><code>vignettes/de-parallel.Rmd</code></a></small>
       <div class="hidden name"><code>de-parallel.Rmd</code></div>
 
     </div>
 
     
     
-<div id="package-loading" class="section level1">
-<h1 class="hasAnchor">
-<a href="#package-loading" class="anchor"></a>Package loading</h1>
+<p> </p>
+<div class="section level2">
+<h2 id="package-loading">Package loading<a class="anchor" aria-label="anchor" href="#package-loading"></a>
+</h2>
+<p>To load the package simply use the usual <code>library</code> function.<br>
+This tutorial requires also some well-known packages that allows for parallel computations in R.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/marcozanotti/dispositionEffect">dispositionEffect</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">foreach</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bench.r-lib.org/" class="external-link">bench</a></span><span class="op">)</span></code></pre></div>
+<p> </p>
+</div>
+<div class="section level2">
+<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
+<p>The disposition effect analysis is performed on two fundamental types of data frames:</p>
+<ul>
+<li><p>portfolio transactions, that is all the financial transactions an investor did during a specific period of time. A single transaction is made up of 6 features: the investor id, the asset id, the type of the transaction (it can be a buy or a sell), the traded quantity, the traded price, and the datetime.</p></li>
+<li><p>market prices, that is the prices found on the stock markets for each traded asset and each transaction datetimes.</p></li>
+</ul>
+<p> </p>
+</div>
+<div class="section level2">
+<h2 id="the-problem">The Problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
+</h2>
+<p>Usually, investor’s transactions datasets may be huge in size. Moreover, the dataset of market prices may grow exponentially since it has to contain the market prices for each traded asset on each trading datetime.</p>
+<p>This may cause the computation of gains and losses through the main interface of the package (<code>portfolio_compute</code>) to take few minutes in order to produce the output data frame.</p>
+<p>This computational inefficiency is particularly due to the size of the market price dataset, since for every transaction we need to look for the closest available market price at that datetime for each asset.</p>
+<p>For this reason, we used few parallel methodologies to improve the computation time on large datasets.</p>
+<p> </p>
+</div>
+<div class="section level2">
+<h2 id="the-solution-parallel-computing">The Solution: Parallel Computing<a class="anchor" aria-label="anchor" href="#the-solution-parallel-computing"></a>
+</h2>
+<div class="section level3">
+<h3 id="parallel-porfolio_compute">1) Parallel <code>porfolio_compute</code><a class="anchor" aria-label="anchor" href="#parallel-porfolio_compute"></a>
+</h3>
+<p>Usually, you may want to apply the computations on many different investors. To do that one can simply build a function that loops on a list containing the transactions portfolios. The first solution to this problem is to develop a parallel version of <code>portfolio_compute</code> that allows to compute results on many investors in parallel, taking advantage of two very useful R packages: <code>future</code> and <code>furrr</code>.</p>
+<p>A very simple version of the function would look like this.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">portfolio_compute_parallel</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">portfolio_transactions</span>, <span class="va">market_prices</span>, <span class="va">plan</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+
+    <span class="va">investors_id</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">portfolio_transactions</span>, <span class="op">~</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"investor"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">portfolio_compute_safe</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/safely.html" class="external-link">safely</a></span><span class="op">(</span><span class="va">portfolio_compute</span><span class="op">)</span>
+
+    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">plan</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/re-exports.html" class="external-link">availableCores</a></span><span class="op">(</span><span class="op">)</span>
+      <span class="co"># if there are more than 2 cores than use parallel computing</span>
+      <span class="co"># otherwise use sequential computing</span>
+      <span class="co"># RULE: be polite, always leave at least 1 free core</span>
+      <span class="kw">if</span> <span class="op">(</span><span class="op">(</span><span class="va">ncores</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
+          <span class="va">new_plan</span> <span class="op">&lt;-</span> <span class="st">"multisession"</span> <span class="co"># since I am testing on Windows</span>
+      <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+          <span class="va">new_plan</span> <span class="op">&lt;-</span> <span class="st">"sequential"</span>
+      <span class="op">}</span>
+    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+      <span class="va">new_plan</span> <span class="op">&lt;-</span> <span class="va">plan</span>
+    <span class="op">}</span>
+    
+    <span class="va">old_plan</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="va">new_plan</span><span class="op">)</span>
+
+    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">furrr</span><span class="fu">::</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">future_map</a></span><span class="op">(</span>
+        <span class="va">portfolio_transactions</span>,
+        <span class="va">portfolio_compute_safe</span>,
+        <span class="va">market_prices</span>,
+        <span class="va">...</span><span class="op">)</span>
+
+    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/transpose.html" class="external-link">transpose</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">$</span><span class="va">result</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">investors_id</span>
+
+    <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">old_plan</span><span class="op">)</span> <span class="co"># set back the old plan</span>
+
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
+
+<span class="op">}</span></code></pre></div>
+<p>This way you simply need to store all the different investor’s portfolios of transactions in a list and pass it to <code>portfolio_compute_parallel</code> as first argument.</p>
+<p>Now let’s try it on the <code>DEanalysis</code> dataset to see if there is any computational improvement.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">trx</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">transactions</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">investor</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_split.html" class="external-link">group_split</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">mkt</span> <span class="op">&lt;-</span> <span class="va">DEanalysis</span><span class="op">$</span><span class="va">marketprices</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span>
+  <span class="st">"sequential"</span> <span class="op">=</span> <span class="fu">portfolio_compute_parallel</span><span class="op">(</span><span class="va">trx</span>, <span class="va">mkt</span>, plan <span class="op">=</span> <span class="st">"sequential"</span><span class="op">)</span>,
+  <span class="st">"parallel"</span> <span class="op">=</span> <span class="fu">portfolio_compute_parallel</span><span class="op">(</span><span class="va">trx</span>, <span class="va">mkt</span>, plan <span class="op">=</span> <span class="st">"multisession"</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">res</span><span class="op">$</span><span class="va">expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sequential"</span>, <span class="st">"parallel"</span><span class="op">)</span>
+<span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></code></pre></div>
+<p><img src="figures/de-parallel-bench1.PNG" width="100%" style="display: block; margin: auto;"></p>
+<p>As you can see, the benefits of parallel code are clear even on this small sample dataset.</p>
+<p> </p>
+</div>
+<div class="section level3">
+<h3 id="separate-files">2) Separate files<a class="anchor" aria-label="anchor" href="#separate-files"></a>
+</h3>
+<p>Although the first solution may be enough with many small investors, when things get bigger it may be better to physically separate transactions and market prices for each investor.</p>
+<p>This way, a single <code>.RData</code> that contains both the transactions and the market prices for a single investor is created. Once this process is finished, one can simply perform the computations with the usual <code>portfolio_compute</code> loading the needed file sequentially or in parallel by means of the <code>foreach</code>package.</p>
+<p>First let’s store every investor’s datasets into its own file. To do this we can make use of the <code>dispositionEffect:::generate_data</code> internal function. In this way, we are able also to optimize the market price dataset, since for each investor we can save only the market prices of his traded assets for that specific period of trading.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+<span class="fu">foreach</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">trx</span><span class="op">)</span>, .errorhandling <span class="op">=</span> <span class="st">"pass"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">%dopar%</a></span> <span class="op">{</span>
+
+  <span class="va">transactions</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">trx</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">datetime</span><span class="op">)</span>
+  <span class="va">mrkt_prices</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>
+    <span class="va">mkt</span>, 
+    <span class="va">asset</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">transactions</span><span class="op">$</span><span class="va">asset</span><span class="op">)</span> <span class="op">&amp;</span> 
+      <span class="va">datetime</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">transactions</span><span class="op">$</span><span class="va">datetime</span><span class="op">)</span>
+  <span class="op">)</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">dispositionEffect</span><span class="fu">:::</span><span class="fu"><a href="../reference/manipulate_initial_data.html">generate_data</a></span><span class="op">(</span><span class="va">transactions</span>, <span class="va">mrkt_prices</span>, subset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  <span class="va">nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"INV"</span>, <span class="va">i</span>, <span class="st">".RData"</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">df</span>, file <span class="op">=</span> <span class="va">nm</span><span class="op">)</span>
+
+<span class="op">}</span>
+<span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<p>Now, we can build the function to perform computations loading each single file sequentially or in parallel.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">portfolio_compute_onfiles</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">files</span>, <span class="va">plan</span> <span class="op">=</span> <span class="st">"sequential"</span><span class="op">)</span> <span class="op">{</span>
+  
+  <span class="kw">if</span> <span class="op">(</span><span class="va">plan</span> <span class="op">==</span> <span class="st">"sequential"</span><span class="op">)</span> <span class="op">{</span>
+    
+    <span class="va">res_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span><span class="op">)</span>
+    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="va">files</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="co"># load the file</span>
+      <span class="va">tmp_res</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span>
+        <span class="fu">dispositionEffect</span><span class="fu">::</span><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
+          portfolio_transactions <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">transactions</span>,
+          market_prices <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">marketprices</span>
+        <span class="op">)</span>,
+        error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="st">"Error"</span>
+      <span class="op">)</span>
+      <span class="va">res_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tmp_res</span> <span class="co"># save results</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">tmp_res</span><span class="op">)</span>
+    <span class="op">}</span>
+    
+  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+    
+    <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+    <span class="va">res_list</span> <span class="op">&lt;-</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span>, .errorhandling <span class="op">=</span> <span class="st">"pass"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">%dopar%</a></span> <span class="op">{</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="va">files</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="co"># load the file</span>
+        <span class="va">tmp_res</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span>
+          <span class="fu">dispositionEffect</span><span class="fu">::</span><span class="fu"><a href="../reference/portfolio_compute.html">portfolio_compute</a></span><span class="op">(</span>
+            portfolio_transactions <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">transactions</span>,
+            market_prices <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">marketprices</span>
+          <span class="op">)</span>,
+          error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="st">"Error"</span>
+        <span class="op">)</span>
+      <span class="op">}</span>
+    <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+    
+  <span class="op">}</span>
+
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res_list</span><span class="op">)</span>
+    
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">".RData"</span><span class="op">)</span> <span class="co"># list all single .RData</span>
+
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span>
+  <span class="fu">portfolio_compute_onfiles</span><span class="op">(</span><span class="va">files</span>, plan <span class="op">=</span> <span class="st">"sequential"</span><span class="op">)</span>,
+  <span class="fu">portfolio_compute_onfiles</span><span class="op">(</span><span class="va">files</span>, plan <span class="op">=</span> <span class="st">"multisession"</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">res</span><span class="op">$</span><span class="va">expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sequential"</span>, <span class="st">"parallel"</span><span class="op">)</span>
+<span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></code></pre></div>
+<p><img src="figures/de-parallel-bench2.PNG" width="100%" style="display: block; margin: auto;"></p>
+<p> </p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="conclusions">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"></a>
+</h2>
+<p>As expected, parallel computation coupled with load in memory small portion of datasets is the optimal solution.</p>
+<p>Moreover, sometimes a little gain in computation time can be obtained by setting the <code>exact_market_prices</code> argument of <code>portfolio_compute</code> equal to TRUE. This way, the closest market price search is performed on the very same transaction datetime, but it requires that the market price dataset contains all the prices for each asset at each single transaction datetime.</p>
+<p> </p>
+<p> </p>
+<hr>
+<p><em>This tests have been performed on a 4 core, 8GB RAM, Windows machine</em></p>
+<pre><code><span class="co">#&gt;                _                           </span>
+<span class="co">#&gt; platform       x86_64-pc-linux-gnu         </span>
+<span class="co">#&gt; arch           x86_64                      </span>
+<span class="co">#&gt; os             linux-gnu                   </span>
+<span class="co">#&gt; system         x86_64, linux-gnu           </span>
+<span class="co">#&gt; status                                     </span>
+<span class="co">#&gt; major          4                           </span>
+<span class="co">#&gt; minor          2.0                         </span>
+<span class="co">#&gt; year           2022                        </span>
+<span class="co">#&gt; month          04                          </span>
+<span class="co">#&gt; day            22                          </span>
+<span class="co">#&gt; svn rev        82229                       </span>
+<span class="co">#&gt; language       R                           </span>
+<span class="co">#&gt; version.string R version 4.2.0 (2022-04-22)</span>
+<span class="co">#&gt; nickname       Vigorous Calisthenics</span></code></pre>
+<p> </p>
+<p>For more tutorials on disposition effect visit <a href="https://marcozanotti.github.io/dispositionEffect/">dispositionEffect</a>.</p>
 </div>
   </div>
 
@@ -124,11 +322,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
+  <p></p>
+<p>Developed by Lorenzo Mazzucchelli, Marco Zanotti.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -136,6 +336,8 @@
 
   
 
+
+  
 
   </body>
 </html>

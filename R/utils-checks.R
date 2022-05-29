@@ -91,3 +91,13 @@ check_gainloss <- function(df) {
 	return(res_msg)
 
 }
+
+
+#' @describeIn checks Release questions
+release_questions <- function() {
+	qst <- c(
+		"Are references up-to-date?",
+		"Is website functioning?"
+	)
+	return(qst)
+}

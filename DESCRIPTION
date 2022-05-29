@@ -39,7 +39,7 @@ Suggests:
     parallel,
     bench
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 URL: https://marcozanotti.github.io/dispositionEffect/, https://github.com/marcozanotti/dispositionEffect
 BugReports: https://github.com/marcozanotti/dispositionEffect/issues

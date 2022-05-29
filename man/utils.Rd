@@ -10,8 +10,9 @@ ewise_mean(x, y, na.rm = FALSE, zero.substitute = FALSE)
 \arguments{
 \item{x, y}{Numeric vectors of the same length.}
 
-\item{na.rm}{a logical value indicating whether \code{NA}
-    values should be stripped before the computation proceeds.}
+\item{na.rm}{a logical evaluating to \code{TRUE} or \code{FALSE}
+    indicating whether \code{NA} values should be stripped before the
+    computation proceeds.}
 
 \item{zero.substitute}{Logical. If TRUE zero values are substituted with
 corresponding non-missing values whether possible.}

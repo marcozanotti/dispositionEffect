@@ -4,6 +4,7 @@
 \alias{checks}
 \alias{check_values}
 \alias{check_gainloss}
+\alias{release_questions}
 \title{Checks functions}
 \usage{
 check_values(
@@ -14,6 +15,8 @@ check_values(
 )
 
 check_gainloss(df)
+
+release_questions()
 }
 \arguments{
 \item{input_values}{Input to check against target.}
@@ -39,6 +42,8 @@ Functions to perform checks on arguments.
 \item \code{check_values}: Check consistency of values against targets and vice versa.
 
 \item \code{check_gainloss}: Check consistency of gains and losses "values" results.
+
+\item \code{release_questions}: Release questions
 }}
 
 \keyword{internal}
